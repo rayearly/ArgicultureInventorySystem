@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgicultureInventorySystem", "ArgicultureInventorySystem\ArgicultureInventorySystem.csproj", "{F71CAD15-5D7C-4CE2-83C2-2F06713E61B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F71CAD15-5D7C-4CE2-83C2-2F06713E61B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F71CAD15-5D7C-4CE2-83C2-2F06713E61B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F71CAD15-5D7C-4CE2-83C2-2F06713E61B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F71CAD15-5D7C-4CE2-83C2-2F06713E61B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {734E2AF0-A459-4E16-B19F-C2C906B30D10}
+	EndGlobalSection
+EndGlobal
