@@ -18,7 +18,7 @@ namespace ArgicultureInventorySystem.Models
         public decimal OriginalQuantity { get; set; }
 
         // Kuantiti Semasa (Setelah dipinjam2?)
-        public decimal  CurrentQuantity { get; set; }
+        public decimal CurrentQuantity { get; set; }
 
         public StockMeasurement Measurement { get; set; }
 

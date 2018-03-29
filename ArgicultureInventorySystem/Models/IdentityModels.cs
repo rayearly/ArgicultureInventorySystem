@@ -25,6 +25,7 @@ namespace ArgicultureInventorySystem.Models
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<StockMeasurement> StockMeasurements { get; set; }
         public DbSet<StockType> StockTypes { get; set; }
+        public DbSet<BookingDate> BookingDates { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

@@ -215,9 +215,22 @@
     <Compile Include="Migrations\201803290250057_UpdateUCModel.Designer.cs">
       <DependentUpon>201803290250057_UpdateUCModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803290729130_ModifyBookingAddBookingDateModel.cs" />
+    <Compile Include="Migrations\201803290729130_ModifyBookingAddBookingDateModel.Designer.cs">
+      <DependentUpon>201803290729130_ModifyBookingAddBookingDateModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803290730553_ModifyBookingAddBookingDateModelInIdentityModel.cs" />
+    <Compile Include="Migrations\201803290730553_ModifyBookingAddBookingDateModelInIdentityModel.Designer.cs">
+      <DependentUpon>201803290730553_ModifyBookingAddBookingDateModelInIdentityModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803290738579_ModifyBookingModel.cs" />
+    <Compile Include="Migrations\201803290738579_ModifyBookingModel.Designer.cs">
+      <DependentUpon>201803290738579_ModifyBookingModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
+    <Compile Include="Models\BookingDate.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Staff.cs" />
@@ -326,6 +339,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803290250057_UpdateUCModel.resx">
       <DependentUpon>201803290250057_UpdateUCModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803290729130_ModifyBookingAddBookingDateModel.resx">
+      <DependentUpon>201803290729130_ModifyBookingAddBookingDateModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803290730553_ModifyBookingAddBookingDateModelInIdentityModel.resx">
+      <DependentUpon>201803290730553_ModifyBookingAddBookingDateModelInIdentityModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803290738579_ModifyBookingModel.resx">
+      <DependentUpon>201803290738579_ModifyBookingModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
