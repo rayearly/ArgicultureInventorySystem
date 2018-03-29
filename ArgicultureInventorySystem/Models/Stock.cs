@@ -20,8 +20,10 @@ namespace ArgicultureInventorySystem.Models
         // Kuantiti Semasa (Setelah dipinjam2?)
         public decimal CurrentQuantity { get; set; }
 
+        // TODO: Display number based on measurement type. If its tools, then no decimal
         public StockMeasurement Measurement { get; set; }
 
+        // TODO: Maybe can select specific type of problem to note for
         public string Note { get; set; }
 
         public IList<Booking> Bookings { get; set; }

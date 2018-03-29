@@ -11,6 +11,7 @@ namespace ArgicultureInventorySystem.Models
 
         public DateTime BookingDateTime { get; set; }
 
+        // TODO: Detect must be after BookingDateTime
         public DateTime ReturnDateTime { get; set; }
     }
 }

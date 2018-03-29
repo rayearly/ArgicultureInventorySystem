@@ -194,6 +194,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StockMeasurementsController.cs" />
+    <Compile Include="Controllers\StocksController.cs" />
     <Compile Include="Controllers\UniversityCommunityController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -226,6 +227,10 @@
     <Compile Include="Migrations\201803290738579_ModifyBookingModel.cs" />
     <Compile Include="Migrations\201803290738579_ModifyBookingModel.Designer.cs">
       <DependentUpon>201803290738579_ModifyBookingModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803290751180_PopulateBookingDate.cs" />
+    <Compile Include="Migrations\201803290751180_PopulateBookingDate.Designer.cs">
+      <DependentUpon>201803290751180_PopulateBookingDate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -310,6 +315,11 @@
     <Content Include="Views\UniversityCommunity\Delete.cshtml" />
     <Content Include="Views\Booking\Create.cshtml" />
     <Content Include="Views\Booking\Index.cshtml" />
+    <Content Include="Views\Stocks\Create.cshtml" />
+    <Content Include="Views\Stocks\Delete.cshtml" />
+    <Content Include="Views\Stocks\Details.cshtml" />
+    <Content Include="Views\Stocks\Edit.cshtml" />
+    <Content Include="Views\Stocks\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -348,6 +358,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803290738579_ModifyBookingModel.resx">
       <DependentUpon>201803290738579_ModifyBookingModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803290751180_PopulateBookingDate.resx">
+      <DependentUpon>201803290751180_PopulateBookingDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

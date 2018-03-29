@@ -21,10 +21,10 @@
             @Html.DisplayNameFor(model => model.BookingQuantity)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BookingDateTime)
+            @Html.DisplayNameFor(model => model.BookingDate.BookingDateTime)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReturnDateTime)
+            @Html.DisplayNameFor(model => model.BookingDate.ReturnDateTime)
         </th>
         <th></th>
     </tr>
@@ -41,10 +41,10 @@
             @Html.DisplayFor(modelItem => item.BookingQuantity)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.BookingDateTime)
+            @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ReturnDateTime)
+            @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
