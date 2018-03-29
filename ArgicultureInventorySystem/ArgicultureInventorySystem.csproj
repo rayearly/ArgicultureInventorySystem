@@ -199,6 +199,14 @@
     <Compile Include="Migrations\201803290206198_InitialModelCreation.Designer.cs">
       <DependentUpon>201803290206198_InitialModelCreation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803290207524_AddStockType.cs" />
+    <Compile Include="Migrations\201803290207524_AddStockType.Designer.cs">
+      <DependentUpon>201803290207524_AddStockType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803290217256_AddMeasurementTypes.cs" />
+    <Compile Include="Migrations\201803290217256_AddMeasurementTypes.Designer.cs">
+      <DependentUpon>201803290217256_AddMeasurementTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -289,6 +297,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201803290206198_InitialModelCreation.resx">
       <DependentUpon>201803290206198_InitialModelCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803290207524_AddStockType.resx">
+      <DependentUpon>201803290207524_AddStockType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803290217256_AddMeasurementTypes.resx">
+      <DependentUpon>201803290217256_AddMeasurementTypes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
