@@ -190,8 +190,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BookingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StockMeasurementsController.cs" />
+    <Compile Include="Controllers\UniversityCommunityController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -207,6 +210,11 @@
     <Compile Include="Migrations\201803290217256_AddMeasurementTypes.Designer.cs">
       <DependentUpon>201803290217256_AddMeasurementTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803290241160_Correcting UC Model &amp; Creating UC Controller\ View.cs" />
+    <Compile Include="Migrations\201803290250057_UpdateUCModel.cs" />
+    <Compile Include="Migrations\201803290250057_UpdateUCModel.Designer.cs">
+      <DependentUpon>201803290250057_UpdateUCModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -219,6 +227,7 @@
     <Compile Include="Models\UniversityCommunity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\UcBookingStockViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -277,6 +286,17 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\UniversityCommunity\Index.cshtml" />
+    <Content Include="Views\UniversityCommunity\Create.cshtml" />
+    <Content Include="Views\UniversityCommunity\Details.cshtml" />
+    <Content Include="Views\StockMeasurements\Create.cshtml" />
+    <Content Include="Views\StockMeasurements\Delete.cshtml" />
+    <Content Include="Views\StockMeasurements\Details.cshtml" />
+    <Content Include="Views\StockMeasurements\Edit.cshtml" />
+    <Content Include="Views\StockMeasurements\Index.cshtml" />
+    <Content Include="Views\UniversityCommunity\Delete.cshtml" />
+    <Content Include="Views\Booking\Create.cshtml" />
+    <Content Include="Views\Booking\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -303,6 +323,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803290217256_AddMeasurementTypes.resx">
       <DependentUpon>201803290217256_AddMeasurementTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803290250057_UpdateUCModel.resx">
+      <DependentUpon>201803290250057_UpdateUCModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

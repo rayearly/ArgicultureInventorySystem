@@ -11,6 +11,8 @@ namespace ArgicultureInventorySystem.Models
 
         public string IdNumber { get; set; }
 
+        public string Name { get; set; }
+
         public string PhoneNumber { get; set; }
 
         public IList<Booking> Bookings { get; set; }
