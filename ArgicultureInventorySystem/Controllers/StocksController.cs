@@ -34,6 +34,26 @@ namespace ArgicultureInventorySystem.Controllers
             ViewBag.MeasurementTypes = selectItems;
         }
 
+        private void LoadTypes()
+        {
+            var types = _context.StockTypes.ToList();
+
+            var selectItems = new List<SelectListItem>();
+
+            foreach (var type in types)
+            {
+                var listItem = new SelectListItem
+                {
+                    Value = type.Id.ToString(),
+                    Text = type.StockTypeAssigned
+                };
+
+                selectItems.Add(listItem);
+            }
+
+            ViewBag.Types = selectItems;
+        }
+
         // GET: Stocks
         public ActionResult Index()
         {
@@ -58,6 +78,7 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Stocks/Create
         public ActionResult Create()
         {
+            LoadTypes();
             LoadMeasurementType();
             return View();
         }
@@ -82,6 +103,8 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Stocks/Edit/5
         public ActionResult Edit(int? id)
         {
+            LoadTypes();
+            LoadMeasurementType();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

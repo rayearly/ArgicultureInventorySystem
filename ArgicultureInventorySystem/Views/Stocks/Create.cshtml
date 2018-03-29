@@ -21,6 +21,14 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.TypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.TypeId, ((IEnumerable<SelectListItem>)ViewBag.Types), "-- Select Stock Type --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.OriginalQuantity, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -41,7 +49,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.MeasurementId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.MeasurementId, ((IEnumerable<SelectListItem>)ViewBag.MeasurementTypes), "--- Select Measurement Type", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.MeasurementId, ((IEnumerable<SelectListItem>)ViewBag.MeasurementTypes), "-- Select Measurement Type --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.MeasurementId, "", new { @class = "text-danger" })
             </div>
         </div>
