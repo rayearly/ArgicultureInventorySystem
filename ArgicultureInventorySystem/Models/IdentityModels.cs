@@ -20,6 +20,12 @@ namespace ArgicultureInventorySystem.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<UniversityCommunity> UniversityCommunities { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<StockMeasurement> StockMeasurements { get; set; }
+        public DbSet<StockType> StockTypes { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

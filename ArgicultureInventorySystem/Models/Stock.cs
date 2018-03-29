@@ -23,5 +23,7 @@ namespace ArgicultureInventorySystem.Models
         public StockMeasurement Measurement { get; set; }
 
         public string Note { get; set; }
+
+        public IList<Booking> Bookings { get; set; }
     }
 }
