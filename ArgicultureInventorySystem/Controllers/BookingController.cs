@@ -22,7 +22,7 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Dispose();
         }
 
-        // GET: Booking
+                // GET: Booking
         public ActionResult Index(int? ucId)
         {
             var uc = _context.Bookings.ToList();

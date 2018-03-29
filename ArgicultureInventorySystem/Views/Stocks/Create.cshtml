@@ -37,6 +37,14 @@
                 @Html.ValidationMessageFor(model => model.CurrentQuantity, "", new { @class = "text-danger" })
             </div>
         </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.MeasurementId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MeasurementId, ((IEnumerable<SelectListItem>)ViewBag.MeasurementTypes), "--- Select Measurement Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MeasurementId, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" })

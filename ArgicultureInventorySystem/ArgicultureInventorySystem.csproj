@@ -232,6 +232,10 @@
     <Compile Include="Migrations\201803290751180_PopulateBookingDate.Designer.cs">
       <DependentUpon>201803290751180_PopulateBookingDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803291048213_UpdateStockModel.cs" />
+    <Compile Include="Migrations\201803291048213_UpdateStockModel.Designer.cs">
+      <DependentUpon>201803291048213_UpdateStockModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -245,6 +249,7 @@
     <Compile Include="Models\UniversityCommunity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\StockMeasurementViewModel.cs" />
     <Compile Include="ViewModel\UcBookingStockViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -361,6 +366,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803290751180_PopulateBookingDate.resx">
       <DependentUpon>201803290751180_PopulateBookingDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803291048213_UpdateStockModel.resx">
+      <DependentUpon>201803291048213_UpdateStockModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

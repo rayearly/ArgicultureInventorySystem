@@ -12,12 +12,32 @@ namespace ArgicultureInventorySystem.Controllers
 {
     public class StocksController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+
+        private void LoadMeasurementType()
+        {
+            var measurementTypes = _context.StockMeasurements.ToList();
+
+            var selectItems = new List<SelectListItem>();
+
+            foreach (var type in measurementTypes)
+            {
+                var listItem = new SelectListItem
+                {
+                    Value = type.Id.ToString(),
+                    Text = type.MeasurementType
+                };
+
+                selectItems.Add(listItem);
+            }
+
+            ViewBag.MeasurementTypes = selectItems;
+        }
 
         // GET: Stocks
         public ActionResult Index()
         {
-            return View(db.Stocks.ToList());
+            return View(_context.Stocks.ToList());
         }
 
         // GET: Stocks/Details/5
@@ -27,7 +47,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Stock stock = db.Stocks.Find(id);
+            Stock stock = _context.Stocks.Find(id);
             if (stock == null)
             {
                 return HttpNotFound();
@@ -38,6 +58,7 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Stocks/Create
         public ActionResult Create()
         {
+            LoadMeasurementType();
             return View();
         }
 
@@ -46,12 +67,12 @@ namespace ArgicultureInventorySystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,OriginalQuantity,CurrentQuantity,Note")] Stock stock)
+        public ActionResult Create([Bind(Include = "Id,Name,OriginalQuantity,CurrentQuantity,MeasurementId, Note")] Stock stock)
         {
             if (ModelState.IsValid)
             {
-                db.Stocks.Add(stock);
-                db.SaveChanges();
+                _context.Stocks.Add(stock);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +86,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Stock stock = db.Stocks.Find(id);
+            Stock stock = _context.Stocks.Find(id);
             if (stock == null)
             {
                 return HttpNotFound();
@@ -82,8 +103,8 @@ namespace ArgicultureInventorySystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(stock).State = EntityState.Modified;
-                db.SaveChanges();
+                _context.Entry(stock).State = EntityState.Modified;
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(stock);
@@ -96,7 +117,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Stock stock = db.Stocks.Find(id);
+            Stock stock = _context.Stocks.Find(id);
             if (stock == null)
             {
                 return HttpNotFound();
@@ -109,9 +130,9 @@ namespace ArgicultureInventorySystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Stock stock = db.Stocks.Find(id);
-            db.Stocks.Remove(stock);
-            db.SaveChanges();
+            Stock stock = _context.Stocks.Find(id);
+            _context.Stocks.Remove(stock);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -119,7 +140,7 @@ namespace ArgicultureInventorySystem.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _context.Dispose();
             }
             base.Dispose(disposing);
         }
