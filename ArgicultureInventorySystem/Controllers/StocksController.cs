@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ArgicultureInventorySystem.Models;
+using ArgicultureInventorySystem.ViewModel;
 
 namespace ArgicultureInventorySystem.Controllers
 {
@@ -57,7 +58,9 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Stocks
         public ActionResult Index()
         {
-            return View(_context.Stocks.ToList());
+            var stock = _context.Stocks.ToList();
+
+            return View(stock);
         }
 
         // GET: Stocks/Details/5
@@ -88,7 +91,7 @@ namespace ArgicultureInventorySystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,OriginalQuantity,CurrentQuantity,MeasurementId, Note")] Stock stock)
+        public ActionResult Create([Bind(Include = "Id,Name,OriginalQuantity,CurrentQuantity,MeasurementId,TypeId,Note")] Stock stock)
         {
             if (ModelState.IsValid)
             {
@@ -122,7 +125,7 @@ namespace ArgicultureInventorySystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,OriginalQuantity,CurrentQuantity,Note")] Stock stock)
+        public ActionResult Edit([Bind(Include = "Id,Name,OriginalQuantity,CurrentQuantity,MeasurementId,TypeId,Note")] Stock stock)
         {
             if (ModelState.IsValid)
             {

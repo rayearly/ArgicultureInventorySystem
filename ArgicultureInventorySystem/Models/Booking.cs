@@ -31,5 +31,7 @@ namespace ArgicultureInventorySystem.Models
         // Limit Booking Quantity to the CurrentQuantity from Stock
         public decimal BookingQuantity { get; set; }
 
+        public string BookingNotes { get; set; }
+
     }
 }

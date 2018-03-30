@@ -13,5 +13,7 @@ namespace ArgicultureInventorySystem.ViewModel
         public IList<Stock> Stocks { get; set; }
 
         public IList<Booking> Bookings { get; set; }
+
+        public BookingDate BookingDate { get; set; }
     }
 }

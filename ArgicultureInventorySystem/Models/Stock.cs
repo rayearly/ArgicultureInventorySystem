@@ -14,9 +14,9 @@ namespace ArgicultureInventorySystem.Models
 
         public int? TypeId { get; set; }
 
-        // Stock Type List : Tool / Pesticide / Fertilizer
+        // Stock Type List : Tool / Pesticide / Fertilizer (virtual to fill the data ready)
         [ForeignKey("TypeId")]
-        public StockType Type { get; set; }
+        public virtual StockType Type { get; set; }
 
         // Kuantiti Dibeli
         public decimal OriginalQuantity { get; set; }
@@ -28,7 +28,7 @@ namespace ArgicultureInventorySystem.Models
 
         // TODO: Display number based on measurement type. If its tools, then no decimal
         [ForeignKey("MeasurementId")]
-        public StockMeasurement Measurement { get; set; }
+        public virtual StockMeasurement Measurement { get; set; }
 
         // TODO: Maybe can select specific type of problem to note for
         public string Note { get; set; }

@@ -22,12 +22,17 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Dispose();
         }
 
-                // GET: Booking
-        public ActionResult Index(int? ucId)
+        // GET: Booking
+        public ActionResult Index(int id)
         {
-            var uc = _context.Bookings.ToList();
-            
-            return View(uc);
+            var viewModel = new UcBookingStockViewModel
+            {
+                UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id),
+                Bookings = _context.Bookings.ToList()
+            };
+
+
+            return View(viewModel);
         }
 
         // GET: Booking/Details/5
@@ -37,10 +42,10 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking/Create
-        public ActionResult Create(int ucId)
+        public ActionResult Create(int id)
         {
-            var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucId);
-
+            var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id);
+            //var booking = _context.Bookings.SingleOrDefault(u => u.UniversityCommunity.Id == ucId);
             var viewModel = new UcBookingStockViewModel
             {
                 UniversityCommunity = uc,
@@ -53,18 +58,29 @@ namespace ArgicultureInventorySystem.Controllers
 
         // POST: Booking/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(UcBookingStockViewModel ucBooking)
         {
-            try
+            var viewModel = new UcBookingStockViewModel
             {
-                // TODO: Add insert logic here
+                UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucBooking.UniversityCommunity.Id),
 
-                return RedirectToAction("Index");
-            }
-            catch
+            };
+
+            if (!ModelState.IsValid)
             {
-                return View();
+                return View("Create", viewModel);
             }
+
+            foreach (var booking in ucBooking.Bookings)
+            {
+                booking.UniversityCommunityId = ucBooking.UniversityCommunity.Id;
+                booking.BookingDate = ucBooking.BookingDate;
+                booking.Stock = booking.Stock;
+                _context.Bookings.Add(booking);
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Booking");
         }
 
         // GET: Booking/Edit/5
@@ -109,6 +125,37 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return View();
             }
+        }
+
+        private void LoadStocks()
+        {
+            var stocks = _context.Stocks.ToList();
+
+            var selectItems = new List<SelectListItem>();
+
+            foreach (var stock in stocks)
+            {
+                var listItem = new SelectListItem
+                {
+                    Value = stock.Id.ToString(),
+                    Text = stock.Name
+                };
+
+                selectItems.Add(listItem);
+            }
+
+            ViewBag.LoadStocks = selectItems;
+        }
+
+        public ActionResult BookingPartialResult()
+        {
+            //var viewModel = new JudgeBoothMarkViewModel
+            //{
+            //JudgeBoothMarks = _context.JudgeBoothMark.ToList(),
+            //Booths = _context.Booths.ToList()
+            //};
+            LoadStocks();
+            return PartialView("_BookingPartial", new Booking());
         }
     }
 }

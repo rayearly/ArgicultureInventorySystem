@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.WebSockets;
 using ArgicultureInventorySystem.Models;
+using ArgicultureInventorySystem.ViewModel;
 
 namespace ArgicultureInventorySystem.Controllers
 {
@@ -27,6 +28,7 @@ namespace ArgicultureInventorySystem.Controllers
         public ActionResult Index()
         {
             var universityCommunity = _context.UniversityCommunities.ToList();
+
             return View(universityCommunity);
         }
 

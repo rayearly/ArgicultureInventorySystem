@@ -6,10 +6,12 @@ using ArgicultureInventorySystem.Models;
 
 namespace ArgicultureInventorySystem.ViewModel
 {
-    public class StockMeasurementViewModel
+    public class StockTypeMeasurementViewModel
     {
-        public Stock Stock { get; set; }
+        public IList<Stock> Stocks { get; set; }
 
         public StockMeasurement StockMeasurement { get; set; }
+
+        public StockType StockType { get; set; }
     }
 }

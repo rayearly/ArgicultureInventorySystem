@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ArgicultureInventorySystem.Models.Booking>
+﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -7,18 +7,15 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", new {id = Model.UniversityCommunity.Id})
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Stock.Name)
+            @Html.DisplayNameFor(model => model.UniversityCommunity.Name)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.UniversityCommunity.IdNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BookingQuantity)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.BookingDate.BookingDateTime)
@@ -29,7 +26,7 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Bookings) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Stock.Name)

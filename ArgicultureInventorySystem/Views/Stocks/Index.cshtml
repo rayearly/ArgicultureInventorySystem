@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
@@ -15,13 +15,16 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
+            @Html.DisplayNameFor(model => model.Type.StockTypeAssigned)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.OriginalQuantity)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CurrentQuantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Note)
         </th>
         <th></th>
     </tr>
@@ -32,13 +35,16 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Type)
+            @Html.DisplayFor(modelItem => item.Type.StockTypeAssigned)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.OriginalQuantity)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CurrentQuantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Note)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
