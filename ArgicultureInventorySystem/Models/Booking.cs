@@ -23,6 +23,7 @@ namespace ArgicultureInventorySystem.Models
         public virtual Stock Stock { get; set; }
 
         // Refer to the date from BookingDate
+        [Key, Column(Order = 2)]
         public int BookingDateId { get; set; }
 
         [ForeignKey("BookingDateId")]

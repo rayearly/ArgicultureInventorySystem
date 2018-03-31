@@ -27,11 +27,7 @@
             </dl>
            
         <div id="bookings">
-            @foreach (var booking in Model.Bookings)
-            {
                 <!--Partial View here-->
-                @Html.Partial("_BookingPartial", booking)
-            }
         </div>
         
             @Html.HiddenFor(model => model.UniversityCommunity.Id)

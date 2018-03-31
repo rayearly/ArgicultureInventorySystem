@@ -3,7 +3,7 @@ namespace ArgicultureInventorySystem.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class updatemodelsandviews : DbMigration
+    public partial class Updatemodelsandviews : DbMigration
     {
         public override void Up()
         {

@@ -1,0 +1,38 @@
+﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+
+@{
+    ViewBag.Title = "IndexSortByBooking";
+}
+
+<h2>IndexSortByBooking</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", new {id = Model.UniversityCommunity.Id})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BookingDate.BookingDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BookingDate.ReturnDateTime)
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Bookings) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -25,14 +25,26 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking
         public ActionResult Index(int id)
         {
+            var getBooking = _context.Bookings.ToList();
+
+            var getSpecificBooking = new List<Booking>();
+
+            // Get Bookings specific to the customer
+            foreach (var b in getBooking)
+            {
+                if (b.UniversityCommunity.Id == id)
+                {
+                    getSpecificBooking.Add(b);
+                }
+            }
+
             var viewModel = new UcBookingStockViewModel
             {
                 UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id),
-                Bookings = _context.Bookings.ToList()
+                Bookings = getSpecificBooking
             };
 
-
-            return View(viewModel);
+            return View("IndexSortByBooking" , viewModel);
         }
 
         // GET: Booking/Details/5
@@ -44,13 +56,16 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking/Create
         public ActionResult Create(int id)
         {
+            LoadStocks();
             var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id);
-            //var booking = _context.Bookings.SingleOrDefault(u => u.UniversityCommunity.Id == ucId);
+            //var booking = _context.Bookings.Single(u => u.UniversityCommunity.Id == id).BookingDate;
+
             var viewModel = new UcBookingStockViewModel
             {
                 UniversityCommunity = uc,
                 Bookings = _context.Bookings.ToList(),
-                Stocks = _context.Stocks.ToList()
+                Stocks = _context.Stocks.ToList(),
+                //BookingDate = booking
             };
 
             return View(viewModel);
@@ -60,14 +75,28 @@ namespace ArgicultureInventorySystem.Controllers
         [HttpPost]
         public ActionResult Create(UcBookingStockViewModel ucBooking)
         {
+            var getBooking = _context.Bookings.ToList();
+
+            var getSpecificBooking = new List<Booking>();
+
+            // Get Bookings specific to the customer
+            foreach (var b in getBooking)
+            {
+                if (b.UniversityCommunity.Id == ucBooking.UniversityCommunity.Id)
+                {
+                    getSpecificBooking.Add(b);
+                }
+            }
+
             var viewModel = new UcBookingStockViewModel
             {
                 UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucBooking.UniversityCommunity.Id),
-
+                Bookings = getSpecificBooking
             };
 
             if (!ModelState.IsValid)
             {
+                LoadStocks();
                 return View("Create", viewModel);
             }
 
@@ -80,7 +109,10 @@ namespace ArgicultureInventorySystem.Controllers
             }
 
             _context.SaveChanges();
-            return RedirectToAction("Index", "Booking");
+
+            var getId = viewModel.UniversityCommunity.Id;
+
+            return RedirectToAction("Index", new { id = getId });
         }
 
         // GET: Booking/Edit/5
@@ -149,11 +181,6 @@ namespace ArgicultureInventorySystem.Controllers
 
         public ActionResult BookingPartialResult()
         {
-            //var viewModel = new JudgeBoothMarkViewModel
-            //{
-            //JudgeBoothMarks = _context.JudgeBoothMark.ToList(),
-            //Booths = _context.Booths.ToList()
-            //};
             LoadStocks();
             return PartialView("_BookingPartial", new Booking());
         }

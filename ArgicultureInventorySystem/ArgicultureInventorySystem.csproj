@@ -239,9 +239,13 @@
     <Compile Include="Migrations\201803291048213_UpdateStockModel.Designer.cs">
       <DependentUpon>201803291048213_UpdateStockModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201803301355272_updatemodelsandviews.cs" />
-    <Compile Include="Migrations\201803301355272_updatemodelsandviews.Designer.cs">
-      <DependentUpon>201803301355272_updatemodelsandviews.cs</DependentUpon>
+    <Compile Include="Migrations\201803301355272_Updatemodelsandviews.cs" />
+    <Compile Include="Migrations\201803301355272_Updatemodelsandviews.Designer.cs">
+      <DependentUpon>201803301355272_Updatemodelsandviews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803310639120_ChangeBookingAddPK.cs" />
+    <Compile Include="Migrations\201803310639120_ChangeBookingAddPK.Designer.cs">
+      <DependentUpon>201803310639120_ChangeBookingAddPK.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -256,6 +260,7 @@
     <Compile Include="Models\UniversityCommunity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\SortByBookingDate.cs" />
     <Compile Include="ViewModel\StockTypeMeasurementViewModel.cs" />
     <Compile Include="ViewModel\UcBookingStockViewModel.cs" />
   </ItemGroup>
@@ -334,6 +339,8 @@
     <Content Include="Views\Booking\Create.cshtml" />
     <Content Include="Views\Shared\_BookingPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
+    <Content Include="Views\Booking\IndexSortByBooking.cshtml" />
+    <Content Include="Views\Booking\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -379,8 +386,11 @@
     <EmbeddedResource Include="Migrations\201803291048213_UpdateStockModel.resx">
       <DependentUpon>201803291048213_UpdateStockModel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803301355272_updatemodelsandviews.resx">
-      <DependentUpon>201803301355272_updatemodelsandviews.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803301355272_Updatemodelsandviews.resx">
+      <DependentUpon>201803301355272_Updatemodelsandviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803310639120_ChangeBookingAddPK.resx">
+      <DependentUpon>201803310639120_ChangeBookingAddPK.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
