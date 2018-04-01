@@ -75,8 +75,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 UniversityCommunity = uc,
                 Bookings = _context.Bookings.ToList(),
-                Stocks = _context.Stocks.ToList(),
-                //BookingDate = booking
+                Stocks = _context.Stocks.ToList()
             };
 
             return View(viewModel);
@@ -88,17 +87,9 @@ namespace ArgicultureInventorySystem.Controllers
         {
             var getBooking = _context.Bookings.ToList();
 
-            var getSpecificBooking = new List<Booking>();
-
             // Get Bookings specific to the customer
-            foreach (var b in getBooking)
-            {
-                if (b.UniversityCommunity.Id == ucBooking.UniversityCommunity.Id)
-                {
-                    getSpecificBooking.Add(b);
-                }
-            }
-
+            var getSpecificBooking = getBooking.Where(b => b.UniversityCommunity.Id == ucBooking.UniversityCommunity.Id).ToList();
+            
             var viewModel = new UcBookingStockViewModel
             {
                 UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucBooking.UniversityCommunity.Id),
@@ -138,17 +129,14 @@ namespace ArgicultureInventorySystem.Controllers
             var getBookings = uc.Bookings.ToList();
 
             var book = new List<Booking>(getBookings.Where(b => b.BookingDateId == bookingDateId));
-
-            var get = _context.BookingDates.Single(b => b.Id == bookingDateId);
             
             var viewModel = new UcBookingStockViewModel
             {
                 UniversityCommunity = uc,
                 Bookings = book,
                 Stocks = _context.Stocks.ToList(),
-                //BookingDates = getBookingsDates, //Find singleordefault booking id held by the booking
-                BookingDate = get
-            };
+                BookingDate = _context.BookingDates.Single(b => b.Id == bookingDateId)
+        };
 
             return View(viewModel);
         }
@@ -159,16 +147,8 @@ namespace ArgicultureInventorySystem.Controllers
         {
             var getBooking = _context.Bookings.ToList();
 
-            var getSpecificBooking = new List<Booking>();
-
             // Get Bookings specific to the customer
-            foreach (var b in getBooking)
-            {
-                if (b.UniversityCommunity.Id == ucBooking.UniversityCommunity.Id)
-                {
-                    getSpecificBooking.Add(b);
-                }
-            }
+            var getSpecificBooking = getBooking.Where(b => b.UniversityCommunity.Id == ucBooking.UniversityCommunity.Id).ToList();
 
             var viewModel = new UcBookingStockViewModel
             {
@@ -182,17 +162,31 @@ namespace ArgicultureInventorySystem.Controllers
                 return View("Edit", viewModel);
             }
 
-            
-            //var bookingInDb = _context.Bookings.
-            
-            // If what? insert. If what? Update...
-            foreach (var booking in getSpecificBooking)
-            {
-                booking.UniversityCommunityId = ucBooking.UniversityCommunity.Id;
-                booking.BookingDate = ucBooking.BookingDate;
-                booking.Stock = booking.Stock;
 
-                _context.Bookings.Add(booking);
+            foreach (var booking in ucBooking.Bookings)
+            {
+                if (booking.BookingDateId == 0)
+                {
+                    //Insert if bookingId 0
+                    booking.UniversityCommunityId = ucBooking.UniversityCommunity.Id;
+                    booking.Stock = booking.Stock;
+                    booking.BookingDateId = ucBooking.Bookings.First().BookingDateId;
+                    _context.Bookings.Add(booking);
+                    
+                }
+
+                else
+                {
+                    //Update if exist
+                    var bInDb = _context.Bookings.Single(b => b.BookingDateId == booking.BookingDateId && b.StockId == booking.StockId);
+
+                    bInDb.BookingDate = booking.BookingDate;
+                    bInDb.BookingDateId = booking.BookingDateId;
+                    bInDb.BookingNotes = booking.BookingNotes;
+                    bInDb.BookingQuantity = booking.BookingQuantity;
+                    bInDb.Stock = booking.Stock;
+                    bInDb.StockId = booking.StockId;
+                }
             }
 
             _context.SaveChanges();
