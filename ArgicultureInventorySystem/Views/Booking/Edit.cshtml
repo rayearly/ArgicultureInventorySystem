@@ -17,9 +17,11 @@
             <dt>@Html.LabelFor(model => model.UniversityCommunity.Name, "User Name", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
             <dd>@Html.DisplayFor(model => model.UniversityCommunity.Name, new { @class = "form-control" })</dd>
             @Html.ValidationMessageFor(model => model.UniversityCommunity.Name, "", new { @class = "text-danger" })
+
             <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
             <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, new { @class = "form-control" })</dd>
             @Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })
+
             <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
             <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, new { @class = "form-control" })</dd>
             @Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })

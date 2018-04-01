@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ArgicultureInventorySystem.Models;
 using ArgicultureInventorySystem.ViewModel;
+using Microsoft.Ajax.Utilities;
 
 namespace ArgicultureInventorySystem.Controllers
 {
@@ -38,10 +39,20 @@ namespace ArgicultureInventorySystem.Controllers
                 }
             }
 
+            var getBookingDates = new List<BookingDate>();
+
+            foreach (var b in getSpecificBooking)
+            {
+                
+                getBookingDates.Add(b.BookingDate); 
+            }
+
+            // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
                 UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id),
-                Bookings = getSpecificBooking
+                Bookings = getSpecificBooking,
+                BookingDates = getBookingDates.Distinct()
             };
 
             return View("IndexSortByBooking" , viewModel);
@@ -99,7 +110,7 @@ namespace ArgicultureInventorySystem.Controllers
                 LoadStocks();
                 return View("Create", viewModel);
             }
-
+            
             foreach (var booking in ucBooking.Bookings)
             {
                 booking.UniversityCommunityId = ucBooking.UniversityCommunity.Id;
@@ -116,25 +127,79 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, int bookingDateId)
         {
-            return View();
+            LoadStocks();
+
+            // Get the universityCommunity information by passed Id
+            var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id);
+
+            // Get the whole list of bookings
+            var getBookings = uc.Bookings.ToList();
+
+            var book = new List<Booking>(getBookings.Where(b => b.BookingDateId == bookingDateId));
+
+            var get = _context.BookingDates.Single(b => b.Id == bookingDateId);
+            
+            var viewModel = new UcBookingStockViewModel
+            {
+                UniversityCommunity = uc,
+                Bookings = book,
+                Stocks = _context.Stocks.ToList(),
+                //BookingDates = getBookingsDates, //Find singleordefault booking id held by the booking
+                BookingDate = get
+            };
+
+            return View(viewModel);
         }
 
         // POST: Booking/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, UcBookingStockViewModel ucBooking)
         {
-            try
-            {
-                // TODO: Add update logic here
+            var getBooking = _context.Bookings.ToList();
 
-                return RedirectToAction("Index");
-            }
-            catch
+            var getSpecificBooking = new List<Booking>();
+
+            // Get Bookings specific to the customer
+            foreach (var b in getBooking)
             {
-                return View();
+                if (b.UniversityCommunity.Id == ucBooking.UniversityCommunity.Id)
+                {
+                    getSpecificBooking.Add(b);
+                }
             }
+
+            var viewModel = new UcBookingStockViewModel
+            {
+                UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucBooking.UniversityCommunity.Id),
+                Bookings = getSpecificBooking
+            };
+
+            if (!ModelState.IsValid)
+            {
+                LoadStocks();
+                return View("Edit", viewModel);
+            }
+
+            
+            //var bookingInDb = _context.Bookings.
+            
+            // If what? insert. If what? Update...
+            foreach (var booking in getSpecificBooking)
+            {
+                booking.UniversityCommunityId = ucBooking.UniversityCommunity.Id;
+                booking.BookingDate = ucBooking.BookingDate;
+                booking.Stock = booking.Stock;
+
+                _context.Bookings.Add(booking);
+            }
+
+            _context.SaveChanges();
+
+            var getId = viewModel.UniversityCommunity.Id;
+
+            return RedirectToAction("Index", new { id = getId });
         }
 
         // GET: Booking/Delete/5

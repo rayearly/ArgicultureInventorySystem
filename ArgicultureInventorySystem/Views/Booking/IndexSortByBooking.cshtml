@@ -7,7 +7,7 @@
 <h2>IndexSortByBooking</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", new {id = Model.UniversityCommunity.Id})
+    @Html.ActionLink("Create New Booking", "Create", new {id = Model.UniversityCommunity.Id}, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
@@ -18,17 +18,19 @@
             @Html.DisplayNameFor(model => model.BookingDate.ReturnDateTime)
         </th>
     </tr>
+    
+    @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId");
 
-    @foreach (var item in Model.Bookings) {
+    @foreach (var item in Model.BookingDates) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
+                @Html.DisplayFor(modelItem => item.BookingDateTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
+                @Html.DisplayFor(modelItem => item.ReturnDateTime)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Edit", "Edit", new { id=Model.UniversityCommunity.Id, bookingDateId = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>

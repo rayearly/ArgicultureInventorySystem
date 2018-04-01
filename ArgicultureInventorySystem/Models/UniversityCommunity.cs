@@ -15,6 +15,6 @@ namespace ArgicultureInventorySystem.Models
 
         public string PhoneNumber { get; set; }
 
-        public IList<Booking> Bookings { get; set; }
+        public virtual IList<Booking> Bookings { get; set; }
     }
 }

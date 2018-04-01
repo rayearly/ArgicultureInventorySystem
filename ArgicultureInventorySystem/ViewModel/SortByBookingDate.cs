@@ -13,3 +13,10 @@ namespace ArgicultureInventorySystem.ViewModel
         public virtual IList<Booking> Bookings { get; set; }
     }
 }
+
+/* Where BookingDateID == bookingdateId for University bookings list 
+  ---- get the booking details inside the newly created booking viewmodel?
+  ---- bookingdate id
+  -------- list of booking that had the bookingdate id
+     
+     */
