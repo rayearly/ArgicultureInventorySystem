@@ -49,22 +49,37 @@
 @section scripts
 {
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
+
             var url = '@Url.Action("BookingPartialResult")';
             var form = $('form');
             var recipients = $('#bookings');
             $('#add').click(function() {
-                $.get(url, function(response) {
-                    recipients.append(response);
-                    // Reparse the validator for client side validation
-                    form.data('validator', null);
-                    $.validator.unobtrusive.parse(form);
-                });
+                $.get(url,
+                    function(response) {
+                        recipients.append(response);
+                        // Reparse the validator for client side validation
+                        form.data('validator', null);
+                        $.validator.unobtrusive.parse(form);
+                    });
             });
 
-            $('#bookings').on('click', '.deleteRow', function () {
-                $(this).closest('.bookings').remove();
-            });
+            $('#bookings').on('click',
+                '.deleteRow',
+                function() {
+                    $(this).closest('.bookings').remove();
+                });
         });
     </script>
+
+    
+        @if (ViewBag.OverloadBooking != null) {
+            <script type="text/javascript">
+                $(function() {
+                    alert("@ViewBag.OverloadBooking");
+                });
+        
+            </script>
+        }
+
 }

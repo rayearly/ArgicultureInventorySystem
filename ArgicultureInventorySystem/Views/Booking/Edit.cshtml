@@ -77,21 +77,23 @@
                 var ucId = container.find('.ucId').val();
 
                 if (id) {
-
-                    $.ajax(
-                        {
-                            type: "POST",
-                            url: "@Url.Action("Delete" , "Booking")",
-                            ajaxsync: true,
-                            data: { id: id, stockId: stockId, ucId: ucId },
-                            success: function () {
-                                alert("success");
-                                container.remove();
-                            },
-                            error: function(data) {
-                                alert("fail");
-                            }
-                        });
+                    
+                    if (confirm("Are you sure?")) {
+                        $.ajax(
+                            {
+                                type: "POST",
+                                url: "@Url.Action("Delete" , "Booking")",
+                                ajaxsync: true,
+                                data: { id: id, stockId: stockId, ucId: ucId },
+                                success: function () {
+                                    alert("success");
+                                    container.remove();
+                                },
+                                error: function(data) {
+                                    alert("fail");
+                                }
+                            });
+                    }
 
                 } else {
                     container.remove();

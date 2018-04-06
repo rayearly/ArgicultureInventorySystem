@@ -4,10 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
+using System.Web.Services.Description;
+using System.Web.UI;
 using ArgicultureInventorySystem.Models;
 using ArgicultureInventorySystem.ViewModel;
 using Microsoft.Ajax.Utilities;
+using FluentValidation;
 
 namespace ArgicultureInventorySystem.Controllers
 {
@@ -58,8 +62,7 @@ namespace ArgicultureInventorySystem.Controllers
         {
             LoadStocks();
             var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id);
-            //var booking = _context.Bookings.Single(u => u.UniversityCommunity.Id == id).BookingDate;
-
+            
             var viewModel = new UcBookingStockViewModel
             {
                 UniversityCommunity = uc,
@@ -74,6 +77,9 @@ namespace ArgicultureInventorySystem.Controllers
         [HttpPost]
         public ActionResult Create(UcBookingStockViewModel ucBooking)
         {
+            /* TODO: When Creating an new Booking, check the number of stock number available, 
+             * TODO: If its less than booked number, deny booking. If its allowed, substract (UPDATE) from currentValue attribute */
+
             var getBooking = _context.Bookings.ToList();
 
             // Get Bookings specific to the customer
@@ -96,7 +102,20 @@ namespace ArgicultureInventorySystem.Controllers
                 booking.UniversityCommunityId = ucBooking.UniversityCommunity.Id;
                 booking.BookingDate = ucBooking.BookingDate;
                 booking.Stock = booking.Stock;
+
+                // Get stock to check current Quantity
+                var getStock = _context.Stocks.Single(s => s.Id == booking.StockId);
+
+                if (booking.BookingQuantity > getStock.CurrentQuantity)
+                {
+                    // Do something
+                    ViewBag.OverloadBooking = "shit";
+                    LoadStocks();
+                    return View(ucBooking);
+                }
+
                 _context.Bookings.Add(booking);
+                
             }
 
             _context.SaveChanges();
@@ -134,6 +153,10 @@ namespace ArgicultureInventorySystem.Controllers
         [HttpPost]
         public ActionResult Edit(int id, UcBookingStockViewModel ucBooking)
         {
+            /* TODO: When Adding/Creating a new Booking, check the number of stock number available, 
+             * TODO: If its less than booked number, deny booking. If its allowed, substract (UPDATE) from currentValue attribute
+             * TODO: Check for changes? */
+
             var getBooking = _context.Bookings.ToList();
 
             // Get Bookings specific to the customer
@@ -214,7 +237,8 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Bookings.Remove(booking);
             _context.SaveChanges();
 
-            // Start loading ViewModel to return to edit
+            #region Start Loading ViewModel to return to Edit
+            
             LoadStocks();
 
             // Get the universityCommunity information by passed Id
@@ -232,11 +256,12 @@ namespace ArgicultureInventorySystem.Controllers
                 Stocks = _context.Stocks.ToList(),
                 BookingDate = _context.BookingDates.Single(b => b.Id == id)
             };
+            #endregion
 
             return View("Edit", viewModel);
         }
 
-        // Get the stock into the ViewBag to be used in the PartialViews
+        #region LoadStock - Get the stock into the ViewBag to be used in the PartialViews
         private void LoadStocks()
         {
             var stocks = _context.Stocks.ToList();
@@ -252,6 +277,7 @@ namespace ArgicultureInventorySystem.Controllers
             // Store the list in a ViewBag
             ViewBag.LoadStocks = selectItems;
         }
+        #endregion
 
         // Function to return the partial view created for Booking
         public ActionResult BookingPartialResult()
