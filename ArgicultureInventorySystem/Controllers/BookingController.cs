@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ArgicultureInventorySystem.Models;
@@ -28,24 +30,11 @@ namespace ArgicultureInventorySystem.Controllers
         {
             var getBooking = _context.Bookings.ToList();
 
-            var getSpecificBooking = new List<Booking>();
-
             // Get Bookings specific to the customer
-            foreach (var b in getBooking)
-            {
-                if (b.UniversityCommunity.Id == id)
-                {
-                    getSpecificBooking.Add(b);
-                }
-            }
+            var getSpecificBooking = getBooking.Where(b => b.UniversityCommunity.Id == id).ToList();
 
-            var getBookingDates = new List<BookingDate>();
-
-            foreach (var b in getSpecificBooking)
-            {
-                
-                getBookingDates.Add(b.BookingDate); 
-            }
+            // Get the dates from the specific booking
+            var getBookingDates = getSpecificBooking.Select(b => b.BookingDate).ToList();
 
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
@@ -136,7 +125,7 @@ namespace ArgicultureInventorySystem.Controllers
                 Bookings = book,
                 Stocks = _context.Stocks.ToList(),
                 BookingDate = _context.BookingDates.Single(b => b.Id == bookingDateId)
-        };
+            };
 
             return View(viewModel);
         }
@@ -197,47 +186,74 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int bookingDateId, int? stockId, int? ucId)
         {
-            return View();
+            if (bookingDateId == null || stockId == null || ucId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // Get the specific booking from Booking table (PK: stockId + bookingdateId + universityCommunityId)
+            var booking = _context.Bookings.Single(b => b.BookingDateId == bookingDateId && b.StockId == stockId && b.UniversityCommunityId == ucId);
+            
+            return View("Edit", booking);
         }
 
         // POST: Booking/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int? id, int? stockId, int? ucId)
         {
-            try
+            if (id == null)
             {
-                // TODO: Add delete logic here
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-                return RedirectToAction("Index");
-            }
-            catch
+            // Get the specific booking from Booking table (PK: stockId + bookingdateId + universityCommunityId)
+            var booking = _context.Bookings.Single(b => b.BookingDateId == id && b.StockId == stockId && b.UniversityCommunityId == ucId);
+
+            _context.Bookings.Remove(booking);
+            _context.SaveChanges();
+
+            // Start loading ViewModel to return to edit
+            LoadStocks();
+
+            // Get the universityCommunity information by passed Id
+            var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucId);
+
+            // Get the whole list of bookings
+            var getBookings = uc.Bookings.ToList();
+
+            var book = new List<Booking>(getBookings.Where(b => b.BookingDateId == id));
+
+            var viewModel = new UcBookingStockViewModel
             {
-                return View();
-            }
+                UniversityCommunity = uc,
+                Bookings = book,
+                Stocks = _context.Stocks.ToList(),
+                BookingDate = _context.BookingDates.Single(b => b.Id == id)
+            };
+
+            return View("Edit", viewModel);
         }
 
+        // Get the stock into the ViewBag to be used in the PartialViews
         private void LoadStocks()
         {
             var stocks = _context.Stocks.ToList();
 
-            var selectItems = new List<SelectListItem>();
-
-            foreach (var stock in stocks)
+            // Get the stock into the list
+            var selectItems = stocks.Select(stock => new SelectListItem
             {
-                var listItem = new SelectListItem
-                {
-                    Value = stock.Id.ToString(),
-                    Text = stock.Name
-                };
+                Value = stock.Id.ToString(),
+                Text = stock.Name
+            })
+            .ToList();
 
-                selectItems.Add(listItem);
-            }
-
+            // Store the list in a ViewBag
             ViewBag.LoadStocks = selectItems;
         }
 
+        // Function to return the partial view created for Booking
         public ActionResult BookingPartialResult()
         {
             LoadStocks();

@@ -26,7 +26,11 @@
                     @Html.ValidationMessageFor(b => b.BookingNotes)
                 </td>
                 <td>
-                    <a href="#" class="deleteRow">X</a>
+                    @Html.HiddenFor(b => b.BookingDateId, new {@class="id"})
+                    @Html.HiddenFor(b => b.StockId, new { @class = "stockId" })
+                    @Html.HiddenFor(b => b.UniversityCommunityId, new { @class = "ucId" })
+                    <a href="#" id="Delete" class="deleteRow">X</a>
+
                 </td>
             </tr>
 
