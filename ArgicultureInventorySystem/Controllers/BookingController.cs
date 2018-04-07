@@ -211,7 +211,7 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking/Delete/5
         public ActionResult Delete(int bookingDateId, int? stockId, int? ucId)
         {
-            if (bookingDateId == null || stockId == null || ucId == null)
+            if (stockId == null || ucId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }

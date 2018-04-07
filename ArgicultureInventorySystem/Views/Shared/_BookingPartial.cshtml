@@ -8,7 +8,7 @@
 <div class="bookings">
     @using (Html.BeginCollectionItem("bookings"))
     {
-        <table>
+        <table class="table table-bordered table-hover">
             <tr>
                 <td>
                     @Html.LabelFor(b => b.StockId)
@@ -29,8 +29,8 @@
                     @Html.HiddenFor(b => b.BookingDateId, new {@class="id"})
                     @Html.HiddenFor(b => b.StockId, new { @class = "stockId" })
                     @Html.HiddenFor(b => b.UniversityCommunityId, new { @class = "ucId" })
-                    <a href="#" id="Delete" class="deleteRow">X</a>
-
+                    <br/>
+                    <div style ="text-align: center"><a href="#" id="Delete" class="deleteRow"><button type="button" id="add" class="btn btn-danger">X</button></a></div>
                 </td>
             </tr>
 

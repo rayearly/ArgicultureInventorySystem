@@ -20,10 +20,10 @@
                 @Html.ValidationMessageFor(model => model.UniversityCommunity.Name, "", new { @class = "text-danger" })
                 <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
                 <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, new { @class = "form-control" })</dd>
-                @Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })
+                <dd>@Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })</dd>
                 <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
                 <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, new { @class = "form-control" })</dd>
-                @Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })
+                <dd>@Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })</dd>
             </dl>
            
         <div id="bookings">
@@ -31,12 +31,12 @@
         </div>
         
             @Html.HiddenFor(model => model.UniversityCommunity.Id)
-
-            <button type="button" id="add">Add Booth</button>
+            <br/>
+            <button type="button" id="add" class = "btn btn-primary">Click to add Booth + </button>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create New Booking" class="btn btn-success btn-lg" />
             </div>
         </div>
     </div>

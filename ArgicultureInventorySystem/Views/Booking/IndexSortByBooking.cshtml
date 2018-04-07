@@ -4,7 +4,7 @@
     ViewBag.Title = "IndexSortByBooking";
 }
 
-<h2>IndexSortByBooking</h2>
+<h3>Booking List for @Model.UniversityCommunity.Name</h3>
 
 <p>
     @Html.ActionLink("Create New Booking", "Create", new {id = Model.UniversityCommunity.Id}, new { @class = "btn btn-primary" })
@@ -19,8 +19,7 @@
         </th>
     </tr>
     
-    @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId");
-
+    @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
     @foreach (var item in Model.BookingDates) {
         <tr>
             <td>
@@ -30,9 +29,9 @@
                 @Html.DisplayFor(modelItem => item.ReturnDateTime)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=Model.UniversityCommunity.Id, bookingDateId = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new {id = Model.UniversityCommunity.Id, bookingDateId = item.Id}) |
+                @Html.ActionLink("Details", "Details", new {/* id=item.PrimaryKey */}) |
+                @Html.ActionLink("Delete", "Delete", new {/* id=item.PrimaryKey */})
             </td>
         </tr>
     }
