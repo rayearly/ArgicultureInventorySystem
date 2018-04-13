@@ -1,54 +1,40 @@
-﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+﻿@model IEnumerable<ArgicultureInventorySystem.Models.UniversityCommunity>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Booking List</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", new {id = Model.UniversityCommunity.Id})
+   
 </p>
-<table class="table">
+<table class="table table-bordered table-hover">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UniversityCommunity.Name)
+            @Html.DisplayNameFor(model => model.IdNumber)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UniversityCommunity.IdNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BookingDate.BookingDateTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BookingDate.ReturnDateTime)
+            @Html.DisplayNameFor(model => model.PhoneNumber)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model.Bookings) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Stock.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UniversityCommunity.IdNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BookingQuantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.ActionLink("View Bookings", "Index", "Booking", new { id=item.Id }, null)
+            </td>
+        </tr>
+    }
 
 </table>

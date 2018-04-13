@@ -51,6 +51,13 @@ namespace ArgicultureInventorySystem.Controllers
             return View("IndexSortByBooking" , viewModel);
         }
 
+        public ActionResult Index2()
+        {
+            var universityCommunity = _context.UniversityCommunities.ToList();
+
+            return View("Index", universityCommunity);
+        }
+
         // GET: Booking/Details/5
         public ActionResult Details(int id)
         {
