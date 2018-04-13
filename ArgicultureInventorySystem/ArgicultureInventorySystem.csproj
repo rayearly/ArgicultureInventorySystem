@@ -395,7 +395,6 @@
     <Content Include="Views\StockMeasurements\Edit.cshtml" />
     <Content Include="Views\StockMeasurements\Index.cshtml" />
     <Content Include="Views\UniversityCommunity\Delete.cshtml" />
-    <Content Include="Views\Booking\UCBookingList.cshtml" />
     <Content Include="Views\Stocks\Create.cshtml" />
     <Content Include="Views\Stocks\Delete.cshtml" />
     <Content Include="Views\Stocks\Details.cshtml" />
@@ -404,7 +403,7 @@
     <Content Include="Views\Booking\Create.cshtml" />
     <Content Include="Views\Shared\_BookingPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
-    <Content Include="Views\Booking\BookingList.cshtml" />
+    <Content Include="Views\Booking\CustBookingList.cshtml" />
     <Content Include="Views\Booking\Edit.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
@@ -417,6 +416,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Booking\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

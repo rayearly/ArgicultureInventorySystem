@@ -30,7 +30,7 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking for Specific Customer
-        public ActionResult Index(string id)
+        public ActionResult CustomerBooking(string id)
         {
             var getBooking = _context.Bookings.ToList();
 
@@ -49,15 +49,16 @@ namespace ArgicultureInventorySystem.Controllers
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
             };
 
-            return View("BookingList" , viewModel);
+            return View("CustBookingList" , viewModel);
         }
 
         // GET: Booking List for Admin (Show list of Customer)
-        public ActionResult BookingList()
+        [Authorize(Roles = RoleName.CanManageBookings)]
+        public ActionResult AllBookingList()
         {
-            var universityCommunity = _context.UniversityCommunities.ToList();
+            var au = _context.Users.ToList();
 
-            return View("UCBookingList", universityCommunity);
+            return View("Index", au);
         }
 
         // GET: Booking/Details/5
