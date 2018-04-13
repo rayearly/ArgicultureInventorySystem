@@ -29,13 +29,13 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Dispose();
         }
 
-        // GET: Booking
-        public ActionResult Index(int id)
+        // GET: Booking for Specific Customer
+        public ActionResult Index(string id)
         {
             var getBooking = _context.Bookings.ToList();
 
             // Get Bookings specific to the customer
-            var getSpecificBooking = getBooking.Where(b => b.UniversityCommunity.Id == id).ToList();
+            var getSpecificBooking = getBooking.Where(b => b.ApplicationUser.Id == id).ToList();
 
             // Get the dates from the specific booking
             var getBookingDates = getSpecificBooking.Select(b => b.BookingDate).ToList();
@@ -43,19 +43,21 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id),
+                //UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id),
                 Bookings = getSpecificBooking,
-                BookingDates = getBookingDates.Distinct()
+                BookingDates = getBookingDates.Distinct(),
+                ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
             };
 
-            return View("IndexSortByBooking" , viewModel);
+            return View("BookingList" , viewModel);
         }
 
-        public ActionResult Index2()
+        // GET: Booking List for Admin (Show list of Customer)
+        public ActionResult BookingList()
         {
             var universityCommunity = _context.UniversityCommunities.ToList();
 
-            return View("Index", universityCommunity);
+            return View("UCBookingList", universityCommunity);
         }
 
         // GET: Booking/Details/5
@@ -65,16 +67,17 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking/Create
-        public ActionResult Create(int id)
+        public ActionResult Create(string id)
         {
             LoadStocks();
-            var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id);
+            var uc = _context.Users.SingleOrDefault(u => u.Id == id);
             
             var viewModel = new UcBookingStockViewModel
             {
-                UniversityCommunity = uc,
+                //UniversityCommunity = uc,
                 Bookings = _context.Bookings.ToList(),
-                Stocks = _context.Stocks.ToList()
+                Stocks = _context.Stocks.ToList(),
+                ApplicationUser = uc
             };
 
             return View(viewModel);
@@ -90,12 +93,14 @@ namespace ArgicultureInventorySystem.Controllers
             var getBooking = _context.Bookings.ToList();
 
             // Get Bookings specific to the customer
-            var getSpecificBooking = getBooking.Where(b => b.UniversityCommunity.Id == ucBooking.UniversityCommunity.Id).ToList();
-            
+            var getSpecificBooking = getBooking.Where(b => b.ApplicationUser.Id == ucBooking.ApplicationUser.Id).ToList();
+
+            var getSpecificBooking2 = ucBooking.Bookings.ToList();
+
             var viewModel = new UcBookingStockViewModel
             {
-                UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucBooking.UniversityCommunity.Id),
-                Bookings = getSpecificBooking
+                ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == ucBooking.ApplicationUser.Id),
+                Bookings = getSpecificBooking2
             };
 
             if (!ModelState.IsValid)
@@ -106,7 +111,7 @@ namespace ArgicultureInventorySystem.Controllers
             
             foreach (var booking in ucBooking.Bookings)
             {
-                booking.UniversityCommunityId = ucBooking.UniversityCommunity.Id;
+                booking.UserId = ucBooking.ApplicationUser.Id;
                 booking.BookingDate = ucBooking.BookingDate;
                 booking.Stock = booking.Stock;
 
@@ -127,18 +132,18 @@ namespace ArgicultureInventorySystem.Controllers
 
             _context.SaveChanges();
 
-            var getId = viewModel.UniversityCommunity.Id;
+            var getId = viewModel.ApplicationUser.Id;
 
             return RedirectToAction("Index", new { id = getId });
         }
 
         // GET: Booking/Edit/5
-        public ActionResult Edit(int id, int bookingDateId)
+        public ActionResult Edit(string id, int bookingDateId)
         {
             LoadStocks();
 
             // Get the universityCommunity information by passed Id
-            var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id);
+            var uc = _context.Users.SingleOrDefault(u => u.Id == id);
 
             // Get the whole list of bookings
             var getBookings = uc.Bookings.ToList();
@@ -147,10 +152,11 @@ namespace ArgicultureInventorySystem.Controllers
             
             var viewModel = new UcBookingStockViewModel
             {
-                UniversityCommunity = uc,
+                //UniversityCommunity = uc,
                 Bookings = book,
                 Stocks = _context.Stocks.ToList(),
-                BookingDate = _context.BookingDates.Single(b => b.Id == bookingDateId)
+                BookingDate = _context.BookingDates.Single(b => b.Id == bookingDateId),
+                ApplicationUser = uc
             };
 
             return View(viewModel);
@@ -158,7 +164,7 @@ namespace ArgicultureInventorySystem.Controllers
 
         // POST: Booking/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, UcBookingStockViewModel ucBooking)
+        public ActionResult Edit(string id, UcBookingStockViewModel ucBooking)
         {
             /* TODO: When Adding/Creating a new Booking, check the number of stock number available, 
              * TODO: If its less than booked number, deny booking. If its allowed, substract (UPDATE) from currentValue attribute
@@ -167,11 +173,11 @@ namespace ArgicultureInventorySystem.Controllers
             var getBooking = _context.Bookings.ToList();
 
             // Get Bookings specific to the customer
-            var getSpecificBooking = getBooking.Where(b => b.UniversityCommunity.Id == ucBooking.UniversityCommunity.Id).ToList();
+            var getSpecificBooking = getBooking.Where(b => b.ApplicationUser.Id == ucBooking.ApplicationUser.Id).ToList();
 
             var viewModel = new UcBookingStockViewModel
             {
-                UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucBooking.UniversityCommunity.Id),
+                ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == ucBooking.ApplicationUser.Id),
                 Bookings = getSpecificBooking
             };
 
@@ -187,7 +193,7 @@ namespace ArgicultureInventorySystem.Controllers
                 if (booking.BookingDateId == 0)
                 {
                     //Insert if bookingId 0
-                    booking.UniversityCommunityId = ucBooking.UniversityCommunity.Id;
+                    booking.UserId = ucBooking.ApplicationUser.Id;
                     booking.Stock = booking.Stock;
                     booking.BookingDateId = ucBooking.Bookings.First().BookingDateId;
                     _context.Bookings.Add(booking);
@@ -210,13 +216,13 @@ namespace ArgicultureInventorySystem.Controllers
 
             _context.SaveChanges();
 
-            var getId = viewModel.UniversityCommunity.Id;
+            var getId = viewModel.ApplicationUser.Id;
 
             return RedirectToAction("Index", new { id = getId });
         }
 
         // GET: Booking/Delete/5
-        public ActionResult Delete(int bookingDateId, int? stockId, int? ucId)
+        public ActionResult Delete(int bookingDateId, int? stockId, string ucId)
         {
             if (stockId == null || ucId == null)
             {
@@ -224,14 +230,14 @@ namespace ArgicultureInventorySystem.Controllers
             }
 
             // Get the specific booking from Booking table (PK: stockId + bookingdateId + universityCommunityId)
-            var booking = _context.Bookings.Single(b => b.BookingDateId == bookingDateId && b.StockId == stockId && b.UniversityCommunityId == ucId);
+            var booking = _context.Bookings.Single(b => b.BookingDateId == bookingDateId && b.StockId == stockId && b.UserId == ucId);
             
-            return View("Edit", booking);
+            return View("Edit");
         }
 
         // POST: Booking/Delete/5
         [HttpPost]
-        public ActionResult Delete(int? id, int? stockId, int? ucId)
+        public ActionResult Delete(int? id, int? stockId, string ucId)
         {
             if (id == null)
             {
@@ -239,7 +245,7 @@ namespace ArgicultureInventorySystem.Controllers
             }
 
             // Get the specific booking from Booking table (PK: stockId + bookingdateId + universityCommunityId)
-            var booking = _context.Bookings.Single(b => b.BookingDateId == id && b.StockId == stockId && b.UniversityCommunityId == ucId);
+            var booking = _context.Bookings.Single(b => b.BookingDateId == id && b.StockId == stockId && b.UserId == ucId);
 
             _context.Bookings.Remove(booking);
             _context.SaveChanges();
@@ -249,7 +255,7 @@ namespace ArgicultureInventorySystem.Controllers
             LoadStocks();
 
             // Get the universityCommunity information by passed Id
-            var uc = _context.UniversityCommunities.SingleOrDefault(u => u.Id == ucId);
+            var uc = _context.Users.SingleOrDefault(u => u.Id == ucId);
 
             // Get the whole list of bookings
             var getBookings = uc.Bookings.ToList();
@@ -258,7 +264,7 @@ namespace ArgicultureInventorySystem.Controllers
 
             var viewModel = new UcBookingStockViewModel
             {
-                UniversityCommunity = uc,
+                ApplicationUser = uc,
                 Bookings = book,
                 Stocks = _context.Stocks.ToList(),
                 BookingDate = _context.BookingDates.Single(b => b.Id == id)

@@ -11,10 +11,10 @@ namespace ArgicultureInventorySystem.Models
     public class Booking
     {
         [Key, Column(Order = 0)]
-        public int UniversityCommunityId { get; set; }
+        public string UserId { get; set; }
 
-        [ForeignKey("UniversityCommunityId")]
-        public virtual UniversityCommunity UniversityCommunity { get; set; }
+        [ForeignKey("UserId")]
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
         [Key, Column(Order = 1)]
         public int StockId { get; set; }

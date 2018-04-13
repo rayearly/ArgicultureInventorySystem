@@ -27,7 +27,7 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: UniversityCommunity
         public ActionResult Index()
         {
-            var universityCommunity = _context.UniversityCommunities.ToList();
+            var universityCommunity = _context.Users.ToList();
 
             return View(universityCommunity);
         }

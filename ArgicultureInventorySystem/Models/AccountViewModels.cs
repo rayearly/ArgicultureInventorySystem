@@ -65,6 +65,20 @@ namespace ArgicultureInventorySystem.Models
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "ID Number")]
+        public string IdNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Phone Number")]
+        public string PhoneNo { get; set; }
+
+        public virtual IList<Booking> Bookings { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

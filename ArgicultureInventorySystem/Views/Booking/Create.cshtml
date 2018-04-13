@@ -15,12 +15,14 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div>
             <dl class="dl-horizontal">
-                <dt>@Html.LabelFor(model => model.UniversityCommunity.Name, "User Name", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                <dd>@Html.DisplayFor(model => model.UniversityCommunity.Name, new { @class = "form-control" })</dd>
-                @Html.ValidationMessageFor(model => model.UniversityCommunity.Name, "", new { @class = "text-danger" })
+                <dt>@Html.LabelFor(model => model.ApplicationUser.Name, "User Name", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                <dd>@Html.TextBoxFor(model => model.ApplicationUser.Name, new { @class = "form-control" })</dd>
+                <dd>@Html.ValidationMessageFor(model => model.ApplicationUser.Name, "", new { @class = "text-danger" })</dd>
+
                 <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
                 <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, new { @class = "form-control" })</dd>
                 <dd>@Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })</dd>
+                
                 <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
                 <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, new { @class = "form-control" })</dd>
                 <dd>@Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })</dd>
@@ -30,7 +32,7 @@
                 <!--Partial View here-->
         </div>
         
-            @Html.HiddenFor(model => model.UniversityCommunity.Id)
+            @Html.HiddenFor(model => model.ApplicationUser.Id)
             <br/>
             <button type="button" id="add" class = "btn btn-primary">Click to add Booth + </button>
 

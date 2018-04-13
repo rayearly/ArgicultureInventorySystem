@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ArgicultureInventorySystem.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ArgicultureInventorySystem.Controllers
 {
@@ -17,6 +18,11 @@ namespace ArgicultureInventorySystem.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+
+        public ActionResult Index()
+        {
+            return RedirectToAction("Index", "UniversityCommunity");
+        }
 
         public AccountController()
         {
@@ -151,7 +157,15 @@ namespace ArgicultureInventorySystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    IdNumber = model.IdNumber,
+                    Name = model.Name,
+                    PhoneNo = model.PhoneNo
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -165,6 +179,7 @@ namespace ArgicultureInventorySystem.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
+
                 AddErrors(result);
             }
 

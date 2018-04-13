@@ -14,9 +14,9 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div>
         <dl class="dl-horizontal">
-            <dt>@Html.LabelFor(model => model.UniversityCommunity.Name, "User Name", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-            <dd>@Html.DisplayFor(model => model.UniversityCommunity.Name, new { @class = "form-control" })</dd>
-            @Html.ValidationMessageFor(model => model.UniversityCommunity.Name, "", new { @class = "text-danger" })
+            <dt>@Html.LabelFor(model => model.ApplicationUser.Name, "User Name", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+            <dd>@Html.DisplayFor(model => model.ApplicationUser.Name, new { @class = "form-control" })</dd>
+            @Html.ValidationMessageFor(model => model.ApplicationUser.Name, "", new { @class = "text-danger" })
 
             <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
             <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, new { @class = "form-control" })</dd>
@@ -27,21 +27,22 @@
             @Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })
         </dl>
            
+        @foreach (var booking in Model.Bookings)
+        {
+            <!--Partial View here-->
+            @Html.Partial("_BookingPartial", booking)
+        }
         <div id="bookings">
-            @foreach (var booking in Model.Bookings)
-            {
-                <!--Partial View here-->
-                @Html.Partial("_BookingPartial", booking)
-            }
+            
         </div>
         
-        @Html.HiddenFor(model => model.UniversityCommunity.Id)
-
-        <button type="button" id="add">Add Booth</button>
+        @Html.HiddenFor(model => model.ApplicationUser.Id)
+        <br/>
+        <button type="button" id="add" class="btn btn-primary">Click to add Booth + </button>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Edit Booking" class="btn btn-success btn-lg" />
             </div>
         </div>
     </div>
@@ -54,53 +55,26 @@
 @section scripts
 {
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             var url = '@Url.Action("BookingPartialResult")';
             var form = $('form');
             var recipients = $('#bookings');
+            $('#add').click(function() {
+                $.get(url,
+                    function(response) {
+                        recipients.append(response);
+                        // Reparse the validator for client side validation
+                        form.data('validator', null);
+                        $.validator.unobtrusive.parse(form);
+                    });
+            });
 
-            $('#add').click(function () {
-                $.get(url, function(response) {
-                    recipients.append(response);
-                    // Reparse the validator for client side validation
-                    form.data('validator', null);
-                    $.validator.unobtrusive.parse(form);
+            $('#bookings').on('click',
+                '.deleteRow',
+                function() {
+                    $(this).closest('.bookings').remove();
                 });
-            });
-
-            $('#bookings').on('click', '.deleteRow', function () {
-
-                var container = $(this).closest('.bookings');
-                var id = container.find('.id').val();
-                var stockId = container.find('.stockId').val();
-                var ucId = container.find('.ucId').val();
-
-                if (id) {
-                    
-                    if (confirm("Are you sure?")) {
-                        $.ajax(
-                            {
-                                type: "POST",
-                                url: "@Url.Action("Delete" , "Booking")",
-                                ajaxsync: true,
-                                data: { id: id, stockId: stockId, ucId: ucId },
-                                success: function () {
-                                    alert("success");
-                                    container.remove();
-                                },
-                                error: function(data) {
-                                    alert("fail");
-                                }
-                            });
-                    }
-
-                } else {
-                    container.remove();
-                }
-                
-            });
-            
         });
     </script>
 }

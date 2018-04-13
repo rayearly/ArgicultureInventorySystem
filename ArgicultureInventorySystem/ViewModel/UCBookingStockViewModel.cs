@@ -8,7 +8,7 @@ namespace ArgicultureInventorySystem.ViewModel
 {
     public class UcBookingStockViewModel
     {
-        public UniversityCommunity UniversityCommunity { get; set; }
+        //public UniversityCommunity UniversityCommunity { get; set; }
 
         public IList<Stock> Stocks { get; set; }
 
@@ -18,5 +18,7 @@ namespace ArgicultureInventorySystem.ViewModel
 
         // Get Booking by BookingDate
         public IEnumerable<BookingDate> BookingDates { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }
