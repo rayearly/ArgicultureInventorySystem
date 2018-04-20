@@ -60,6 +60,9 @@ namespace ArgicultureInventorySystem.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        // Get Account here
+        public ApplicationUser AppUser { get; set; }
     }
 
     public class RegisterViewModel

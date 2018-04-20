@@ -32,6 +32,7 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking for Specific Customer
         public ActionResult CustomerBooking(string id)
         {
+            //TODO: If authorized link to another page
             var getBooking = _context.Bookings.ToList();
 
             // Get Bookings specific to the customer
@@ -122,7 +123,7 @@ namespace ArgicultureInventorySystem.Controllers
                 if (booking.BookingQuantity > getStock.CurrentQuantity)
                 {
                     // Do something
-                    ViewBag.OverloadBooking = "shit";
+                    ViewBag.OverloadBooking = "The stock for " + getStock.Name + " is not enough";
                     LoadStocks();
                     return View(ucBooking);
                 }
@@ -135,7 +136,7 @@ namespace ArgicultureInventorySystem.Controllers
 
             var getId = viewModel.ApplicationUser.Id;
 
-            return RedirectToAction("Index", new { id = getId });
+            return RedirectToAction("CustomerBooking", "Booking", new { id = getId });
         }
 
         // GET: Booking/Edit/5
@@ -219,7 +220,7 @@ namespace ArgicultureInventorySystem.Controllers
 
             var getId = viewModel.ApplicationUser.Id;
 
-            return RedirectToAction("Index", new { id = getId });
+            return RedirectToAction("CustomerBooking", "Booking", new { id = getId });
         }
 
         // GET: Booking/Delete/5

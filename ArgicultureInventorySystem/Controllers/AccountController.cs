@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ArgicultureInventorySystem.Controllers
 {
+
     [Authorize]
     public class AccountController : Controller
     {
@@ -24,8 +25,12 @@ namespace ArgicultureInventorySystem.Controllers
             return RedirectToAction("Index", "UniversityCommunity");
         }
 
+        private readonly ApplicationDbContext _context;
+
+
         public AccountController()
         {
+            _context = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -81,11 +86,19 @@ namespace ArgicultureInventorySystem.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
+
+            var user = _context.Users.SingleOrDefault(u => u.Email == model.Email);
+            var holdId = user.Id;
+            // maybe check role admin or not
+            
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //return RedirectToLocal(returnUrl);
+                    // Here call function to pass to page?
+                    return RedirectToAction("CustomerBooking", "Booking", new {id = holdId});
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -436,6 +449,7 @@ namespace ArgicultureInventorySystem.Controllers
             }
 
             base.Dispose(disposing);
+            _context.Dispose();
         }
 
         #region Helpers
