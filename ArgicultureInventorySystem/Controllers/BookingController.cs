@@ -32,6 +32,9 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking for Specific Customer
         public ActionResult CustomerBooking(string id)
         {
+            if (User.IsInRole(RoleName.CanManageBookings))
+                return AllBookingList();
+                
             //TODO: If authorized link to another page
             var getBooking = _context.Bookings.ToList();
 
@@ -50,7 +53,8 @@ namespace ArgicultureInventorySystem.Controllers
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
             };
 
-            return View("CustBookingList" , viewModel);
+            return View("CustBookingList", viewModel);
+
         }
 
         // GET: Booking List for Admin (Show list of Customer)
