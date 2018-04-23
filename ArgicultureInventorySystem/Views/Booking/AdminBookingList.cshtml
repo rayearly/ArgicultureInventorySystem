@@ -1,7 +1,7 @@
 ﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
 
 @{
-    ViewBag.Title = "Booking List";
+    ViewBag.Title = "IndexSortByBooking";
 }
 
 <h3>Booking List for @Model.ApplicationUser.Name</h3>
@@ -30,7 +30,9 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.Id}) |
-                @Html.ActionLink("Details", "Details", new {/* id=item.PrimaryKey */})
+                @Html.ActionLink("Details", "Details", new {/* id=item.PrimaryKey */}) |
+                @Html.ActionLink("Delete", "Delete", new {/* id=item.PrimaryKey */})
+                
             </td>
         </tr>
     }

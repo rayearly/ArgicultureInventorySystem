@@ -417,6 +417,7 @@
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Booking\Index.cshtml" />
+    <Content Include="Views\Booking\AdminBookingList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -88,16 +88,15 @@ namespace ArgicultureInventorySystem.Controllers
             // To enable password failures to trigger account lockout, change to shouldLockout: true
 
             var user = _context.Users.SingleOrDefault(u => u.Email == model.Email);
-            var holdId = user.Id;
-            // maybe check role admin or not
             
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     //return RedirectToLocal(returnUrl);
-                    // Here call function to pass to page?
-                    return RedirectToAction("CustomerBooking", "Booking", new {id = holdId});
+                    // Here call function to pass to page? & Create Session?
+                    Session["UserSessionId"] = user.Id;
+                    return RedirectToAction("RedirectUserHome", "Booking", new {id = user.Id});
 
                 case SignInStatus.LockedOut:
                     return View("Lockout");

@@ -29,13 +29,26 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Dispose();
         }
 
+        public ActionResult RedirectUserHome(string id)
+        {
+            // TODO: Create Admin Menu
+            return User.IsInRole(RoleName.CanManageBookings) ? AllBookingList() : CustomerBooking(id);
+        }
+
+        public ActionResult RedirectUserBooking(string id)
+        {
+            return User.IsInRole(RoleName.CanManageBookings) ? AdminBooking(id) : CustomerBooking(id);
+        }
+
         // GET: Booking for Specific Customer
         public ActionResult CustomerBooking(string id)
         {
-            if (User.IsInRole(RoleName.CanManageBookings))
-                return AllBookingList();
-                
-            //TODO: If authorized link to another page
+            // TODO: How to clear session value after logout?
+            if (id == null)
+            {
+                id = (string)Session["UserSessionId"];
+            }
+
             var getBooking = _context.Bookings.ToList();
 
             // Get Bookings specific to the customer
@@ -47,7 +60,6 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                //UniversityCommunity = _context.UniversityCommunities.SingleOrDefault(u => u.Id == id),
                 Bookings = getSpecificBooking,
                 BookingDates = getBookingDates.Distinct(),
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
@@ -57,13 +69,37 @@ namespace ArgicultureInventorySystem.Controllers
 
         }
 
+        // Admin Booking : same as Customer except redirected to another page? Fix this
+        [Authorize(Roles = RoleName.CanManageBookings)]
+        public ActionResult AdminBooking(string id)
+        {
+
+            var getBooking = _context.Bookings.ToList();
+
+            // Get Bookings specific to the customer
+            var getSpecificBooking = getBooking.Where(b => b.ApplicationUser.Id == id).ToList();
+
+            // Get the dates from the specific booking
+            var getBookingDates = getSpecificBooking.Select(b => b.BookingDate).ToList();
+
+            // This is the list of booking not sorted by booking date
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = getSpecificBooking,
+                BookingDates = getBookingDates.Distinct(),
+                ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
+            };
+
+            return View("AdminBookingList", viewModel);
+        }
+
         // GET: Booking List for Admin (Show list of Customer)
         [Authorize(Roles = RoleName.CanManageBookings)]
         public ActionResult AllBookingList()
         {
-            var au = _context.Users.ToList();
+            var uc = _context.Users.ToList();
 
-            return View("Index", au);
+            return View("Index", uc);
         }
 
         // GET: Booking/Details/5
