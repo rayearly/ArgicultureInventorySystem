@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "AdminHomePage";
+}
+
+<h2>Admin HomePage</h2>
+
+<p>
+    @Html.ActionLink("View Users", "AllBookingList", null, new { @class = "btn btn-primary" })
+</p>
+
+<p>
+    @Html.ActionLink("View Unapproved Booking", "UnApprovedBookings", null, new { @class = "btn btn-primary" })
+</p>
+
+<p>
+    @Html.ActionLink("View Stocks", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<p>
+    @Html.ActionLink("Generate Reprot", "Create", null, new { @class = "btn btn-primary" })
+</p>

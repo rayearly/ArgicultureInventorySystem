@@ -32,7 +32,12 @@ namespace ArgicultureInventorySystem.Controllers
         public ActionResult RedirectUserHome(string id)
         {
             // TODO: Create Admin Menu
-            return User.IsInRole(RoleName.CanManageBookings) ? AllBookingList() : CustomerBooking(id);
+            return User.IsInRole(RoleName.CanManageBookings) ? AdminHomePage() : CustomerBooking(id);
+        }
+
+        public ViewResult AdminHomePage()
+        {
+            return View("AdminHomePage");
         }
 
         public ActionResult RedirectUserBooking(string id)
@@ -102,6 +107,22 @@ namespace ArgicultureInventorySystem.Controllers
             return View("Index", uc);
         }
 
+        // GET: Get Unapproved Booking and display it in a page to be approved by admin
+        public ActionResult UnApprovedBookings()
+        {
+            var unapproved = _context.Bookings.Where(b => b.BookingStatus == null).ToList();
+
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = unapproved,
+                BookingDates = _context.BookingDates.ToList(),
+                ApplicationUsers = _context.Users.ToList()
+            };
+
+            return View("UnapprovedBookingList", viewModel);
+        }
+
+
         // GET: Booking/Details/5
         public ActionResult Details(int id)
         {
@@ -130,7 +151,9 @@ namespace ArgicultureInventorySystem.Controllers
         public ActionResult Create(UcBookingStockViewModel ucBooking)
         {
             /* TODO: When Creating an new Booking, check the number of stock number available, 
-             * TODO: If its less than booked number, deny booking. If its allowed, substract (UPDATE) from currentValue attribute */
+             * TODO: If its less than booked number, deny booking. If its allowed, substract (UPDATE) from currentValue attribute 
+               TODO: Check if the stock selected is the same as previous one in the list or not. If same, deny booking.
+             */
 
             var getBooking = _context.Bookings.ToList();
 

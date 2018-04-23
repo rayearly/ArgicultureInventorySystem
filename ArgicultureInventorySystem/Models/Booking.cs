@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -33,6 +34,8 @@ namespace ArgicultureInventorySystem.Models
         public decimal BookingQuantity { get; set; }
 
         public string BookingNotes { get; set; }
+
+        public string BookingStatus { get; set; }
 
     }
 }

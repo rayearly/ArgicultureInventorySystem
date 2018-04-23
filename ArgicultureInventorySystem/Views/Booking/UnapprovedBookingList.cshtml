@@ -1,0 +1,56 @@
+﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+
+
+@{
+    ViewBag.Title = "UnapprovedBookingList";
+}
+
+<h2>Unapproved Booking List</h2>
+<br/>
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicationUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BookingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BookingDate)
+        </th>
+        <th>
+            Status
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Bookings) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
+            </td>
+            <td>
+                @if (item.BookingStatus == null)
+                {
+                    <p>Not Approved</p>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {}) |
+                @Html.ActionLink("Details", "Details", new {}) |
+                @Html.ActionLink("Delete", "Delete", new {}) | 
+                @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new {}, null)
+            </td>
+        </tr>
+    }
+</table>
+
+<p>
+    @Html.ActionLink("Return to Home", "AdminHomePage", null, new { @class = "btn btn-primary" })
+</p>
