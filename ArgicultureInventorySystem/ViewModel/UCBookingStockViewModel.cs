@@ -12,7 +12,7 @@ namespace ArgicultureInventorySystem.ViewModel
 
         public IList<Stock> Stocks { get; set; }
 
-        public IList<Booking> Bookings { get; set; }
+        public IEnumerable<Booking> Bookings { get; set; }
 
         public virtual BookingDate BookingDate { get; set; }
 
@@ -21,6 +21,6 @@ namespace ArgicultureInventorySystem.ViewModel
 
         public ApplicationUser ApplicationUser { get; set; }
 
-        public IList<ApplicationUser> ApplicationUsers { get; set; }
+        public IEnumerable<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

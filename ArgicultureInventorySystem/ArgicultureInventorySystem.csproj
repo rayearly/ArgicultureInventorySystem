@@ -288,6 +288,10 @@
     <Compile Include="Migrations\201804230134309_SetDefaultValueToBookingStatus3.Designer.cs">
       <DependentUpon>201804230134309_SetDefaultValueToBookingStatus3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804241011448_ChangeBookingStatusToBoolean.cs" />
+    <Compile Include="Migrations\201804241011448_ChangeBookingStatusToBoolean.Designer.cs">
+      <DependentUpon>201804241011448_ChangeBookingStatusToBoolean.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -543,6 +547,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804230134309_SetDefaultValueToBookingStatus3.resx">
       <DependentUpon>201804230134309_SetDefaultValueToBookingStatus3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804241011448_ChangeBookingStatusToBoolean.resx">
+      <DependentUpon>201804241011448_ChangeBookingStatusToBoolean.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

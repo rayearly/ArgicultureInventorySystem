@@ -36,10 +36,15 @@
                 @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
             </td>
             <td>
-                @if (item.BookingStatus == null)
+                @if (item.BookingStatus == false)
                 {
                     <p>Not Approved</p>
                 }
+                else
+                {
+                    <p>Approved</p>
+                }
+                @Html.CheckBoxFor(c => item.BookingStatus, new { @checked = "checked"})
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {}) |

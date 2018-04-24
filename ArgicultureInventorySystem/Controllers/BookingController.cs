@@ -35,6 +35,8 @@ namespace ArgicultureInventorySystem.Controllers
             return User.IsInRole(RoleName.CanManageBookings) ? AdminHomePage() : CustomerBooking(id);
         }
 
+        // DISPLAY: Menu for Admin
+        [Authorize(Roles = RoleName.CanManageBookings)]
         public ViewResult AdminHomePage()
         {
             return View("AdminHomePage");
@@ -110,18 +112,24 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Get Unapproved Booking and display it in a page to be approved by admin
         public ActionResult UnApprovedBookings()
         {
-            var unapproved = _context.Bookings.Where(b => b.BookingStatus == null).ToList();
+            // Get the unapproved bookings
+            var unapproved = _context.Bookings.Where(b => b.BookingStatus == false).ToList();
 
+            // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = unapproved,
-                BookingDates = _context.BookingDates.ToList(),
-                ApplicationUsers = _context.Users.ToList()
+                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
             };
 
             return View("UnapprovedBookingList", viewModel);
         }
 
+        [HttpPost]
+        public ActionResult ApproveBooking(string userId)
+        {
+            //var booking = _context.Bookings.Single(b => b.)
+            return View("UnapprovedBookingList");
+        }
 
         // GET: Booking/Details/5
         public ActionResult Details(int id)
