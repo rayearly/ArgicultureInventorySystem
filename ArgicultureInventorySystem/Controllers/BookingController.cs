@@ -125,10 +125,27 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult ApproveBooking(string userId)
+        public ActionResult ApproveBooking(int bookingId)
         {
-            //var booking = _context.Bookings.Single(b => b.)
-            return View("UnapprovedBookingList");
+            var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
+
+            foreach (var book in booking)
+            {
+                book.BookingStatus = true;
+            }
+
+            _context.SaveChanges();
+
+            // Get the unapproved bookings
+            var unapproved = _context.Bookings.Where(b => b.BookingStatus == false).ToList();
+
+            // This is the list of booking not sorted by booking date
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
+            };
+
+            return View("UnapprovedBookingList", viewModel);
         }
 
         // GET: Booking/Details/5

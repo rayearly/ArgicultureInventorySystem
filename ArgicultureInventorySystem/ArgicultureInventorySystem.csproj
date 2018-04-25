@@ -483,6 +483,7 @@
     <Content Include="Views\Booking\AdminBookingList.cshtml" />
     <Content Include="Views\Booking\AdminHomePage.cshtml" />
     <Content Include="Views\Booking\UnapprovedBookingList.cshtml" />
+    <Content Include="Views\Shared\_BookingApprove.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

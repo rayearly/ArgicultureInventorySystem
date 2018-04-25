@@ -1,0 +1,33 @@
+﻿@using System.Diagnostics.PerformanceData
+@using System.Web.Mvc.Html
+@using Microsoft.Ajax.Utilities
+@using HtmlHelpers.BeginCollectionItem
+@model ArgicultureInventorySystem.Models.Booking
+
+
+<div class="approve">
+    @using (Html.BeginCollectionItem("approve"))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.BookingDate.BookingDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.BookingDate.ReturnDateTime)
+            </td>
+            <td>
+                <div class="checkbox">
+                    <a href="#" id="Approve" class="approveRow"><button type="button" class="btn btn-primary">✓</button></a>
+                    @Html.HiddenFor(modelItem => modelItem.BookingDateId, new {@class = "bookingId"})
+                </div>
+            </td>
+            <td>
+                @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new {id = Model.BookingDateId}, null)
+                <!--TODO: redirect view booking to specific list of booking for the booking id, create new controller?-->
+            </td>
+        </tr>
+    }
+</div>
