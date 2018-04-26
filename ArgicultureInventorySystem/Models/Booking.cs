@@ -11,6 +11,11 @@ namespace ArgicultureInventorySystem.Models
 {
     public class Booking
     {
+        public Booking()
+        {
+            BookingStatus = "In Process";
+        }
+
         [Key, Column(Order = 0)]
         public string UserId { get; set; }
 
@@ -35,7 +40,7 @@ namespace ArgicultureInventorySystem.Models
 
         public string BookingNotes { get; set; }
 
-        public bool BookingStatus { get; set; }
+        public string BookingStatus { get; set; }
 
     }
 }

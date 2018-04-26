@@ -1,0 +1,35 @@
+﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Booking Details</h2>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            Stock Name
+        </th>
+        <th>
+            Booked Quantity
+        </th>
+        <th>
+            Current Available Quantity
+        </th>
+    </tr>
+    @foreach (var book in Model.Bookings)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(m => book.Stock.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(m => book.BookingQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(m => book.Stock.CurrentQuantity)
+            </td>
+        </tr>
+    }
+</table>
+@Html.ActionLink("<< Back to Unapproved List", "UnApprovedBookings")

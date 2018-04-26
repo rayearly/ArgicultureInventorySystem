@@ -80,6 +80,10 @@ namespace ArgicultureInventorySystem.Controllers
         [Authorize(Roles = RoleName.CanManageBookings)]
         public ActionResult AdminBooking(string id)
         {
+            if (id == null)
+            {
+                id = (string)Session["UserSessionId"];
+            }
 
             var getBooking = _context.Bookings.ToList();
 
@@ -113,7 +117,7 @@ namespace ArgicultureInventorySystem.Controllers
         public ActionResult UnApprovedBookings()
         {
             // Get the unapproved bookings
-            var unapproved = _context.Bookings.Where(b => b.BookingStatus == false).ToList();
+            var unapproved = _context.Bookings.Where(b => b.BookingStatus == "In Process").ToList();
 
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
@@ -128,16 +132,54 @@ namespace ArgicultureInventorySystem.Controllers
         public ActionResult ApproveBooking(int bookingId)
         {
             var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
+            var stock = _context.Stocks.ToList();
 
             foreach (var book in booking)
             {
-                book.BookingStatus = true;
+                // Set approval (bool) into true - approved
+                book.BookingStatus = "Approved";
+
+                foreach (var s in stock)
+                {
+                    if (s.Id == book.StockId)
+                    {
+                        // Substract current quantity with quantity booked
+                        // TODO: check if the value is negative, dont make approval
+                        s.CurrentQuantity = s.CurrentQuantity - book.BookingQuantity;
+                    }
+                }
             }
 
             _context.SaveChanges();
 
             // Get the unapproved bookings
-            var unapproved = _context.Bookings.Where(b => b.BookingStatus == false).ToList();
+            var unapproved = _context.Bookings.Where(b => b.BookingStatus == "In Process").ToList();
+
+            // This is the list of booking not sorted by booking date
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
+            };
+
+            return View("UnapprovedBookingList", viewModel);
+        }
+
+        // TODO: Disapprove Booking
+        [HttpPost]
+        public ActionResult DisApproveBooking(int bookingId)
+        {
+            var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
+
+            foreach (var book in booking)
+            {
+                // Set approval (bool) into true - approved
+                book.BookingStatus = "Rejected";
+            }
+
+            _context.SaveChanges();
+
+            // Get the unapproved bookings
+            var unapproved = _context.Bookings.Where(b => b.BookingStatus == "In Process").ToList();
 
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
@@ -151,7 +193,17 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var booking = _context.Bookings.Where(b => b.BookingDateId == id);
+
+            var stock = _context.Stocks.ToList();
+
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = booking,
+                Stocks = stock
+            };
+
+            return View("Details", viewModel);
         }
 
         // GET: Booking/Create

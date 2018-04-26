@@ -6,8 +6,7 @@
 
 <h2>Unapproved Booking List</h2>
 <br/>
-<div id="checkbox">
-    
+<div id="approve">
     <table class="table table-bordered table-hover">
         <tr>
             <th>
@@ -42,11 +41,9 @@
         <script type="text/javascript">
         $(document).ready(function() {
 
-            $('#checkbox').on('click',
-                '.approveRow',
-                function() {
+            $('#approve').on('click', '.approveRow', function() {
 
-                    var container = $(this).closest('.checkbox');
+                    var container = $(this).closest('.approve');
                     var bookingId = container.find('.bookingId').val();
 
                     if (bookingId) {
@@ -71,7 +68,36 @@
                         }
                     }
 
-                });
+            });
+
+            $('#approve').on('click', '.disapproveRow', function() {
+
+                var container = $(this).closest('.approve');
+                var bookingId = container.find('.bookingId').val();
+
+                if (bookingId) {
+                    var answer = confirm("Reject Booking?");
+
+                    if (answer) {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("DisApproveBooking", "Booking")",
+                            ajaxsync: true,
+                            data: { bookingId: bookingId },
+                            success: function() {
+                                alert("Booking has been rejected");
+                                location.reload();
+                            },
+                            error: function(data) {
+                                alert("Rejection Failed");
+                            }
+                        });
+                    } else {
+                        e.preventDefault();
+                    }
+                }
+
+            });
 
 
         });

@@ -19,13 +19,14 @@
                 @Html.DisplayFor(modelItem => modelItem.BookingDate.ReturnDateTime)
             </td>
             <td>
-                <div class="checkbox">
+                <div class="approve">
                     <a href="#" id="Approve" class="approveRow"><button type="button" class="btn btn-primary">✓</button></a>
+                    <a href="#" id="Approve" class="disapproveRow"><button type="button" class="btn btn-danger">X</button></a>
                     @Html.HiddenFor(modelItem => modelItem.BookingDateId, new {@class = "bookingId"})
                 </div>
             </td>
             <td>
-                @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new {id = Model.BookingDateId}, null)
+                @Html.ActionLink("View Booking Details", "Details", "Booking", new {id = Model.BookingDateId}, null)
                 <!--TODO: redirect view booking to specific list of booking for the booking id, create new controller?-->
             </td>
         </tr>
