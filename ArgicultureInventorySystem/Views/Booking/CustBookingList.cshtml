@@ -1,4 +1,5 @@
-﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+﻿@using Antlr.Runtime.Tree
+@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
 
 @{
     ViewBag.Title = "Booking List";
@@ -17,20 +18,34 @@
         <th>
             @Html.DisplayNameFor(model => model.BookingDate.ReturnDateTime)
         </th>
+        <th>
+            Booking Status
+        </th>
     </tr>
     
     @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
-    @foreach (var item in Model.BookingDates) {
+    @foreach (var item in Model.Bookings) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.BookingDateTime)
+                @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ReturnDateTime)
+                @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.Id}) |
-                @Html.ActionLink("Details", "Details", new {/* id=item.PrimaryKey */})
+                @Html.DisplayFor(modelItem => item.BookingStatus)
+            </td>
+            <td>
+                @if (item.BookingStatus == "Approved" || item.BookingStatus == "Rejected")
+                {
+
+                }
+                else
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDateId}, new { @class = "btn btn-primary" })
+                }
+                
+                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary" })
             </td>
         </tr>
     }

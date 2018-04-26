@@ -13,9 +13,6 @@
         <th>
             Booked Quantity
         </th>
-        <th>
-            Current Available Quantity
-        </th>
     </tr>
     @foreach (var book in Model.Bookings)
     {
@@ -26,10 +23,16 @@
             <td>
                 @Html.DisplayFor(m => book.BookingQuantity)
             </td>
-            <td>
-                @Html.DisplayFor(m => book.Stock.CurrentQuantity)
-            </td>
         </tr>
     }
 </table>
-@Html.ActionLink("<< Back to Unapproved List", "UnApprovedBookings")
+
+<a href="javascript:void(0);" id="backLink"> << Back</a>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).on('click', '#backLink', function () {
+            history.go(-1);
+        });
+    </script>
+}

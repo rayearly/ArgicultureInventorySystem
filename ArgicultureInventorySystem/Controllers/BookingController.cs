@@ -67,7 +67,7 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = getSpecificBooking,
+                Bookings = getSpecificBooking.DistinctBy(b => b.BookingDateId),
                 BookingDates = getBookingDates.Distinct(),
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
             };
@@ -164,7 +164,6 @@ namespace ArgicultureInventorySystem.Controllers
             return View("UnapprovedBookingList", viewModel);
         }
 
-        // TODO: Disapprove Booking
         [HttpPost]
         public ActionResult DisApproveBooking(int bookingId)
         {
