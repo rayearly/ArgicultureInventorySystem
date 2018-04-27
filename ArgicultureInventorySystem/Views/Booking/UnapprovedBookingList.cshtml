@@ -37,70 +37,73 @@
     </p>
 
     @section scripts
-{
+    {
         <script type="text/javascript">
-        $(document).ready(function() {
+            $(document).ready(function() {
 
-            $('#approve').on('click', '.approveRow', function() {
+                $('#approve').on('click',
+                    '.approveRow',
+                    function() {
 
-                    var container = $(this).closest('.approve');
-                    var bookingId = container.find('.bookingId').val();
+                        var container = $(this).closest('.approve');
+                        var bookingId = container.find('.bookingId').val();
 
-                    if (bookingId) {
-                        var answer = confirm("Approve Booking?");
-
-                        if (answer) {
-                            $.ajax({
-                                type: "POST",
-                                url: "@Url.Action("ApproveBooking", "Booking")",
-                                ajaxsync: true,
-                                data: { bookingId: bookingId },
-                                success: function() {
-                                    alert("Booking Approved");
-                                    location.reload();
-                                },
-                                error: function(data) {
-                                    alert("Approval Failed");
-                                }
-                            });
-                        } else {
-                            e.preventDefault();
-                        }
-                    }
-
-            });
-
-            $('#approve').on('click', '.disapproveRow', function() {
-
-                var container = $(this).closest('.approve');
-                var bookingId = container.find('.bookingId').val();
-
-                if (bookingId) {
-                    var answer = confirm("Reject Booking?");
-
-                    if (answer) {
-                        $.ajax({
-                            type: "POST",
-                            url: "@Url.Action("DisApproveBooking", "Booking")",
-                            ajaxsync: true,
-                            data: { bookingId: bookingId },
-                            success: function() {
-                                alert("Booking has been rejected");
-                                location.reload();
-                            },
-                            error: function(data) {
-                                alert("Rejection Failed");
+                        if (bookingId) {
+                            var answer = confirm("Approve Booking?");
+                            if (answer) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "@Url.Action("ApproveBooking", "Booking")",
+                                    ajaxsync: true,
+                                    data: { bookingId: bookingId },
+                                    success: function() {
+                                        alert("Booking Approved");
+                                        location.reload();
+                                    },
+                                    error: function(data) {
+                                        alert("Approval Failed");
+                                    }
+                                });
+                            } else {
+                                e.preventDefault();
                             }
-                        });
-                    } else {
-                        e.preventDefault();
-                    }
-                }
+                        }
+
+                    });
+
+                $('#approve').on('click',
+                    '.disapproveRow',
+                    function() {
+
+                        var container = $(this).closest('.approve');
+                        var bookingId = container.find('.bookingId').val();
+
+                        if (bookingId) {
+                            var answer = confirm("Reject Booking?");
+
+                            if (answer) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "@Url.Action("DisApproveBooking", "Booking")",
+                                    ajaxsync: true,
+                                    data: { bookingId: bookingId },
+                                    success: function() {
+                                        alert("Booking has been rejected");
+                                        location.reload();
+                                    },
+                                    error: function(data) {
+                                        alert("Rejection Failed");
+                                    }
+                                });
+                            } else {
+                                e.preventDefault();
+                            }
+                        }
+
+                    });
+
 
             });
-
-
-        });
 
 
         </script>

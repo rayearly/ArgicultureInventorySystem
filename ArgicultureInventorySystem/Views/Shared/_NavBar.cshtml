@@ -10,9 +10,9 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("My Booking", "RedirectUserBooking", "Booking")</li>
                 <li>@Html.ActionLink("Admin Menu", "AdminHomePage", "Booking")</li>
                 <li>@Html.ActionLink("View Customer List", "AllBookingList", "Booking")</li>
-                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
             </ul>
             @Html.Partial("_LoginPartial")
         </div>
