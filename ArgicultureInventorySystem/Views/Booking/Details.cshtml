@@ -33,12 +33,16 @@
     }
 </table>
 
-<a href="javascript:void(0);" id="backLink"> << Back</a>
+<div align="left">
+    <ul class="pager" align="left">
+        <li><a href="javascript:void(0);" id="backLink"> << Back</a></li>
+    </ul>
+</div>
 
-@section scripts{
-    <script type="text/javascript">
-        $(document).on('click', '#backLink', function () {
-            history.go(-1);
-        });
-    </script>
-}
+    @section scripts{
+        <script type="text/javascript">
+            $(document).on('click', '#backLink', function () {
+                history.go(-1);
+            });
+        </script>
+    }

@@ -9,66 +9,78 @@
     <li><a href="#">Home</a></li>
     <li class="active">Homepage</li>
 </ul>
+<table width="100%">
+    <tr>
+        <td width="60%">
+            <div>
+                <p>
+                    @Html.ActionLink("View Users", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                </p>
 
-<p>
-    @Html.ActionLink("View Users", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
-</p>
+                <p>
+                    @Html.ActionLink("View Stocks", "Index", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                </p>
+                <p>
+                    @Html.ActionLink("Generate Report", "Report", "Booking", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                </p>
+            </div>
+        </td>
+        <td width="100px"></td>
+        <td width="30%">
+            <script>
+                var inProcess = 0;
+                var rejected = 0;
+                var approved = 0;
+            </script>
 
-<p>
-    @Html.ActionLink("View Stocks", "Index", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
-</p>
-<p>
-    @Html.ActionLink("Generate Report", "Report", "Booking", null, new { @class = "btn btn-warning btn-lg btn-block" })
-</p>
-
-<script>
-    var inProcess = 0;
-    var rejected = 0;
-    var approved = 0;
-</script>
-
-@foreach (var booking in Model.Bookings)
-{
+            @foreach (var booking in Model.Bookings)
+            {
 
 
-    if (@booking.BookingStatus == "In Process")
-    {
-        <script>inProcess++;</script>
-    }
+                if (@booking.BookingStatus == "In Process")
+                {
+                    <script>inProcess++;</script>
+                }
 
-    else if (@booking.BookingStatus == "Rejected")
-    {
-        <script>rejected++;</script>
-    }
+                else if (@booking.BookingStatus == "Rejected")
+                {
+                    <script>rejected++;</script>
+                }
 
-    else if (@booking.BookingStatus == "Approved")
-    {
-        <script>approved++;</script>
-    }
-}
+                else if (@booking.BookingStatus == "Approved")
+                {
+                    <script>approved++;</script>
+                }
+            }
 
-<p>
-    
-    <div align ="left" width ="400px" class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Booking Status</h3>
-        </div>
-        <div class="panel-body">
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <span class="badge"><script>document.write(inProcess);</script></span>
-                    @Html.ActionLink("Unapproved Booking", "UnApprovedBookings", null, new {@class = "btn-link"})
-                </li>
-                <li class="list-group-item">
-                    <span class="badge"><script>document.write(approved);</script></span>
-                    @Html.ActionLink("Approved Booking", "ApprovedBooking", null, new {@class = "btn-link"})
-                </li>
-                <li class="list-group-item">
-                    <span class="badge"><script>document.write(rejected);</script></span>
-                    @Html.ActionLink("Rejected Booking", "RejectedBooking", null, new {@class = "btn-link"})
-                </li>
-            </ul>
-        </div>
-    </div>
-    
-</p>
+            <p>
+
+                <div align="left" class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Booking Status</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">
+                                    <script>document.write(inProcess);</script></span>
+                                @Html.ActionLink("Unapproved Booking", "UnApprovedBookings", null, new { @class = "btn-link" })
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">
+                                    <script>document.write(approved);</script></span>
+                                @Html.ActionLink("Approved Booking", "ApprovedBooking", null, new { @class = "btn-link" })
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">
+                                    <script>document.write(rejected);</script></span>
+                                @Html.ActionLink("Rejected Booking", "RejectedBooking", null, new { @class = "btn-link" })
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </p>
+        </td>
+    </tr>
+</table>

@@ -2,6 +2,10 @@
 @model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
 
 @{
+    var count = 0;
+}
+
+@{
     ViewBag.Title = "Booking List";
 }
 
@@ -10,8 +14,10 @@
 <p>
     @Html.ActionLink("Create New Booking", "Create", new {id = Model.ApplicationUser.Id}, new { @class = "btn btn-primary" })
 </p>
-<table class="table table-bordered table-hover">
+<table id="booking" class="table table-bordered table-hover">
+    <thead>
     <tr>
+        <th>No.</th>
         <th>
             @Html.DisplayNameFor(model => model.BookingDate.BookingDateTime)
         </th>
@@ -21,11 +27,19 @@
         <th>
             Booking Status
         </th>
+        <th></th>
     </tr>
+    </thead>
     
     @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
     @foreach (var item in Model.Bookings) {
         <tr>
+            <td>
+                @{
+                    count++;
+                    @count  
+                }
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
             </td>
@@ -42,12 +56,25 @@
                 }
                 else
                 {
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDateId}, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.BookingDateId}, new {@class = "btn btn-primary"})
                 }
-                
-                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary" })
+
+                @Html.ActionLink("Details", "Details", new {id = item.BookingDateId}, new {@class = "btn btn-primary"})
             </td>
         </tr>
     }
 
 </table>
+
+@section scripts{
+    <script>
+        $(document).ready(function() {
+            $("#booking").DataTable({
+                columnDefs : [
+                    { targets: 4, sortable: false}
+                ],
+                order: [[0, "asc"]]
+            });
+        });
+    </script>
+}
