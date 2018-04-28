@@ -40,7 +40,15 @@ namespace ArgicultureInventorySystem.Controllers
         [Authorize(Roles = RoleName.CanManageBookings)]
         public ViewResult AdminHomePage()
         {
-            return View("AdminHomePage");
+            // Get Bookings specific to the customer
+            var bookings = _context.Bookings.ToList();
+
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = bookings.DistinctBy(b => b.BookingDateId)
+            };
+
+            return View("AdminHomePage", viewModel);
         }
 
         public ActionResult RedirectUserBooking(string id)
