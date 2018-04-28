@@ -1,16 +1,17 @@
 ﻿@model IEnumerable<ArgicultureInventorySystem.Models.Stock>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Stock List";
 }
 
-<h2>Index</h2>
+<h2>Stock List</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", "Stocks", null, new { @class = "btn btn-primary" })
 </p>
 <table id ="stocks" class="table table-bordered table-hover">
     <thead>
+    <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -29,8 +30,10 @@
         <th>
             Manage
         </th>
+    </tr>
     </thead>
 
+    <tbody>
     @foreach (var item in Model) {
         <tr>
             <td>
@@ -56,7 +59,7 @@
             </td>
         </tr>
     }
-
+    </tbody>
 </table>
 
 @section scripts{

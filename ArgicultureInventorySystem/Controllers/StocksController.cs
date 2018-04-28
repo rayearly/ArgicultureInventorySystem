@@ -170,5 +170,16 @@ namespace ArgicultureInventorySystem.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public JsonResult GetStock(string term = "")
+        {
+            var measurements = _context.Stocks
+                .Where(m => m.Name.ToUpper()
+                .Contains(term.ToUpper()))
+                .Select(m => new {Name = m.Name, ID = m.Id})
+                .Distinct().ToList();
+
+            return Json(measurements, JsonRequestBehavior.AllowGet);
+        }
     }
 }

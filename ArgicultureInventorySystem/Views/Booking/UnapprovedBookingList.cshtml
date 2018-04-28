@@ -7,24 +7,26 @@
 <h2>Unapproved Booking List</h2>
 <br/>
 <div id="approve">
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookingDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookingDate)
-            </th>
-            <th>
-                Status
-            </th>
-        </tr>
-    
-
-
+    <table id ="booking" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationUser)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BookingDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BookingDate)
+                </th>
+                <th>
+                    Approve / Reject
+                </th>
+                <th>
+                    
+                </th>
+            </tr>
+        </thead>
     @foreach (var booking in Model.Bookings)
     {
         <!--Partial View here-->
@@ -41,6 +43,8 @@
         <script type="text/javascript">
             $(document).ready(function() {
 
+                $("#booking").DataTable();
+
                 $('#approve').on('click',
                     '.approveRow',
                     function() {
@@ -52,7 +56,7 @@
                             var answer = confirm("Approve Booking?");
                             if (answer) {
                                 $.ajax({
-                                    type: "POST",
+                                    type: "PUT",
                                     url: "@Url.Action("ApproveBooking", "Booking")",
                                     ajaxsync: true,
                                     data: { bookingId: bookingId },

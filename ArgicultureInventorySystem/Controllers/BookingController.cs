@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Http.Results;
 using System.Web.ModelBinding;
 using System.Web.Mvc;
 using System.Web.Services.Description;
@@ -128,7 +129,7 @@ namespace ArgicultureInventorySystem.Controllers
             return View("UnapprovedBookingList", viewModel);
         }
 
-        [HttpPost]
+        [HttpPut]
         public ActionResult ApproveBooking(int bookingId)
         {
             var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
@@ -136,18 +137,23 @@ namespace ArgicultureInventorySystem.Controllers
 
             foreach (var book in booking)
             {
-                // Set approval (bool) into true - approved
-                book.BookingStatus = "Approved";
-
                 foreach (var s in stock)
                 {
                     if (s.Id == book.StockId)
                     {
                         // Substract current quantity with quantity booked
-                        // TODO: check if the value is negative, dont make approval
-                        s.CurrentQuantity = s.CurrentQuantity - book.BookingQuantity;
+                        // TODO: check if the value is negative/zero, dont make approval
+                        var currentQty = s.CurrentQuantity - book.BookingQuantity;
+
+                        if (currentQty <= 0)
+                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                        s.CurrentQuantity = currentQty;
                     }
                 }
+
+                // Set approval (bool) into true - approved
+                book.BookingStatus = "Approved";
             }
 
             _context.SaveChanges();
@@ -189,6 +195,13 @@ namespace ArgicultureInventorySystem.Controllers
             return View("UnapprovedBookingList", viewModel);
         }
 
+        // TODO: CurrentQuantity plus the stock being booked?
+        [HttpPost]
+        public ActionResult BookingReturned(int bookingId)
+        {
+            return View();
+        }
+
         // GET: Booking/Details/5
         public ActionResult Details(int id)
         {
@@ -222,6 +235,7 @@ namespace ArgicultureInventorySystem.Controllers
             return View(viewModel);
         }
 
+        // TODO: CREATE & EDIT DO NOT ALLOW SAME SELECTION OF STOCK
         // POST: Booking/Create
         [HttpPost]
         public ActionResult Create(UcBookingStockViewModel ucBooking)
@@ -231,6 +245,7 @@ namespace ArgicultureInventorySystem.Controllers
                TODO: Check if the stock selected is the same as previous one in the list or not. If same, deny booking.
              */
 
+            var hold = ucBooking;
             var getBooking = _context.Bookings.ToList();
 
             // Get Bookings specific to the customer
@@ -238,16 +253,10 @@ namespace ArgicultureInventorySystem.Controllers
 
             var getSpecificBooking2 = ucBooking.Bookings.ToList();
 
-            var viewModel = new UcBookingStockViewModel
-            {
-                ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == ucBooking.ApplicationUser.Id),
-                Bookings = getSpecificBooking2
-            };
-
             if (!ModelState.IsValid)
             {
                 LoadStocks();
-                return View("Create", viewModel);
+                return View("Create", ucBooking);
             }
             
             foreach (var booking in ucBooking.Bookings)
@@ -264,7 +273,7 @@ namespace ArgicultureInventorySystem.Controllers
                     // Do something
                     ViewBag.OverloadBooking = "The stock for " + getStock.Name + " is not enough";
                     LoadStocks();
-                    return View(ucBooking);
+                    return View("Create", hold);
                 }
 
                 _context.Bookings.Add(booking);
@@ -273,7 +282,7 @@ namespace ArgicultureInventorySystem.Controllers
 
             _context.SaveChanges();
 
-            var getId = viewModel.ApplicationUser.Id;
+            var getId = ucBooking.ApplicationUser.Id;
 
             return RedirectToAction("CustomerBooking", "Booking", new { id = getId });
         }

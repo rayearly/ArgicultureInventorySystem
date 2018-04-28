@@ -13,6 +13,9 @@
         <th>
             Booked Quantity
         </th>
+        <th>
+            Current Available Quantity
+        </th>
     </tr>
     @foreach (var book in Model.Bookings)
     {
@@ -22,6 +25,9 @@
             </td>
             <td>
                 @Html.DisplayFor(m => book.BookingQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(m => book.Stock.CurrentQuantity)
             </td>
         </tr>
     }
