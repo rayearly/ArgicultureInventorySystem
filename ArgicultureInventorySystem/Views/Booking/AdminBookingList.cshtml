@@ -4,6 +4,10 @@
     ViewBag.Title = "IndexSortByBooking";
 }
 
+@{
+    var count = 0;
+}
+
 <script>var count = 1;</script>
 
 <h3>Booking List for @Model.ApplicationUser.Name</h3>
@@ -15,12 +19,14 @@
 <table id="booking" class="table table-bordered table-hover">
     <thead>
     <tr>
-        <th>No.</th>
         <th>
-            @Html.DisplayNameFor(model => model.BookingDate.BookingDateTime)
+            No.
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BookingDate.ReturnDateTime)
+            Booking Date
+        </th>
+        <th>
+            Return Date
         </th>
         <th></th>
     </tr>
@@ -33,10 +39,10 @@
     {
         <tr>
             <td>
-                <script>
-                    document.write(count);
+                @{
                     count++;
-                </script>
+                    @count
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BookingDateTime)
@@ -59,7 +65,12 @@
 @section scripts{
     <script>
         $(document).ready(function() {
-            $("#booking").DataTable();
+            $("#booking").DataTable({
+                columnDefs: [
+                    { targets: 3, sortable: false }
+                ],
+                order: [[0, "asc"]]
+            });
         });
     </script>
 }

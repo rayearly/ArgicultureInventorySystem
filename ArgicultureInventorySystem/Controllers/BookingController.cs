@@ -59,6 +59,9 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking for Specific Customer
         public ActionResult CustomerBooking(string id)
         {
+            if ((string)Session["UserSessionId"] == null)
+                return RedirectToAction("Login", "Account");
+
             // TODO: How to clear session value after logout?
             if (id == null)
             {
@@ -89,6 +92,11 @@ namespace ArgicultureInventorySystem.Controllers
         [Authorize(Roles = RoleName.CanManageBookings)]
         public ActionResult AdminBooking(string id)
         {
+            if ((string)Session["UserSessionId"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (id == null)
             {
                 id = (string)Session["UserSessionId"];
