@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,6 +14,7 @@ using ArgicultureInventorySystem.Models;
 using ArgicultureInventorySystem.ViewModel;
 using Microsoft.Ajax.Utilities;
 using FluentValidation;
+using Microsoft.AspNet.Identity;
 
 namespace ArgicultureInventorySystem.Controllers
 {
@@ -59,8 +61,11 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking for Specific Customer
         public ActionResult CustomerBooking(string id)
         {
-            if ((string)Session["UserSessionId"] == null)
+            if ((string) Session["UserSessionId"] == null)
+            {
+                // TODO: Get rid of admin@admin?
                 return RedirectToAction("Login", "Account");
+            }
 
             // TODO: How to clear session value after logout?
             if (id == null)
@@ -239,11 +244,11 @@ namespace ArgicultureInventorySystem.Controllers
         {
             LoadStocks();
             var uc = _context.Users.SingleOrDefault(u => u.Id == id);
-            
+            var bookings = new List<Booking>();
+
             var viewModel = new UcBookingStockViewModel
             {
-                //UniversityCommunity = uc,
-                Bookings = _context.Bookings.ToList(),
+                Bookings = bookings,
                 Stocks = _context.Stocks.ToList(),
                 ApplicationUser = uc
             };
@@ -262,19 +267,17 @@ namespace ArgicultureInventorySystem.Controllers
              */
 
             var hold = ucBooking;
-            var getBooking = _context.Bookings.ToList();
-
-            // Get Bookings specific to the customer
-            var getSpecificBooking = getBooking.Where(b => b.ApplicationUser.Id == ucBooking.ApplicationUser.Id).ToList();
-
-            var getSpecificBooking2 = ucBooking.Bookings.ToList();
 
             if (!ModelState.IsValid)
             {
                 LoadStocks();
                 return View("Create", ucBooking);
             }
-            
+
+            string check = null;
+            string listOfOverload = null;
+            var holdBookings = new List<Booking>();
+
             foreach (var booking in ucBooking.Bookings)
             {
                 booking.UserId = ucBooking.ApplicationUser.Id;
@@ -283,23 +286,39 @@ namespace ArgicultureInventorySystem.Controllers
 
                 // Get stock to check current Quantity
                 var getStock = _context.Stocks.Single(s => s.Id == booking.StockId);
-
+                
                 if (booking.BookingQuantity > getStock.CurrentQuantity)
                 {
                     // Do something
-                    ViewBag.OverloadBooking = "The stock for " + getStock.Name + " is not enough";
                     LoadStocks();
-                    return View("Create", hold);
+                    listOfOverload += getStock.Name + ", ";
+                    check = "overload booking";
                 }
 
-                _context.Bookings.Add(booking);
+                holdBookings.Add(booking);
+
                 
+
             }
+
+            if (check != null)
+            {
+                ViewBag.OverloadBooking = "The stock for " + listOfOverload + " is not enough";
+                return View("Create", hold);
+            }
+
+            // Save the booking in the database if the booking is not overloaded
+            foreach (var booking in holdBookings)
+            {
+                _context.Bookings.Add(booking);
+            }
+
 
             _context.SaveChanges();
 
             var getId = ucBooking.ApplicationUser.Id;
 
+            // Successful booking notification?
             return RedirectToAction("CustomerBooking", "Booking", new { id = getId });
         }
 

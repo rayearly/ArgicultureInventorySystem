@@ -9,16 +9,29 @@
 
 </head>
 <body>
-    @Html.Partial("_NavBar");
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+@Html.Partial("_NavBar");
+<div class="container body-content">
+    @RenderBody()
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    </footer>
+</div>
 
-    @Scripts.Render("~/bundles/lib")
-    @RenderSection("scripts", required: false)
+@Scripts.Render("~/bundles/lib")
+@RenderSection("scripts", required: false)
 </body>
 </html>
+
+@section scripts{
+    <script>
+        var sessionTimeoutWarning = @Session.Timeout- 1;
+
+        var sTimeout = parseInt(sessionTimeoutWarning) * 60 * 1000;
+        setTimeout('sessionEnd()', sTimeout);
+
+        function sessionEnd() {
+            window.location = "/Account/LogOff";
+        }
+    </script>
+}

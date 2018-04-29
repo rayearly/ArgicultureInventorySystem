@@ -418,6 +418,9 @@ namespace ArgicultureInventorySystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            Session["UserSessionId"] = null;
+            Session.Clear();
+            Session.Abandon();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
