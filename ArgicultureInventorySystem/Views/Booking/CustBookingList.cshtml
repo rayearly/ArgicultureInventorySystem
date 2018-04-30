@@ -17,7 +17,12 @@
 <table id="booking" class="table table-bordered table-hover">
     <thead>
     <tr>
-        <th>No.</th>
+        <th>
+            No.
+        </th>
+        <th>
+            Booking ID
+        </th>
         <th>
             Booking Date
         </th>
@@ -39,6 +44,9 @@
                     count++;
                     @count  
                 }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)

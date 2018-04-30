@@ -23,10 +23,16 @@
             No.
         </th>
         <th>
+            Booking ID
+        </th>
+        <th>
             Booking Date
         </th>
         <th>
             Return Date
+        </th>
+        <th>
+            Status
         </th>
         <th></th>
     </tr>
@@ -35,7 +41,7 @@
     <tbody>
         
     @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
-    @foreach (var item in Model.BookingDates)
+    @foreach (var item in Model.Bookings)
     {
         <tr>
             <td>
@@ -45,14 +51,20 @@
                 }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BookingDateTime)
+                @Html.DisplayFor(modelItem => item.BookingId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ReturnDateTime)
+                @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.Id}) |
-                @Html.ActionLink("Details", "Details", new {/* id=item.PrimaryKey */}) |
+                @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingStatus)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId}) |
                 @Html.ActionLink("Delete", "Delete", new {/* id=item.PrimaryKey */})
 
             </td>

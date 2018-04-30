@@ -42,5 +42,7 @@ namespace ArgicultureInventorySystem.Models
 
         public string BookingStatus { get; set; }
 
+        public string BookingId { get; set; }
+
     }
 }

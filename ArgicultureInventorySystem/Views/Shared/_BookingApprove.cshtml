@@ -18,10 +18,19 @@
             <td>
                 @Html.DisplayFor(modelItem => modelItem.BookingDate.ReturnDateTime)
             </td>
-            <td>
+            <td align="center">
                 <div class="approve">
-                    <a href="#" id="Approve" class="approveRow"><button type="button" class="btn btn-primary">✓</button></a>
-                    <a href="#" id="Approve" class="disapproveRow"><button type="button" class="btn btn-danger">X</button></a>
+                    @if (ViewBag.Title != "ApprovedBookingList")
+                    {
+                        <a href="#" id="Approve" class="approveRow"><button type="button" class="btn btn-primary">✓</button></a>
+                    }
+                    
+                    
+                    @if (ViewBag.Title != "RejectedBookingList")
+                    {
+                        <a href="#" id="Approve" class="disapproveRow"><button type="button" class="btn btn-danger">X</button></a>
+                    }
+                    
                     @Html.HiddenFor(modelItem => modelItem.BookingDateId, new {@class = "bookingId"})
                 </div>
             </td>

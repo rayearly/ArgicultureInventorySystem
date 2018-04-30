@@ -313,6 +313,10 @@
     <Compile Include="Migrations\201804260034538_ChangeBookingStatusToStringForInProcessDefault.Designer.cs">
       <DependentUpon>201804260034538_ChangeBookingStatusToStringForInProcessDefault.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804292349441_AddBookingIdForIdentification.cs" />
+    <Compile Include="Migrations\201804292349441_AddBookingIdForIdentification.Designer.cs">
+      <DependentUpon>201804292349441_AddBookingIdForIdentification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -678,6 +682,8 @@
     <Content Include="Views\Booking\UnapprovedBookingList.cshtml" />
     <Content Include="Views\Shared\_BookingApprove.cshtml" />
     <Content Include="Views\Booking\Details.cshtml" />
+    <None Include="Views\Booking\RejectedBookingList.cshtml" />
+    <Content Include="Views\Booking\ApprovedBookingList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -749,6 +755,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804260034538_ChangeBookingStatusToStringForInProcessDefault.resx">
       <DependentUpon>201804260034538_ChangeBookingStatusToStringForInProcessDefault.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804292349441_AddBookingIdForIdentification.resx">
+      <DependentUpon>201804292349441_AddBookingIdForIdentification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

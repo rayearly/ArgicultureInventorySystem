@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.EnterpriseServices;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -118,7 +119,7 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = getSpecificBooking,
+                Bookings = getSpecificBooking.DistinctBy(b => b.BookingDateId),
                 BookingDates = getBookingDates.Distinct(),
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
             };
@@ -149,6 +150,37 @@ namespace ArgicultureInventorySystem.Controllers
 
             return View("UnapprovedBookingList", viewModel);
         }
+
+        // GET: Get Unapproved Booking and display it in a page to be approved by admin
+        public ActionResult ApprovedBooking()
+        {
+            // Get the unapproved bookings
+            var unapproved = _context.Bookings.Where(b => b.BookingStatus == "Approved").ToList();
+
+            // This is the list of booking not sorted by booking date
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
+            };
+
+            return View("ApprovedBookingList", viewModel);
+        }
+
+        // GET: Get Unapproved Booking and display it in a page to be approved by admin
+        public ActionResult RejectedBooking()
+        {
+            // Get the unapproved bookings
+            var unapproved = _context.Bookings.Where(b => b.BookingStatus == "Rejected").ToList();
+
+            // This is the list of booking not sorted by booking date
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
+            };
+
+            return View("RejectedBookingList", viewModel);
+        }
+
 
         [HttpPut]
         public ActionResult ApproveBooking(int bookingId)
@@ -192,7 +224,7 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult DisApproveBooking(int bookingId)
+        public ActionResult RejectBooking(int bookingId)
         {
             var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
 
@@ -278,11 +310,16 @@ namespace ArgicultureInventorySystem.Controllers
             string listOfOverload = null;
             var holdBookings = new List<Booking>();
 
+            // Generate Random BookingId to be used as reference
+            var bookingId = GenerateRandomBookingId();
+
             foreach (var booking in ucBooking.Bookings)
             {
                 booking.UserId = ucBooking.ApplicationUser.Id;
                 booking.BookingDate = ucBooking.BookingDate;
                 booking.Stock = booking.Stock;
+                booking.BookingId = bookingId;
+                
 
                 // Get stock to check current Quantity
                 var getStock = _context.Stocks.Single(s => s.Id == booking.StockId);
@@ -296,9 +333,6 @@ namespace ArgicultureInventorySystem.Controllers
                 }
 
                 holdBookings.Add(booking);
-
-                
-
             }
 
             if (check != null)
@@ -313,12 +347,11 @@ namespace ArgicultureInventorySystem.Controllers
                 _context.Bookings.Add(booking);
             }
 
-
             _context.SaveChanges();
 
             var getId = ucBooking.ApplicationUser.Id;
 
-            // Successful booking notification?
+            // TODO: Successful booking notification?
             return RedirectToAction("CustomerBooking", "Booking", new { id = getId });
         }
 
@@ -482,6 +515,16 @@ namespace ArgicultureInventorySystem.Controllers
         {
             LoadStocks();
             return PartialView("_BookingPartial", new Booking());
+        }
+
+        private static readonly Random Random = new Random();
+
+        // Generate Random alphanumeric as BookingId
+        public string GenerateRandomBookingId()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+
+            return new string (Enumerable.Repeat(chars, 4).Select(s => s[Random.Next(s.Length)]).ToArray());
         }
     }
 }
