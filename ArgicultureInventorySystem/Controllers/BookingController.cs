@@ -16,6 +16,7 @@ using ArgicultureInventorySystem.ViewModel;
 using Microsoft.Ajax.Utilities;
 using FluentValidation;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace ArgicultureInventorySystem.Controllers
 {
@@ -258,6 +259,16 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking/Details/5
         public ActionResult Details(int id)
         {
+            
+            var getBookingUser = _context.Bookings.First(b => b.BookingDateId == id);
+
+            var user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+
+            if (user.Id != getBookingUser.UserId)
+            {
+                return RedirectToAction("CustomerBooking", "Booking", new { user.Id });
+            }
+
             var booking = _context.Bookings.Where(b => b.BookingDateId == id);
 
             var stock = _context.Stocks.ToList();
@@ -358,6 +369,22 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking/Edit/5
         public ActionResult Edit(string id, int bookingDateId)
         {
+            // Check status if the guest try to edit from changing the link
+            // TODO: other user can change the link to view others information. Restrict this.
+            var user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+
+            if (user.Id != id)
+            {
+                return RedirectToAction("CustomerBooking", "Booking", new { id });
+            }
+
+            var getBookingStatus = _context.Bookings.First(b => b.BookingDateId == bookingDateId);
+
+            if (getBookingStatus.BookingStatus == "Approved" || getBookingStatus.BookingStatus == "Rejected")
+            {
+                return RedirectToAction("CustomerBooking", "Booking", new {id});
+            }
+
             LoadStocks();
 
             // Get the universityCommunity information by passed Id

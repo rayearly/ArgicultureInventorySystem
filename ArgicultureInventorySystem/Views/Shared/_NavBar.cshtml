@@ -13,12 +13,12 @@
             <ul class="nav navbar-nav">
                 
                 @{
-                    if (User.IsInRole(RoleName.CanManageBookings))
+                    if (User.IsInRole(RoleName.CanManageBookings) && Session["UserSessionId"] != null)
                     {
                         <li>@Html.ActionLink("Admin Menu", "AdminHomePage", "Booking")</li>
                         <li>@Html.ActionLink("View Customer List", "AllBookingList", "Booking")</li>
                     }
-                    else
+                    else if (Session["UserSessionId"] != null)
                     {
                         <li>@Html.ActionLink("My Booking", "RedirectUserBooking", "Booking")</li>
                     }

@@ -28,7 +28,7 @@
         var sessionTimeoutWarning = @Session.Timeout- 1;
 
         var sTimeout = parseInt(sessionTimeoutWarning) * 60 * 1000;
-        setTimeout('sessionEnd()', sTimeout);
+        setTimeout(sessionEnd(), sTimeout);
 
         function sessionEnd() {
             window.location = "/Account/LogOff";

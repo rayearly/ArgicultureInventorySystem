@@ -4,26 +4,29 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Booking List</h2>
+<h2>Users List</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", "UniversityCommunity", null, new {@class = "btn btn-primary"})
+    @Html.ActionLink("Create New User", "Create", "UniversityCommunity", null, new {@class = "btn btn-primary"})
 </p>
-<table class="table table-bordered table-hover">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.IdNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNo)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
+<table id ="users" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                User ID
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Contact Number
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    
+@foreach (var item in Model)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.IdNumber)
@@ -44,3 +47,16 @@
 }
 
 </table>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#users").DataTable({
+                columnDefs : [
+                    { targets: 3, sortable: false}
+                ],
+                order: [[0, "asc"]]
+            });
+        });
+    </script>
+}
