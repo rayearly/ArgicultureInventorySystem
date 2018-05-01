@@ -89,7 +89,7 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = getSpecificBooking.DistinctBy(b => b.BookingDateId),
+                Bookings = getSpecificBooking.DistinctBy(b => b.BookingDateId).OrderByDescending(b => b.BookingDateId),
                 BookingDates = getBookingDates.Distinct(),
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
             };
@@ -149,7 +149,7 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
+                Bookings = unapproved.DistinctBy(b => b.BookingDateId).OrderByDescending(b => b.BookingDateId)
             };
 
             return View("UnapprovedBookingList", viewModel);
@@ -164,7 +164,7 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = approved.DistinctBy(b => b.BookingDateId)
+                Bookings = approved.DistinctBy(b => b.BookingDateId).OrderByDescending(b => b.BookingDateId)
             };
 
             return View("ApprovedBookingList", viewModel);
@@ -179,7 +179,7 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = rejected.DistinctBy(b => b.BookingDateId)
+                Bookings = rejected.DistinctBy(b => b.BookingDateId).OrderByDescending(b => b.BookingDateId)
             };
 
             return View("RejectedBookingList", viewModel);
@@ -194,7 +194,7 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = rejected.DistinctBy(b => b.BookingDateId)
+                Bookings = rejected.DistinctBy(b => b.BookingDateId).OrderByDescending(b => b.BookingDateId)
             };
 
             return View("ReturnedBookingList", viewModel);
@@ -434,20 +434,24 @@ namespace ArgicultureInventorySystem.Controllers
         {
             // Check status if the guest try to edit from changing the link
             // TODO: other user can change the link to view others information. Restrict this.
-            var user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-
-            if (user.Id != id)
+            if (!User.IsInRole(RoleName.CanManageBookings))
             {
-                return RedirectToAction("CustomerBooking", "Booking", new { id });
+                var user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+
+                if (user.Id != id)
+                {
+                    return RedirectToAction("CustomerBooking", "Booking", new { id });
+                }
+
+                var getBookingStatus = _context.Bookings.First(b => b.BookingDateId == bookingDateId);
+
+                // if booking is already approved/rejected/returned, then redirect to user booking page
+                if (getBookingStatus.BookingStatus == "Approved" || getBookingStatus.BookingStatus == "Rejected" || getBookingStatus.BookingStatus == "Returned")
+                {
+                    return RedirectToAction("CustomerBooking", "Booking", new { id });
+                }
             }
-
-            var getBookingStatus = _context.Bookings.First(b => b.BookingDateId == bookingDateId);
-
-            if (getBookingStatus.BookingStatus == "Approved" || getBookingStatus.BookingStatus == "Rejected")
-            {
-                return RedirectToAction("CustomerBooking", "Booking", new {id});
-            }
-
+            
             LoadStocks();
 
             // Get the universityCommunity information by passed Id
@@ -460,7 +464,6 @@ namespace ArgicultureInventorySystem.Controllers
             
             var viewModel = new UcBookingStockViewModel
             {
-                //UniversityCommunity = uc,
                 Bookings = book,
                 Stocks = _context.Stocks.ToList(),
                 BookingDate = _context.BookingDates.Single(b => b.Id == bookingDateId),
@@ -520,6 +523,7 @@ namespace ArgicultureInventorySystem.Controllers
                     bInDb.BookingQuantity = booking.BookingQuantity;
                     bInDb.Stock = booking.Stock;
                     bInDb.StockId = booking.StockId;
+                    bInDb.BookingId = booking.BookingId;
                 }
             }
 
@@ -547,7 +551,7 @@ namespace ArgicultureInventorySystem.Controllers
 
         // POST: Booking/Delete/5
         [AllowAnonymous]
-        [HttpPost]
+        [HttpDelete]
         public ActionResult Delete(int? id, int? stockId, string ucId)
         {
             if (id == null)

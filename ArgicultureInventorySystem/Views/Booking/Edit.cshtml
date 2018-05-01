@@ -60,11 +60,11 @@
         $(document).ready(function () {
 
             $('#datepicker').datepicker({
-                format: 'dd/mm/yyyy'
+                format: 'dd/MM/yy'
             });
 
             $('#datepicker2').datepicker({
-                format: 'dd/mm/yyyy'
+                format: 'dd/MM/yy'
             });
 
             var url = '@Url.Action("BookingPartialResult")';
@@ -86,34 +86,31 @@
                 var id = container.find('.id').val();
                 var stockId = container.find('.stockId').val();
                 var ucId = container.find('.ucId').val();
-
+                
                 if (id) {
-                    var answer = confirm("Delete booked item?");
-
-                    if (answer) {
-                        $.ajax(
-                            {
-                                type: "POST",
-                                url: "@Url.Action("Delete" , "Booking")",
-                                ajaxsync: true,
-                                data: { id: id, stockId: stockId, ucId: ucId },
-                                success: function() {
-                                    alert("Delete successful");
-                                    container.remove();
-                                },
-                                error: function(data) {
-                                    alert("fail");
-                                }
-                            });
-
-                    } else {
-                        e.preventDefault();
-                    }
+                    bootbox.confirm("Delete Booked item?", function(result) {
+                        if (result) {
+                            $.ajax(
+                                {
+                                    type: "DELETE",
+                                    url: "@Url.Action("Delete" , "Booking")",
+                                    ajaxsync: true,
+                                    data: { id: id, stockId: stockId, ucId: ucId },
+                                    success: function() {
+                                        bootbox.alert("Item booked deleted successfully", function () {
+                                            container.fadeOut(500,
+                                                function() {
+                                                    container.remove();
+                                                });
+                                        });
+                                    },
+                                    error: function(data) {
+                                        bootbox.alert("fail");
+                                    }
+                                });
+                        }
+                    });
                 }
-                     else {
-                    container.remove();
-                }
-
             });
         });
     </script>

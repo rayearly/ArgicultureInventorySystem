@@ -71,6 +71,7 @@
             var url = '@Url.Action("BookingPartialResult")';
             var form = $('form');
             var recipients = $('#bookings');
+
             $('#add').click(function() {
                 $.get(url,
                     function(response) {
@@ -97,7 +98,7 @@
     @if (ViewBag.OverloadBooking != null) {
             <script type="text/javascript">
                 $(function() {
-                    alert("@ViewBag.OverloadBooking");
+                    bootbox.alert("@ViewBag.OverloadBooking");
                 });
         
             </script>

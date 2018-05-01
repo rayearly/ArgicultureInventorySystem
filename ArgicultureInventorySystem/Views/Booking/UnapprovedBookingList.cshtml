@@ -4,28 +4,33 @@
     ViewBag.Title = "UnapprovedBookingList";
 }
 
+@{
+    var count = 0;
+    var count2 = 0;
+}
+
 <h2>Unapproved Booking List</h2>
 <br/>
 <div id="approve">
     <table id ="booking" class="table table-bordered table-hover">
         <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.ApplicationUser)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BookingDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BookingDate)
-                </th>
-                <th>
-                    Approve / Reject
-                </th>
-                <th>
-                    
-                </th>
-            </tr>
+        <tr>
+            <th>
+                User Name
+            </th>
+            <th>
+                Booking Date
+            </th>
+            <th>
+                Booking Date
+            </th>
+            <th>
+                Approve / Reject
+            </th>
+            <th>
+
+            </th>
+        </tr>
         </thead>
     @foreach (var booking in Model.Bookings)
     {

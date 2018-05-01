@@ -58,13 +58,9 @@
                 @Html.DisplayFor(modelItem => item.BookingStatus)
             </td>
             <td>
-                @if (item.BookingStatus == "Approved" || item.BookingStatus == "Rejected")
+                @if (item.BookingStatus != "Approved" && item.BookingStatus != "Rejected" && item.BookingStatus != "Returned")
                 {
-
-                }
-                else
-                {
-                    @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.BookingDateId}, new {@class = "btn btn-primary"})
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDateId }, new { @class = "btn btn-primary" })
                 }
 
                 @Html.ActionLink("Details", "Details", new {id = item.BookingDateId}, new {@class = "btn btn-primary"})
