@@ -684,6 +684,7 @@
     <Content Include="Views\Shared\_BookingApprove.cshtml" />
     <Content Include="Views\Booking\Details.cshtml" />
     <Content Include="Views\Booking\CustBookingDetails.cshtml" />
+    <Content Include="Views\Booking\ReturnedBookingList.cshtml" />
     <None Include="Views\Booking\RejectedBookingList.cshtml" />
     <Content Include="Views\Booking\ApprovedBookingList.cshtml" />
   </ItemGroup>

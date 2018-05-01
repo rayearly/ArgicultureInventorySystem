@@ -31,6 +31,7 @@
                 var inProcess = 0;
                 var rejected = 0;
                 var approved = 0;
+                var returned = 0;
             </script>
 
             @foreach (var booking in Model.Bookings)
@@ -50,6 +51,11 @@
                 else if (@booking.BookingStatus == "Approved")
                 {
                     <script>approved++;</script>
+                }
+
+                else if (@booking.BookingStatus == "Returned")
+                {
+                    <script>returned++;</script>
                 }
             }
 
@@ -75,6 +81,12 @@
                                 <span class="badge">
                                     <script>document.write(rejected);</script></span>
                                 @Html.ActionLink("Rejected Booking", "RejectedBookingList", null, new { @class = "btn-link" })
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">
+                                    <script>document.write(returned);</script>
+                                </span>
+                                @Html.ActionLink("Returned Booking", "ReturnedBookingList", null, new { @class = "btn-link" })
                             </li>
                         </ul>
                     </div>

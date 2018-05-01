@@ -138,7 +138,7 @@ namespace ArgicultureInventorySystem.Controllers
             return View("Index", uc);
         }
 
-        #region Get the different type of region status? - can be in one function TODO:
+        #region Get the different type of Booking status? - can be in one function TODO:
 
         // GET: Get Unapproved Bookings and display it in a page to be approved by admin
         public ActionResult UnApprovedBookingList()
@@ -185,7 +185,24 @@ namespace ArgicultureInventorySystem.Controllers
             return View("RejectedBookingList", viewModel);
         }
 
+        // GET: Get returned Bookings and display it in a page to be viewed by admin
+        public ActionResult ReturnedBookingList()
+        {
+            // Get the unapproved bookings
+            var rejected = _context.Bookings.Where(b => b.BookingStatus == "Returned").ToList();
+
+            // This is the list of booking not sorted by booking date
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = rejected.DistinctBy(b => b.BookingDateId)
+            };
+
+            return View("ReturnedBookingList", viewModel);
+        }
+
         #endregion
+
+        #region Update different type of booking status - can be refactored?
 
         [HttpPut]
         public ActionResult ApproveBooking(int bookingId)
@@ -227,7 +244,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "The stock for " + stocklist + "is not enough");
             }
-            
+
             _context.SaveChanges();
 
             // If update success then send code OK.
@@ -289,6 +306,8 @@ namespace ArgicultureInventorySystem.Controllers
             // If update success then send code OK.
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
+
+        #endregion
 
         // GET: Booking/Details/5
         [AllowAnonymous]

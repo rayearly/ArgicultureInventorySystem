@@ -1,0 +1,121 @@
+﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+
+@{
+    ViewBag.Title = "ReturnedBookingList";
+}
+
+<h2>Returned Booking List</h2>
+<br/>
+<div id="approve">
+    <table id ="booking" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Booking Date
+            </th>
+            <th>
+                Return Date
+            </th>
+            <th>
+                    
+            </th>
+        </tr>
+        </thead>
+        @foreach (var booking in Model.Bookings)
+        {
+            <!--Partial View here-->
+            @Html.Partial("_BookingApprove", booking)
+        }
+    </table>
+</div>
+    <p>
+        @Html.ActionLink("Return to Home", "AdminHomePage", null, new { @class = "btn btn-primary" })
+    </p>
+
+@section scripts 
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#booking").DataTable();
+
+            $('#approve').on('click',
+                '.disapproveRow',
+                function () {
+
+                    var container = $(this).closest('.approve');
+                    var bookingId = container.find('.bookingId').val();
+                    var $tr = $(this).closest('tr');
+
+                    if (bookingId) {
+                        bootbox.confirm("Reject Booking?", function (result) {
+                            if (result) {
+                                $.ajax({
+                                    type: "PUT",
+                                    url: "@Url.Action("RejectBooking", "Booking")",
+                                    ajaxsync: true,
+                                    data: { bookingId: bookingId },
+                                    success: function () {
+                                        bootbox.alert("Booking has been Rejected.", function() {
+                                            $tr.find('td').fadeOut(500,
+                                                function () {
+                                                    $tr.remove();
+                                                });
+                                            // maybe place location.reload() here to reload the page if no rows left.
+                                        });
+
+                                    },
+                                    error: function (data) {
+                                        bootbox.alert("Rejection Failed");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+            $('#approve').on('click',
+                '.returnRow',
+                function() {
+
+                    var container = $(this).closest('.approve');
+                    var bookingId = container.find('.bookingId').val();
+                    var $tr = $(this).closest('tr');
+
+                    if (bookingId) {
+                        bootbox.confirm("Booking is returned?", function(result) {
+                            if (result) {
+                                $.ajax({
+                                    type: "PUT",
+                                    url: "@Url.Action("ReturnBooking", "Booking")",
+                                    ajaxsync: true,
+                                    data: { bookingId: bookingId },
+                                    success: function () {
+                                        bootbox.alert("Booking has been Returned. Stock number Updated.", function() {
+                                            $tr.find('td').fadeOut(500,
+                                                function () {
+                                                    $tr.remove();
+                                                });
+                                            // maybe place location.reload() here to reload the page if no rows left.
+                                        });
+
+                                    },
+                                    error: function (data) {
+                                        bootbox.alert("Return Failed");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+
+        });
+
+
+    </script>
+
+}

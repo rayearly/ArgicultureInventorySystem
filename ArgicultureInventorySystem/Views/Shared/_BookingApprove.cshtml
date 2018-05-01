@@ -18,27 +18,30 @@
             <td>
                 @Html.DisplayFor(modelItem => modelItem.BookingDate.ReturnDateTime)
             </td>
-            <td align="center">
-                <div class="approve">
-                    @if (ViewBag.Title == "ApprovedBookingList")
-                    {
-                        <a href="#" id="Approve" class="returnRow"><button type="button" class="btn btn-success">↻</button></a>
-                    }
+            @if (ViewBag.Title != "ReturnedBookingList")
+            {
+                <td align="center">
+                    <div class="approve">
+                        @if (ViewBag.Title == "ApprovedBookingList")
+                        {
+                            <a href="#" id="Approve" class="returnRow"><button type="button" class="btn btn-success">↻</button></a>
+                        }
 
-                    @if (ViewBag.Title != "ApprovedBookingList")
-                    {
-                        <a href="#" id="Approve" class="approveRow"><button type="button" class="btn btn-primary">✓</button></a>
-                    }
+                        @if (ViewBag.Title != "ApprovedBookingList")
+                        {
+                            <a href="#" id="Approve" class="approveRow"><button type="button" class="btn btn-primary">✓</button></a>
+                        }
                     
                     
-                    @if (ViewBag.Title != "RejectedBookingList")
-                    {
-                        <a href="#" id="Approve" class="disapproveRow"><button type="button" class="btn btn-danger">X</button></a>
-                    }
+                        @if (ViewBag.Title != "RejectedBookingList")
+                        {
+                            <a href="#" id="Approve" class="disapproveRow"><button type="button" class="btn btn-danger">X</button></a>
+                        }
                     
-                    @Html.HiddenFor(modelItem => modelItem.BookingDateId, new {@class = "bookingId"})
-                </div>
-            </td>
+                        @Html.HiddenFor(modelItem => modelItem.BookingDateId, new {@class = "bookingId"})
+                    </div>
+                </td>
+            }
             <td>
                 @Html.ActionLink("View Booking Details", "Details", "Booking", new {id = Model.BookingDateId}, null)
                 <!--TODO: redirect view booking to specific list of booking for the booking id, create new controller?-->
