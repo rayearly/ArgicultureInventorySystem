@@ -137,8 +137,11 @@ namespace ArgicultureInventorySystem.Controllers
             return View("Index", uc);
         }
 
-        // GET: Get Unapproved Booking and display it in a page to be approved by admin
-        public ActionResult UnApprovedBookings()
+        #region Get the different type of region status? - can be in one function TODO:
+
+        // GET: Get Unapproved Bookings and display it in a page to be approved by admin
+        [Authorize(Roles = RoleName.CanManageBookings)]
+        public ActionResult UnApprovedBookingList()
         {
             // Get the unapproved bookings
             var unapproved = _context.Bookings.Where(b => b.BookingStatus == "In Process").ToList();
@@ -152,42 +155,47 @@ namespace ArgicultureInventorySystem.Controllers
             return View("UnapprovedBookingList", viewModel);
         }
 
-        // GET: Get Unapproved Booking and display it in a page to be approved by admin
-        public ActionResult ApprovedBooking()
+        // GET: Get Approved Bookings and display it in a page to be viewed/rejected by admin
+        [Authorize(Roles = RoleName.CanManageBookings)]
+        public ActionResult ApprovedBookingList()
         {
-            // Get the unapproved bookings
-            var unapproved = _context.Bookings.Where(b => b.BookingStatus == "Approved").ToList();
+            // Get the approved bookings
+            var approved = _context.Bookings.Where(b => b.BookingStatus == "Approved").ToList();
 
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
+                Bookings = approved.DistinctBy(b => b.BookingDateId)
             };
 
             return View("ApprovedBookingList", viewModel);
         }
 
-        // GET: Get Unapproved Booking and display it in a page to be approved by admin
-        public ActionResult RejectedBooking()
+        // GET: Get rejected Bookings and display it in a page to be viewed/approved by admin
+        [Authorize(Roles = RoleName.CanManageBookings)]
+        public ActionResult RejectedBookingList()
         {
             // Get the unapproved bookings
-            var unapproved = _context.Bookings.Where(b => b.BookingStatus == "Rejected").ToList();
+            var rejected = _context.Bookings.Where(b => b.BookingStatus == "Rejected").ToList();
 
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
+                Bookings = rejected.DistinctBy(b => b.BookingDateId)
             };
 
             return View("RejectedBookingList", viewModel);
         }
 
+        #endregion
 
         [HttpPut]
         public ActionResult ApproveBooking(int bookingId)
         {
             var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
             var stock = _context.Stocks.ToList();
+            string check = null;
+            string stocklist = null;
 
             foreach (var book in booking)
             {
@@ -200,7 +208,10 @@ namespace ArgicultureInventorySystem.Controllers
                         var currentQty = s.CurrentQuantity - book.BookingQuantity;
 
                         if (currentQty <= 0)
-                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                        {
+                            check = "booking overload";
+                            stocklist += s.Name + ", ";
+                        }
 
                         s.CurrentQuantity = currentQty;
                     }
@@ -210,6 +221,14 @@ namespace ArgicultureInventorySystem.Controllers
                 book.BookingStatus = "Approved";
             }
 
+            if (check != null)
+            {
+                ViewBag.StockStatus = "The stock for " + stocklist + "is not enough";
+                Session["StockStatus"] = "The stock for " + stocklist + "is not enough";
+                TempData["StockStatus"] = "The stock for " + stocklist + "is not enough";
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "The stock for " + stocklist + "is not enough");
+            }
+            
             _context.SaveChanges();
 
             // Get the unapproved bookings
@@ -221,10 +240,11 @@ namespace ArgicultureInventorySystem.Controllers
                 Bookings = unapproved.DistinctBy(b => b.BookingDateId)
             };
 
-            return View("UnapprovedBookingList", viewModel);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
-        [HttpPost]
+        // TODO: Write Reject reason / comment
+        [HttpPut]
         public ActionResult RejectBooking(int bookingId)
         {
             var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
@@ -246,12 +266,12 @@ namespace ArgicultureInventorySystem.Controllers
                 Bookings = unapproved.DistinctBy(b => b.BookingDateId)
             };
 
-            return View("UnapprovedBookingList", viewModel);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         // TODO: CurrentQuantity plus the stock being booked?
-        [HttpPost]
-        public ActionResult BookingReturned(int bookingId)
+        [HttpPut]
+        public ActionResult ReturnBooking(int bookingId)
         {
             return View();
         }
@@ -259,16 +279,20 @@ namespace ArgicultureInventorySystem.Controllers
         // GET: Booking/Details/5
         public ActionResult Details(int id)
         {
-            
-            var getBookingUser = _context.Bookings.First(b => b.BookingDateId == id);
-
-            var user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-
-            if (user.Id != getBookingUser.UserId)
+            // If user is not admin then check identity. Admin can freely view any user booking details
+            if (!User.IsInRole(RoleName.CanManageBookings))
             {
-                return RedirectToAction("CustomerBooking", "Booking", new { user.Id });
-            }
+                var getBookingUser = _context.Bookings.First(b => b.BookingDateId == id);
 
+                var user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+
+                // Check if current user is the user that using this system
+                if (user.Id != getBookingUser.UserId)
+                {
+                    return RedirectToAction("CustomerBooking", "Booking", new { user.Id });
+                }
+            }
+            
             var booking = _context.Bookings.Where(b => b.BookingDateId == id);
 
             var stock = _context.Stocks.ToList();
