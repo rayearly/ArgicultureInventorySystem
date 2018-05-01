@@ -1,0 +1,42 @@
+﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Booking Details</h2>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            Stock Name
+        </th>
+        <th>
+            Booked Quantity
+        </th>
+    </tr>
+    @foreach (var book in Model.Bookings)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(m => book.Stock.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(m => book.BookingQuantity)
+            </td>
+        </tr>
+    }
+</table>
+
+<div align="left">
+    <ul class="pager" align="left">
+        <li><a href="javascript:void(0);" id="backLink"> << Back</a></li>
+    </ul>
+</div>
+
+    @section scripts{
+        <script type="text/javascript">
+            $(document).on('click', '#backLink', function () {
+                history.go(-1);
+            });
+        </script>
+    }

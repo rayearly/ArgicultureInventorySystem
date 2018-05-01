@@ -20,7 +20,7 @@
                     @Html.DisplayNameFor(model => model.BookingDate)
                 </th>
                 <th>
-                    Approve / Reject
+                    Returned / Reject
                 </th>
                 <th>
                     
@@ -41,20 +41,20 @@
 @section scripts 
 {
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             $("#booking").DataTable();
 
             $('#approve').on('click',
                 '.disapproveRow',
-                function() {
+                function () {
 
                     var container = $(this).closest('.approve');
                     var bookingId = container.find('.bookingId').val();
                     var $tr = $(this).closest('tr');
 
                     if (bookingId) {
-                        bootbox.confirm("Reject Booking?", function(result) {
+                        bootbox.confirm("Reject Booking?", function (result) {
                             if (result) {
                                 $.ajax({
                                     type: "PUT",
@@ -69,10 +69,45 @@
                                                 });
                                             // maybe place location.reload() here to reload the page if no rows left.
                                         });
-                                        
+
                                     },
                                     error: function (data) {
                                         bootbox.alert("Rejection Failed");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+            $('#approve').on('click',
+                '.returnRow',
+                function() {
+
+                    var container = $(this).closest('.approve');
+                    var bookingId = container.find('.bookingId').val();
+                    var $tr = $(this).closest('tr');
+
+                    if (bookingId) {
+                        bootbox.confirm("Booking is returned?", function(result) {
+                            if (result) {
+                                $.ajax({
+                                    type: "PUT",
+                                    url: "@Url.Action("ReturnBooking", "Booking")",
+                                    ajaxsync: true,
+                                    data: { bookingId: bookingId },
+                                    success: function () {
+                                        bootbox.alert("Booking has been Returned. Stock number Updated.", function() {
+                                            $tr.find('td').fadeOut(500,
+                                                function () {
+                                                    $tr.remove();
+                                                });
+                                            // maybe place location.reload() here to reload the page if no rows left.
+                                        });
+
+                                    },
+                                    error: function (data) {
+                                        bootbox.alert("Return Failed");
                                     }
                                 });
                             }

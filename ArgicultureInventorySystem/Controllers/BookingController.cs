@@ -20,6 +20,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace ArgicultureInventorySystem.Controllers
 {
+    [Authorize(Roles = RoleName.CanManageBookings)]
     public class BookingController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -34,6 +35,7 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Dispose();
         }
 
+        [AllowAnonymous]
         public ActionResult RedirectUserHome(string id)
         {
             // TODO: Create Admin Menu
@@ -41,7 +43,6 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // DISPLAY: Menu for Admin
-        [Authorize(Roles = RoleName.CanManageBookings)]
         public ViewResult AdminHomePage()
         {
             // Get Bookings specific to the customer
@@ -55,12 +56,14 @@ namespace ArgicultureInventorySystem.Controllers
             return View("AdminHomePage", viewModel);
         }
 
+        [AllowAnonymous]
         public ActionResult RedirectUserBooking(string id)
         {
             return User.IsInRole(RoleName.CanManageBookings) ? AdminBooking(id) : CustomerBooking(id);
         }
 
         // GET: Booking for Specific Customer
+        [AllowAnonymous]
         public ActionResult CustomerBooking(string id)
         {
             if ((string) Session["UserSessionId"] == null)
@@ -96,7 +99,6 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // Admin Booking : same as Customer except redirected to another page? Fix this
-        [Authorize(Roles = RoleName.CanManageBookings)]
         public ActionResult AdminBooking(string id)
         {
             if ((string)Session["UserSessionId"] == null)
@@ -129,7 +131,6 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking List for Admin (Show list of Customer)
-        [Authorize(Roles = RoleName.CanManageBookings)]
         public ActionResult AllBookingList()
         {
             var uc = _context.Users.ToList();
@@ -140,7 +141,6 @@ namespace ArgicultureInventorySystem.Controllers
         #region Get the different type of region status? - can be in one function TODO:
 
         // GET: Get Unapproved Bookings and display it in a page to be approved by admin
-        [Authorize(Roles = RoleName.CanManageBookings)]
         public ActionResult UnApprovedBookingList()
         {
             // Get the unapproved bookings
@@ -156,7 +156,6 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Get Approved Bookings and display it in a page to be viewed/rejected by admin
-        [Authorize(Roles = RoleName.CanManageBookings)]
         public ActionResult ApprovedBookingList()
         {
             // Get the approved bookings
@@ -172,7 +171,6 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Get rejected Bookings and display it in a page to be viewed/approved by admin
-        [Authorize(Roles = RoleName.CanManageBookings)]
         public ActionResult RejectedBookingList()
         {
             // Get the unapproved bookings
@@ -194,7 +192,11 @@ namespace ArgicultureInventorySystem.Controllers
         {
             var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
             var stock = _context.Stocks.ToList();
+
+            // Check if the booking is overload or not by message exist
             string check = null;
+
+            // List the stock that had book overloaded
             string stocklist = null;
 
             foreach (var book in booking)
@@ -217,29 +219,18 @@ namespace ArgicultureInventorySystem.Controllers
                     }
                 }
 
-                // Set approval (bool) into true - approved
+                // Set approval (string) into Approved
                 book.BookingStatus = "Approved";
             }
 
             if (check != null)
             {
-                ViewBag.StockStatus = "The stock for " + stocklist + "is not enough";
-                Session["StockStatus"] = "The stock for " + stocklist + "is not enough";
-                TempData["StockStatus"] = "The stock for " + stocklist + "is not enough";
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "The stock for " + stocklist + "is not enough");
             }
             
             _context.SaveChanges();
 
-            // Get the unapproved bookings
-            var unapproved = _context.Bookings.Where(b => b.BookingStatus == "In Process").ToList();
-
-            // This is the list of booking not sorted by booking date
-            var viewModel = new UcBookingStockViewModel
-            {
-                Bookings = unapproved.DistinctBy(b => b.BookingDateId)
-            };
-
+            // If update success then send code OK.
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
@@ -273,12 +264,46 @@ namespace ArgicultureInventorySystem.Controllers
         [HttpPut]
         public ActionResult ReturnBooking(int bookingId)
         {
-            return View();
+            var booking = _context.Bookings.Where(b => b.BookingDateId == bookingId);
+            var stock = _context.Stocks.ToList();
+
+            foreach (var book in booking)
+            {
+                foreach (var s in stock)
+                {
+                    if (s.Id == book.StockId)
+                    {
+                        // Add current quantity with quantity booked
+                        var currentQty = s.CurrentQuantity + book.BookingQuantity;
+
+                        s.CurrentQuantity = currentQty;
+                    }
+                }
+
+                // Set approval into returned
+                book.BookingStatus = "Returned";
+            }
+
+            _context.SaveChanges();
+
+            // If update success then send code OK.
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         // GET: Booking/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
+            var booking = _context.Bookings.Where(b => b.BookingDateId == id);
+
+            var stock = _context.Stocks.ToList();
+
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = booking,
+                Stocks = stock
+            };
+
             // If user is not admin then check identity. Admin can freely view any user booking details
             if (!User.IsInRole(RoleName.CanManageBookings))
             {
@@ -291,22 +316,15 @@ namespace ArgicultureInventorySystem.Controllers
                 {
                     return RedirectToAction("CustomerBooking", "Booking", new { user.Id });
                 }
+
+                return View("CustBookingDetails", viewModel);
             }
             
-            var booking = _context.Bookings.Where(b => b.BookingDateId == id);
-
-            var stock = _context.Stocks.ToList();
-
-            var viewModel = new UcBookingStockViewModel
-            {
-                Bookings = booking,
-                Stocks = stock
-            };
-
             return View("Details", viewModel);
         }
 
         // GET: Booking/Create
+        [AllowAnonymous]
         public ActionResult Create(string id)
         {
             LoadStocks();
@@ -325,6 +343,7 @@ namespace ArgicultureInventorySystem.Controllers
 
         // TODO: CREATE & EDIT DO NOT ALLOW SAME SELECTION OF STOCK
         // POST: Booking/Create
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Create(UcBookingStockViewModel ucBooking)
         {
@@ -391,6 +410,7 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking/Edit/5
+        [AllowAnonymous]
         public ActionResult Edit(string id, int bookingDateId)
         {
             // Check status if the guest try to edit from changing the link
@@ -432,6 +452,7 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // POST: Booking/Edit/5
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Edit(string id, UcBookingStockViewModel ucBooking)
         {
@@ -491,6 +512,7 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking/Delete/5
+        [AllowAnonymous]
         public ActionResult Delete(int bookingDateId, int? stockId, string ucId)
         {
             if (stockId == null || ucId == null)
@@ -505,6 +527,7 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // POST: Booking/Delete/5
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Delete(int? id, int? stockId, string ucId)
         {
@@ -544,6 +567,7 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         #region LoadStock - Get the stock into the ViewBag to be used in the PartialViews
+        [AllowAnonymous]
         private void LoadStocks()
         {
             var stocks = _context.Stocks.ToList();
@@ -562,6 +586,7 @@ namespace ArgicultureInventorySystem.Controllers
         #endregion
 
         // Function to return the partial view created for Booking
+        [AllowAnonymous]
         public ActionResult BookingPartialResult()
         {
             LoadStocks();
@@ -571,6 +596,7 @@ namespace ArgicultureInventorySystem.Controllers
         private static readonly Random Random = new Random();
 
         // Generate Random alphanumeric as BookingId
+        [AllowAnonymous]
         public string GenerateRandomBookingId()
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
