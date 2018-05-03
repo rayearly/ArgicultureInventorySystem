@@ -63,6 +63,21 @@ namespace ArgicultureInventorySystem.Controllers
             return View(stock);
         }
 
+        // Pesticide = 2, Tools = 1, Fertilizer = 3
+
+        // GET: Stocks - Pesticide
+        public ActionResult GetStockPesticide()
+        {
+            var stockPesticide = _context.Stocks.Where(s => s.TypeId == 2).ToList();
+
+            return View("Index", stockPesticide);
+        }
+
+
+        // GET: Stocks - Tools
+
+        // GET: Stocks = Fertilizers
+        
         // GET: Stocks/Details/5
         public ActionResult Details(int? id)
         {
