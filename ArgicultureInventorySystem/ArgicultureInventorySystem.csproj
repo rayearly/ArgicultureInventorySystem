@@ -317,6 +317,14 @@
     <Compile Include="Migrations\201804292349441_AddBookingIdForIdentification.Designer.cs">
       <DependentUpon>201804292349441_AddBookingIdForIdentification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805040049555_BookingNotesRepair.cs" />
+    <Compile Include="Migrations\201805040049555_BookingNotesRepair.Designer.cs">
+      <DependentUpon>201805040049555_BookingNotesRepair.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805040054030_InsertUsersDetailsInsideUsersTable.cs" />
+    <Compile Include="Migrations\201805040054030_InsertUsersDetailsInsideUsersTable.Designer.cs">
+      <DependentUpon>201805040054030_InsertUsersDetailsInsideUsersTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -761,6 +769,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804292349441_AddBookingIdForIdentification.resx">
       <DependentUpon>201804292349441_AddBookingIdForIdentification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805040049555_BookingNotesRepair.resx">
+      <DependentUpon>201805040049555_BookingNotesRepair.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805040054030_InsertUsersDetailsInsideUsersTable.resx">
+      <DependentUpon>201805040054030_InsertUsersDetailsInsideUsersTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
