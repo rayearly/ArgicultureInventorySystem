@@ -1,4 +1,5 @@
-﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+﻿@using Microsoft.Ajax.Utilities
+@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -6,42 +7,45 @@
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-        <h4>Booking</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div>
+
+    <h4>Booking</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div>
 
 
-            <dl class="dl-horizontal">
-                <dt>@Html.LabelFor(model => model.ApplicationUser.Name, "User Name", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                <dd>@Html.DisplayFor(model => model.ApplicationUser.Name, new { @class = "form-control" })</dd>
+        <dl class="dl-horizontal">
+            <dt>@Html.LabelFor(model => model.ApplicationUser.Name, "User Name", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+            <dd>@Html.DisplayFor(model => model.ApplicationUser.Name, new { @class = "form-control" })</dd>
 
-                <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, new { @class = "form-control", id = "datepicker" })</dd>
-                <dd>@Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })</dd>
-                
-                <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, new { @class = "form-control", id = "datepicker2" })</dd>
-               
-                <dd>@Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })</dd>
-            </dl>
+            <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+            <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, "{0:dd-MM-yyyy}", new { @class = "form-control", id = "datepicker" })</dd>
+            <dd>@Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })</dd>
 
-            <div id="bookings">
-                @foreach (var booking in Model.Bookings)
+            <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Return Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+            <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, "{0:dd-MM-yyyy}", new { @class = "form-control", id = "datepicker2" })</dd>
+
+            <dd>@Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })</dd>
+        </dl>
+
+        <div id="bookings">
+            @if (Model.Bookings != null)
+            {
+                foreach (var booking in Model.Bookings)
                 {
                     <!--Partial View here-->
                     @Html.Partial("_BookingPartial", booking)
-          
-                }
-            </div>
 
-            @Html.HiddenFor(model => model.ApplicationUser.Id)
-            <br/>
-            <button type="button" id="add" class = "btn btn-primary">Click to add booking item + </button>
+                }
+            }
+        </div>
+
+        @Html.HiddenFor(model => model.ApplicationUser.Id)
+        <br />
+        <button type="button" id="add" class="btn btn-primary">Click to add booking item + </button>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -61,12 +65,31 @@
         $(document).ready(function() {
 
             $('#datepicker').datepicker({
-                dateFormat: 'dd/mm/yy'
+                dateFormat: 'dd-mm-yy',
+                minDate: new Date()
             });
 
+            var bookdate = new Date();
+            $('#datepicker').on("change paste keyup",
+                function () {
+                    bookdate = $('#datepicker').val();
+                });
+
             $('#datepicker2').datepicker({
-                dateFormat: 'dd/mm/yy'
+                dateFormat: 'dd-mm-yy',
+                minDate: bookdate
             });
+
+            $('#datepicker2').on("change paste keyup",
+                function () {
+
+                    var returndate = $('#datepicker2').val();
+                    if (returndate < bookdate) {
+                        bootbox.alert("The return date must be after the booking date.");
+                        $('#datepicker2').val('');
+                    }
+                });
+
 
             var url = '@Url.Action("BookingPartialResult")';
             var form = $('form');
@@ -87,20 +110,37 @@
                 function() {
                     $(this).closest('.bookings').remove();
                 });
-
-            
-
-            
-
         });
 
     </script>
-    @if (ViewBag.OverloadBooking != null) {
-            <script type="text/javascript">
+
+    @if (ViewBag.OverloadBooking != null)
+    {
+        <script type="text/javascript">
                 $(function() {
                     bootbox.alert("@ViewBag.OverloadBooking");
                 });
-        
-            </script>
-        }
+
+        </script>
+    }
+
+    @if (ViewBag.ZeroBooking != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@ViewBag.ZeroBooking");
+            });
+
+        </script>
+    }
+
+    @if (ViewBag.Error != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@ViewBag.Error");
+            });
+
+        </script>
+    }
 }

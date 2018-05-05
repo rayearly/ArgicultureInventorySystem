@@ -5,10 +5,10 @@
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <h4>Booking</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -19,27 +19,30 @@
             @Html.ValidationMessageFor(model => model.ApplicationUser.Name, "", new { @class = "text-danger" })
 
             <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-            <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "datepicker" })</dd>
+            <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, "{0:dd-MM-yyyy}", new { @class = "form-control", id = "datepicker" })</dd>
             @Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })
 
-            <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-            <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "datepicker2" })</dd>
+            <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Return Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+            <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, "{0:dd-MM-yyyy}", new { @class = "form-control", id = "datepicker2" })</dd>
             @Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })
         </dl>
-           
-    <div id="bookings">
-        @foreach (var booking in Model.Bookings)
-        {
-            <!--Partial View here-->
-            @Html.Partial("_BookingPartial", booking)
-          
-        }
-    </div>
 
-            
+        <div id="bookings">
+            @if (Model.Bookings != null)
+            {
+                foreach (var booking in Model.Bookings)
+                {
+                    <!--Partial View here-->
+                    @Html.Partial("_BookingPartial", booking)
+
+                }
+            }
+        </div>
+
+
 
         @Html.HiddenFor(model => model.ApplicationUser.Id)
-        <br/>
+        <br />
         <button type="button" id="add" class="btn btn-primary">Click to add Booth + </button>
 
         <div class="form-group">
@@ -60,12 +63,30 @@
         $(document).ready(function () {
 
             $('#datepicker').datepicker({
-                format: 'dd/MM/yy'
+                dateFormat: 'dd-mm-yy',
+                minDate: new Date()
             });
 
+            var bookdate = new Date();
+            $('#datepicker').on("change paste keyup",
+                function () {
+                    bookdate = $('#datepicker').val();
+                });
+
             $('#datepicker2').datepicker({
-                format: 'dd/MM/yy'
+                dateFormat: 'dd-mm-yy',
+                minDate: bookdate
             });
+
+            $('#datepicker2').on("change paste keyup",
+                function () {
+
+                    var returndate = $('#datepicker2').val();
+                    if (returndate < bookdate) {
+                        bootbox.alert("The return date must be after the booking date.");
+                        $('#datepicker2').val('');
+                    }
+                });
 
             var url = '@Url.Action("BookingPartialResult")';
             var form = $('form');
@@ -86,7 +107,7 @@
                 var id = container.find('.id').val();
                 var stockId = container.find('.stockId').val();
                 var ucId = container.find('.ucId').val();
-                
+
                 if (id) {
                     bootbox.confirm("Delete Booked item?", function(result) {
                         if (result) {
@@ -114,4 +135,34 @@
             });
         });
     </script>
+
+    @if (ViewBag.OverloadBooking != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@ViewBag.OverloadBooking");
+            });
+
+        </script>
+    }
+
+    @if (ViewBag.ZeroBooking != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@ViewBag.ZeroBooking");
+            });
+
+        </script>
+    }
+
+    @if (ViewBag.Error != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@ViewBag.Error");
+            });
+
+        </script>
+    }
 }

@@ -226,7 +226,7 @@ namespace ArgicultureInventorySystem.Controllers
                         // TODO: check if the value is negative/zero, dont make approval
                         var currentQty = s.CurrentQuantity - book.BookingQuantity;
 
-                        if (currentQty <= 0)
+                        if (currentQty < 0)
                         {
                             check = "booking overload";
                             stocklist += s.Name + ", ";
@@ -277,7 +277,6 @@ namespace ArgicultureInventorySystem.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
-        // TODO: CurrentQuantity plus the stock being booked?
         [HttpPut]
         public ActionResult ReturnBooking(int bookingId)
         {
@@ -288,13 +287,13 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 foreach (var s in stock)
                 {
-                    if (s.Id == book.StockId)
-                    {
-                        // Add current quantity with quantity booked
-                        var currentQty = s.CurrentQuantity + book.BookingQuantity;
+                    if (s.Id != book.StockId) continue;
 
-                        s.CurrentQuantity = currentQty;
-                    }
+                    // Add current quantity with quantity booked (returned) if it is Tool type?
+                    // Tool Stock Type Id = 1
+                    if (s.TypeId != 1) continue;
+                    var currentQty = s.CurrentQuantity + book.BookingQuantity;
+                    s.CurrentQuantity = currentQty;
                 }
 
                 // Set approval into returned
@@ -324,7 +323,7 @@ namespace ArgicultureInventorySystem.Controllers
             };
 
             // If user is not admin then check identity. Admin can freely view any user booking details
-            if (!User.IsInRole(RoleName.CanManageBookings))
+            if (User.IsInRole(RoleName.CanManageBookings)) return View("Details", viewModel);
             {
                 var getBookingUser = _context.Bookings.First(b => b.BookingDateId == id);
 
@@ -338,8 +337,7 @@ namespace ArgicultureInventorySystem.Controllers
 
                 return View("CustBookingDetails", viewModel);
             }
-            
-            return View("Details", viewModel);
+
         }
 
         // GET: Booking/Create
@@ -366,20 +364,18 @@ namespace ArgicultureInventorySystem.Controllers
         [HttpPost]
         public ActionResult Create(UcBookingStockViewModel ucBooking)
         {
-            /* TODO: When Creating an new Booking, check the number of stock number available, 
-             * TODO: If its less than booked number, deny booking. If its allowed, substract (UPDATE) from currentValue attribute 
-               TODO: Check if the stock selected is the same as previous one in the list or not. If same, deny booking.
-             */
-
+            // TODO: Check if the stock selected is the same as previous one in the list or not. If same, deny booking.
+            
             var hold = ucBooking;
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || ucBooking.Bookings == null)
             {
                 LoadStocks();
                 return View("Create", ucBooking);
             }
 
-            string check = null;
+            string overloadBooking = null;
+            string zeroBooking = null;
             string listOfOverload = null;
             var holdBookings = new List<Booking>();
 
@@ -393,24 +389,35 @@ namespace ArgicultureInventorySystem.Controllers
                 booking.Stock = booking.Stock;
                 booking.BookingId = bookingId;
                 
-
                 // Get stock to check current Quantity
                 var getStock = _context.Stocks.Single(s => s.Id == booking.StockId);
                 
+                // Check if the booked quantity is more than available quantity. If yes, it is overloaded.
                 if (booking.BookingQuantity > getStock.CurrentQuantity)
                 {
-                    // Do something
-                    LoadStocks();
                     listOfOverload += getStock.Name + ", ";
-                    check = "overload booking";
+                    overloadBooking = "overload booking";
+                }
+
+                if (booking.BookingQuantity <= 0)
+                {
+                    zeroBooking = "zero booking";
                 }
 
                 holdBookings.Add(booking);
             }
 
-            if (check != null)
+            if (overloadBooking != null)
             {
                 ViewBag.OverloadBooking = "The stock for " + listOfOverload + " is not enough";
+                LoadStocks();
+                return View("Create", hold);
+            }
+
+            if (zeroBooking != null)
+            {
+                ViewBag.ZeroBooking = "Number of item must be at least 1.";
+                LoadStocks();
                 return View("Create", hold);
             }
 
@@ -420,12 +427,22 @@ namespace ArgicultureInventorySystem.Controllers
                 _context.Bookings.Add(booking);
             }
 
-            _context.SaveChanges();
-
             var getId = ucBooking.ApplicationUser.Id;
 
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(@"{0} Exception caught.", e);
+                ViewBag.Error = "Booking cannot be duplicated";
+                LoadStocks();
+                return View("Create", hold);
+            }
+            
             // TODO: Successful booking notification?
-            return RedirectToAction("CustomerBooking", "Booking", new { id = getId });
+            return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = getId });
         }
 
         // GET: Booking/Edit/5
@@ -433,7 +450,6 @@ namespace ArgicultureInventorySystem.Controllers
         public ActionResult Edit(string id, int bookingDateId)
         {
             // Check status if the guest try to edit from changing the link
-            // TODO: other user can change the link to view others information. Restrict this.
             if (!User.IsInRole(RoleName.CanManageBookings))
             {
                 var user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
@@ -445,7 +461,7 @@ namespace ArgicultureInventorySystem.Controllers
 
                 var getBookingStatus = _context.Bookings.First(b => b.BookingDateId == bookingDateId);
 
-                // if booking is already approved/rejected/returned, then redirect to user booking page
+                // If booking is already approved/rejected/returned, then redirect to user booking page
                 if (getBookingStatus.BookingStatus == "Approved" || getBookingStatus.BookingStatus == "Rejected" || getBookingStatus.BookingStatus == "Returned")
                 {
                     return RedirectToAction("CustomerBooking", "Booking", new { id });
@@ -478,9 +494,9 @@ namespace ArgicultureInventorySystem.Controllers
         [HttpPost]
         public ActionResult Edit(string id, UcBookingStockViewModel ucBooking)
         {
-            /* TODO: When Adding/Creating a new Booking, check the number of stock number available, 
-             * TODO: If its less than booked number, deny booking. If its allowed, substract (UPDATE) from currentValue attribute
-             * TODO: Check for changes? */
+            // TODO: Check for 0 for number of item?
+
+            var hold = ucBooking;
 
             var getBooking = _context.Bookings.ToList();
 
@@ -493,12 +509,15 @@ namespace ArgicultureInventorySystem.Controllers
                 Bookings = getSpecificBooking
             };
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || ucBooking.Bookings == null)
             {
                 LoadStocks();
                 return View("Edit", viewModel);
             }
 
+            string check = null;
+            string listOfOverload = null;
+            // var holdBookings = new List<Booking>();
 
             foreach (var booking in ucBooking.Bookings)
             {
@@ -508,6 +527,18 @@ namespace ArgicultureInventorySystem.Controllers
                     booking.UserId = ucBooking.ApplicationUser.Id;
                     booking.Stock = booking.Stock;
                     booking.BookingDateId = ucBooking.Bookings.First().BookingDateId;
+                    booking.BookingId = ucBooking.Bookings.First().BookingId;
+
+                    // Get stock to check current Quantity
+                    var getStock = _context.Stocks.Single(s => s.Id == booking.StockId);
+
+                    // Check if the booked quantity is more than available quantity. If yes, it is overloaded.
+                    if (booking.BookingQuantity > getStock.CurrentQuantity)
+                    {
+                        listOfOverload += getStock.Name + ", ";
+                        check = "overload booking";
+                    }
+
                     _context.Bookings.Add(booking);
                     
                 }
@@ -524,14 +555,42 @@ namespace ArgicultureInventorySystem.Controllers
                     bInDb.Stock = booking.Stock;
                     bInDb.StockId = booking.StockId;
                     bInDb.BookingId = booking.BookingId;
+
+                    // Get stock to check current Quantity
+                    var getStock = _context.Stocks.Single(s => s.Id == booking.StockId);
+
+                    // Check if the booked quantity is more than available quantity. If yes, it is overloaded.
+                    if (booking.BookingQuantity > getStock.CurrentQuantity)
+                    {
+                        listOfOverload += getStock.Name + ", ";
+                        check = "overload booking";
+                    }
                 }
             }
 
-            _context.SaveChanges();
+            if (check != null)
+            {
+                ViewBag.OverloadBooking = "The stock for " + listOfOverload + " is not enough";
+                LoadStocks();
+                return View("Edit", hold);
+            }
 
-            var getId = viewModel.ApplicationUser.Id;
+            var getId = ucBooking.ApplicationUser.Id;
 
-            return RedirectToAction("CustomerBooking", "Booking", new { id = getId });
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(@"{0} Exception caught.", e);
+                ViewBag.Error = "Booking cannot be duplicated";
+                LoadStocks();
+                return View("Create", hold);
+            }
+
+            // TODO: Successful booking notification?
+            return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = getId });
         }
 
         // GET: Booking/Delete/5
