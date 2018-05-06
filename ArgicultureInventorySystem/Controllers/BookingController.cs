@@ -122,7 +122,7 @@ namespace ArgicultureInventorySystem.Controllers
             // This is the list of booking not sorted by booking date
             var viewModel = new UcBookingStockViewModel
             {
-                Bookings = getSpecificBooking.DistinctBy(b => b.BookingDateId),
+                Bookings = getSpecificBooking.DistinctBy(b => b.BookingDateId).OrderByDescending(b => b.BookingDateId),
                 BookingDates = getBookingDates.Distinct(),
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == id)
             };
@@ -377,7 +377,6 @@ namespace ArgicultureInventorySystem.Controllers
             string overloadBooking = null;
             string zeroBooking = null;
             string listOfOverload = null;
-            var holdBookings = new List<Booking>();
 
             // Generate Random BookingId to be used as reference
             var bookingId = GenerateRandomBookingId();
@@ -404,7 +403,7 @@ namespace ArgicultureInventorySystem.Controllers
                     zeroBooking = "zero booking";
                 }
 
-                holdBookings.Add(booking);
+                _context.Bookings.Add(booking);
             }
 
             if (overloadBooking != null)
@@ -421,16 +420,12 @@ namespace ArgicultureInventorySystem.Controllers
                 return View("Create", hold);
             }
 
-            // Save the booking in the database if the booking is not overloaded
-            foreach (var booking in holdBookings)
-            {
-                _context.Bookings.Add(booking);
-            }
-
             var getId = ucBooking.ApplicationUser.Id;
 
+            // Detect the exception (eg; duplicate PK)
             try
             {
+                // Save the booking in the database if the booking is not overloaded
                 _context.SaveChanges();
             }
             catch(Exception e)
@@ -494,8 +489,6 @@ namespace ArgicultureInventorySystem.Controllers
         [HttpPost]
         public ActionResult Edit(string id, UcBookingStockViewModel ucBooking)
         {
-            // TODO: Check for 0 for number of item?
-
             var hold = ucBooking;
 
             var getBooking = _context.Bookings.ToList();
@@ -503,10 +496,13 @@ namespace ArgicultureInventorySystem.Controllers
             // Get Bookings specific to the customer
             var getSpecificBooking = getBooking.Where(b => b.ApplicationUser.Id == ucBooking.ApplicationUser.Id).ToList();
 
+            var getSpecificBooking2 = _context.Bookings.Where(b => b.BookingDateId == ucBooking.BookingDate.Id);
+
             var viewModel = new UcBookingStockViewModel
             {
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == ucBooking.ApplicationUser.Id),
-                Bookings = getSpecificBooking
+                Bookings = getSpecificBooking2,
+                BookingDate = ucBooking.BookingDate
             };
 
             if (!ModelState.IsValid || ucBooking.Bookings == null)
@@ -517,7 +513,7 @@ namespace ArgicultureInventorySystem.Controllers
 
             string check = null;
             string listOfOverload = null;
-            // var holdBookings = new List<Booking>();
+            string zeroBooking = null;
 
             foreach (var booking in ucBooking.Bookings)
             {
@@ -526,7 +522,7 @@ namespace ArgicultureInventorySystem.Controllers
                     //Insert if bookingId 0
                     booking.UserId = ucBooking.ApplicationUser.Id;
                     booking.Stock = booking.Stock;
-                    booking.BookingDateId = ucBooking.Bookings.First().BookingDateId;
+                    booking.BookingDateId = ucBooking.BookingDate.Id;
                     booking.BookingId = ucBooking.Bookings.First().BookingId;
 
                     // Get stock to check current Quantity
@@ -565,6 +561,13 @@ namespace ArgicultureInventorySystem.Controllers
                         listOfOverload += getStock.Name + ", ";
                         check = "overload booking";
                     }
+                    
+                    // If item booked entered is less than 0 or equal to
+                    if (booking.BookingQuantity <= 0)
+                    {
+                        zeroBooking = "zero booking";
+                    }
+
                 }
             }
 
@@ -575,8 +578,18 @@ namespace ArgicultureInventorySystem.Controllers
                 return View("Edit", hold);
             }
 
+            if (zeroBooking != null)
+            {
+                ViewBag.ZeroBooking = "Number of item must be at least 1.";
+                LoadStocks();
+                return View("Edit", hold);
+            }
+
             var getId = ucBooking.ApplicationUser.Id;
 
+            //_context.SaveChanges();
+
+            // Detect the exception (eg; duplicate PK)
             try
             {
                 _context.SaveChanges();
@@ -586,7 +599,7 @@ namespace ArgicultureInventorySystem.Controllers
                 Console.WriteLine(@"{0} Exception caught.", e);
                 ViewBag.Error = "Booking cannot be duplicated";
                 LoadStocks();
-                return View("Create", hold);
+                return View("Edit", hold);
             }
 
             // TODO: Successful booking notification?
@@ -613,9 +626,10 @@ namespace ArgicultureInventorySystem.Controllers
         [HttpDelete]
         public ActionResult Delete(int? id, int? stockId, string ucId)
         {
-            if (id == null)
+            // If the deleted row is empty without selection - allow it
+            if (id == 0 || stockId == 0)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
 
             // Get the specific booking from Booking table (PK: stockId + bookingdateId + universityCommunityId)
