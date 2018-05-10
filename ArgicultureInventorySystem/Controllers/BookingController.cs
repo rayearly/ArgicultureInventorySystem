@@ -358,7 +358,6 @@ namespace ArgicultureInventorySystem.Controllers
             return View(viewModel);
         }
 
-        // TODO: CREATE & EDIT DO NOT ALLOW SAME SELECTION OF STOCK
         // POST: Booking/Create
         [AllowAnonymous]
         [HttpPost]
@@ -657,9 +656,36 @@ namespace ArgicultureInventorySystem.Controllers
                 Stocks = _context.Stocks.ToList(),
                 BookingDate = _context.BookingDates.Single(b => b.Id == id)
             };
+
             #endregion
 
             return View("Edit", viewModel);
+        }
+
+        // TODO: Delete whole booking. Current delete is for deleting one row in a booking.
+        [HttpDelete]
+        public ActionResult DeleteByBookingDateId(int bookingDateId)
+        {
+            // Get the bookings that have the same bookingDateId to be deleted
+            var bookingToDelete = _context.Bookings.Where(b => b.BookingDateId == bookingDateId);
+
+            if (bookingToDelete.Any())
+            {
+                foreach (var booking in bookingToDelete)
+                {
+                    // Delete each of the bookings
+                    _context.Bookings.Remove(booking);
+                }
+            }
+            else
+            {
+                // If booking does not exist return BadRequest
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            _context.SaveChanges();
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         #region LoadStock - Get the stock into the ViewBag to be used in the PartialViews

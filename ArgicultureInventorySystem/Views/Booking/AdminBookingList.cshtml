@@ -43,7 +43,7 @@
     @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
     @foreach (var item in Model.Bookings)
     {
-        <tr>
+        <tr id="bookings">
             <td>
                 @{
                     count++;
@@ -65,8 +65,8 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.BookingDateId })
-
+                @Html.HiddenFor(modelItem => item.BookingDateId, new { @class = "bookingDateId" })
+                <a href="#" class ="deleteBooking">Delete Booking</a>
             </td>
         </tr>
     }
@@ -82,6 +82,37 @@
                     { targets: 3, sortable: false }
                 ],
                 order: [[0, "asc"]]
+            });
+
+            $('#booking').on('click', '.deleteBooking', function () {
+
+                var container = $(this).closest('#bookings');
+                var id = container.find('.bookingDateId').val();
+
+                if (id) {
+                    bootbox.confirm("Delete Booked item?", function(result) {
+                        if (result) {
+                            $.ajax(
+                                {
+                                    type: "DELETE",
+                                    url: "@Url.Action("DeleteByBookingDateId" , "Booking")",
+                                    ajaxsync: true,
+                                    data: { bookingDateId: id },
+                                    success: function() {
+                                        bootbox.alert("Item booked deleted successfully", function () {
+                                            container.fadeOut(500,
+                                                function() {
+                                                    container.remove();
+                                                });
+                                        });
+                                    },
+                                    error: function(data) {
+                                        bootbox.alert("fail");
+                                    }
+                                });
+                        }
+                    });
+                }
             });
         });
     </script>
