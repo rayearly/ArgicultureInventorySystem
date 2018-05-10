@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -27,10 +28,40 @@ namespace ArgicultureInventorySystem.Controllers
 
         private readonly ApplicationDbContext _context;
 
-
         public AccountController()
         {
             _context = new ApplicationDbContext();
+        }
+
+        public ActionResult Edit()
+        {
+            var id = Session["UserSessionId"];
+            var applicationUser = _context.Users.Single(u => u.Id == (string) id);
+            return View(applicationUser);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(string id, ApplicationUser appUser)
+        {
+            var applicationUserInDb = _context.Users.Single(u => u.Id == id);
+
+            try
+            {
+                applicationUserInDb.IdNumber = appUser.IdNumber;
+                applicationUserInDb.Name = appUser.Name;
+                applicationUserInDb.PhoneNo = appUser.PhoneNo;
+                applicationUserInDb.Email = appUser.Email;
+                //applicationUserInDb.UserName = appUser.UserName;
+
+                _context.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(@"{0} Exception caught.", e);
+            }
+
+            return RedirectToAction("Index", "Manage");
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )

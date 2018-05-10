@@ -46,5 +46,7 @@ namespace ArgicultureInventorySystem.Models
         {
             return new ApplicationDbContext();
         }
+
+        //public System.Data.Entity.DbSet<ArgicultureInventorySystem.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }
