@@ -69,17 +69,20 @@
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <span class="badge">
-                                    <script>document.write(inProcess);</script></span>
+                                    <script>document.write(inProcess);</script>
+                                </span>
                                 @Html.ActionLink("Unapproved Booking", "UnApprovedBookingList", null, new { @class = "btn-link" })
                             </li>
                             <li class="list-group-item">
                                 <span class="badge">
-                                    <script>document.write(approved);</script></span>
+                                    <script>document.write(approved);</script>
+                                </span>
                                 @Html.ActionLink("Approved Booking", "ApprovedBookingList", null, new { @class = "btn-link" })
                             </li>
                             <li class="list-group-item">
                                 <span class="badge">
-                                    <script>document.write(rejected);</script></span>
+                                    <script>document.write(rejected);</script>
+                                </span>
                                 @Html.ActionLink("Rejected Booking", "RejectedBookingList", null, new { @class = "btn-link" })
                             </li>
                             <li class="list-group-item">
@@ -98,3 +101,5 @@
 </table>
 
 @Html.ActionLink("View Stock Report - Pesticide", "GetStockPesticide", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
+@Html.ActionLink("View Stock Report - Fertilizer", "GetStockFertilizer", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
+@Html.ActionLink("View Stock Report - Tools", "GetStockTool", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })

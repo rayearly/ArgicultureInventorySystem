@@ -138,7 +138,7 @@ namespace ArgicultureInventorySystem.Controllers
             return View("Index", uc);
         }
 
-        #region Get the different type of Booking status? - can be in one function TODO:
+        #region GET: the different type of Booking status? - can be in one function TODO:
 
         // GET: Get Unapproved Bookings and display it in a page to be approved by admin
         public ActionResult UnApprovedBookingList()
@@ -202,7 +202,7 @@ namespace ArgicultureInventorySystem.Controllers
 
         #endregion
 
-        #region Update different type of booking status - can be refactored?
+        #region PUT: different type of booking status - can be refactored?
 
         [HttpPut]
         public ActionResult ApproveBooking(int bookingId)
@@ -662,7 +662,6 @@ namespace ArgicultureInventorySystem.Controllers
             return View("Edit", viewModel);
         }
 
-        // TODO: Delete whole booking. Current delete is for deleting one row in a booking.
         [HttpDelete]
         public ActionResult DeleteByBookingDateId(int bookingDateId)
         {

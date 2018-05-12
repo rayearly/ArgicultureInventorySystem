@@ -57,10 +57,17 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
+    <div align="left">
+        <ul class="pager" align="left">
+            <li><a href="javascript:void(0);" id="backLink"> << Back</a></li>
+        </ul>
+    </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    
+    <script type="text/javascript">
+        $(document).on('click', '#backLink', function () {
+            history.go(-1);
+        });
+    </script>
 }

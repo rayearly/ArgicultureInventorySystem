@@ -63,6 +63,7 @@ namespace ArgicultureInventorySystem.Controllers
             return View(stock);
         }
 
+        #region GET: Different types of stocks
         // Pesticide = 2, Tools = 1, Fertilizer = 3
 
         // GET: Stocks - Pesticide
@@ -75,9 +76,24 @@ namespace ArgicultureInventorySystem.Controllers
 
 
         // GET: Stocks - Tools
+        public ActionResult GetStockFertilizer()
+        {
+            var stockFertilizer = _context.Stocks.Where(s => s.TypeId == 3).ToList();
+
+            return View("Index", stockFertilizer);
+        }
 
         // GET: Stocks = Fertilizers
-        
+        public ActionResult GetStockTool()
+        {
+            var stockTool = _context.Stocks.Where(s => s.TypeId == 1).ToList();
+
+            return View("Index", stockTool);
+        }
+
+        #endregion
+
+
         // GET: Stocks/Details/5
         public ActionResult Details(int? id)
         {

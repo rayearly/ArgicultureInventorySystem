@@ -329,6 +329,10 @@
     <Compile Include="Migrations\201805050920550_AddSomeStockSample.Designer.cs">
       <DependentUpon>201805050920550_AddSomeStockSample.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805240506392_Idunno.cs" />
+    <Compile Include="Migrations\201805240506392_Idunno.Designer.cs">
+      <DependentUpon>201805240506392_Idunno.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -783,6 +787,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805050920550_AddSomeStockSample.resx">
       <DependentUpon>201805050920550_AddSomeStockSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805240506392_Idunno.resx">
+      <DependentUpon>201805240506392_Idunno.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
