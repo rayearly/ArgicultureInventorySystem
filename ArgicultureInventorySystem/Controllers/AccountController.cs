@@ -33,10 +33,14 @@ namespace ArgicultureInventorySystem.Controllers
             _context = new ApplicationDbContext();
         }
 
-        public ActionResult Edit()
+        public ActionResult Edit(string userId)
         {
-            var id = Session["UserSessionId"];
-            var applicationUser = _context.Users.Single(u => u.Id == (string) id);
+            if (userId == null)
+            {
+                userId = (string) Session["UserSessionId"];
+            }
+            
+            var applicationUser = _context.Users.Single(u => u.Id == userId);
             return View(applicationUser);
         }
 
