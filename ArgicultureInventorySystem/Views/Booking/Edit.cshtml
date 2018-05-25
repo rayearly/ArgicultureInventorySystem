@@ -1,7 +1,18 @@
-﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+﻿@using ArgicultureInventorySystem.Models
+@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
 @{
     ViewBag.Title = "Edit";
 }
+@{
+    if (User.IsInRole(RoleName.CanManageBookings) && Session["UserSessionId"] != null)
+    {
+        <ul class="breadcrumb">
+            <li><a href="../AdminHomePage">Home</a></li>
+            <li class="active">Homepage</li>
+        </ul>
+    }
+}
+
 
 <h2>Edit</h2>
 
@@ -34,13 +45,13 @@
                 {
                     <!--Partial View here-->
                     @Html.Partial("_BookingPartial", booking)
-
                 }
             }
         </div>
 
 
         @Html.HiddenFor(model => model.BookingDate.Id)
+        @Html.HiddenFor(model => model.BookingId)
         @Html.HiddenFor(model => model.ApplicationUser.Id)
         <br />
         <button type="button" id="add" class="btn btn-primary">Click to add Booth + </button>
@@ -53,14 +64,20 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+<div align="left">
+    <ul class="pager" align="left">
+        <li><a href="javascript:void(0);" id="backLink"> << Back</a></li>
+    </ul>
 </div>
+
 
 @section scripts
 {
     <script type="text/javascript">
         $(document).ready(function () {
+            $(document).on('click', '#backLink', function () {
+                history.go(-1);
+            });
 
             $('#datepicker').datepicker({
                 dateFormat: 'dd-mm-yy',
@@ -118,15 +135,16 @@
                                     ajaxsync: true,
                                     data: { id: id, stockId: stockId, ucId: ucId },
                                     success: function() {
-                                        bootbox.alert("Item booked deleted successfully", function () {
-                                            container.fadeOut(500,
+                                            bootbox.alert("Item booked deleted successfully",
                                                 function() {
-                                                    container.remove();
+                                                    container.fadeOut(500,
+                                                        function() {
+                                                            container.remove();
+                                                        });
                                                 });
-                                        });
                                     },
                                     error: function(data) {
-                                        bootbox.alert("fail");
+                                        bootbox.alert("At least select one stock to continue booking.");
                                     }
                                 });
                         }

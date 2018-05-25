@@ -22,5 +22,7 @@ namespace ArgicultureInventorySystem.ViewModel
         public ApplicationUser ApplicationUser { get; set; }
 
         public IEnumerable<ApplicationUser> ApplicationUsers { get; set; }
+
+        public string BookingId { get; set; }
     }
 }

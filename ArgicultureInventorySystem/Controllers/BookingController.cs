@@ -38,7 +38,6 @@ namespace ArgicultureInventorySystem.Controllers
         [AllowAnonymous]
         public ActionResult RedirectUserHome(string id)
         {
-            // TODO: Create Admin Menu
             return User.IsInRole(RoleName.CanManageBookings) ? AdminHomePage() : CustomerBooking(id);
         }
 
@@ -636,9 +635,17 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
+            var bookings = _context.Bookings.Where(b => b.BookingDateId == id && b.StockId == stockId && b.UserId == ucId);
 
+            if (bookings.Count() == 1)
+            {
+                ViewBag.AtLeastOneStock = "At least one stock to continue booking";
+                return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = ucId });
+            }
             // Get the specific booking from Booking table (PK: stockId + bookingdateId + universityCommunityId)
             var booking = _context.Bookings.Single(b => b.BookingDateId == id && b.StockId == stockId && b.UserId == ucId);
+            
+            //var holdBookingUID = booking.BookingId;
 
             _context.Bookings.Remove(booking);
             _context.SaveChanges();
@@ -664,6 +671,12 @@ namespace ArgicultureInventorySystem.Controllers
             };
 
             #endregion
+
+            //if (!viewModel.Bookings.Any())
+            //{
+                //ViewBag.AllDeleted = "alldeleted";
+                //return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = ucId });
+            //}
 
             return View("Edit", viewModel);
         }
