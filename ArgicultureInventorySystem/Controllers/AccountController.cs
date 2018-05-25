@@ -35,6 +35,7 @@ namespace ArgicultureInventorySystem.Controllers
 
         public ActionResult Edit(string userId)
         {
+            LoadDeptFact();
             if (userId == null)
             {
                 userId = (string) Session["UserSessionId"];
@@ -55,7 +56,7 @@ namespace ArgicultureInventorySystem.Controllers
                 applicationUserInDb.Name = appUser.Name;
                 applicationUserInDb.PhoneNo = appUser.PhoneNo;
                 applicationUserInDb.Email = appUser.Email;
-                //applicationUserInDb.UserName = appUser.UserName;
+                applicationUserInDb.DFId = appUser.DFId;
 
                 _context.SaveChanges();
 
@@ -231,7 +232,6 @@ namespace ArgicultureInventorySystem.Controllers
                     Name = model.Name,
                     PhoneNo = model.PhoneNo,
                     DFId = model.DFId,
-                    //DepartmentFaculty =  model.DepartmentFaculty,
                     DepartmentFacultyName = model.DepartmentFacultyName
                 };
 
