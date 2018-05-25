@@ -1,0 +1,81 @@
+﻿@model IEnumerable<ArgicultureInventorySystem.Models.DepartmentFaculty>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    var count = 0;
+}
+
+<h2>Department / Facutly List</h2>
+
+<p>
+    @Html.ActionLink("Create New Department / Faculty", "Create", "DepartmentFaculties", null, new { @class = "btn btn-primary" })
+</p>
+<table id ="facdept" class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>
+            No.
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            Manage
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @{
+                    count++;
+                    @count
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#facdept").DataTable({
+                order: [[0, "asc"]]
+            });
+
+
+            $("#facdept").on("click", ".js-delete", function() {
+                var button = $(this);
+
+                bootbox.confirm("Are you sure?",
+                    function(result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/stocks/" + $(this).attr("data-customer-id"),
+                                method: "DELETE",
+                                success: function() {
+                                    button.parents("tr").remove();
+                                }
+                            });
+                        }
+                    });
+            });
+        });
+
+    </script>
+}

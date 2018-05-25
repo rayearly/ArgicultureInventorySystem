@@ -7,10 +7,7 @@ namespace ArgicultureInventorySystem.Migrations
     {
         public override void Up()
         {
-            DropForeignKey("dbo.AspNetUsers", "FacultyDepartmentId", "dbo.FacultyDepartments");
-            DropIndex("dbo.AspNetUsers", new[] { "FacultyDepartmentId" });
-            DropColumn("dbo.AspNetUsers", "FacultyDepartmentId");
-            DropTable("dbo.FacultyDepartments");
+            
         }
         
         public override void Down()

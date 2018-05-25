@@ -17,7 +17,7 @@ namespace ArgicultureInventorySystem.ViewModel
         public virtual BookingDate BookingDate { get; set; }
 
         // Get Booking by BookingDate
-        public IEnumerable<BookingDate> BookingDates { get; set; }
+        public virtual IEnumerable<BookingDate> BookingDates { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
 

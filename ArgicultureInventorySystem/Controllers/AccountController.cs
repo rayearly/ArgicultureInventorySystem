@@ -210,7 +210,9 @@ namespace ArgicultureInventorySystem.Controllers
                     Email = model.Email,
                     IdNumber = model.IdNumber,
                     Name = model.Name,
-                    PhoneNo = model.PhoneNo
+                    PhoneNo = model.PhoneNo,
+                    DepartmentFacultyId = model.DepartmentFacultyId,
+                    DepartmentFacultyName = model.DepartmentFacultyName
                 };
 
                 var result = await UserManager.CreateAsync(user, model.Password);

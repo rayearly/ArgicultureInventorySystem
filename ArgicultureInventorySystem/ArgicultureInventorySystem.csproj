@@ -219,6 +219,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\StocksController.cs" />
     <Compile Include="Controllers\BookingController.cs" />
+    <Compile Include="Controllers\DepartmentFacultiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StockMeasurementsController.cs" />
@@ -333,10 +334,23 @@
     <Compile Include="Migrations\201805240506392_Idunno.Designer.cs">
       <DependentUpon>201805240506392_Idunno.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805250140089_AddDepartmentFaculty.cs" />
+    <Compile Include="Migrations\201805250140089_AddDepartmentFaculty.Designer.cs">
+      <DependentUpon>201805250140089_AddDepartmentFaculty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805250241287_AddingDeptFacForeignKey.cs" />
+    <Compile Include="Migrations\201805250241287_AddingDeptFacForeignKey.Designer.cs">
+      <DependentUpon>201805250241287_AddingDeptFacForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805250301284_AddingDeptFacultyForDropdown.cs" />
+    <Compile Include="Migrations\201805250301284_AddingDeptFacultyForDropdown.Designer.cs">
+      <DependentUpon>201805250301284_AddingDeptFacultyForDropdown.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
     <Compile Include="Models\BookingDate.cs" />
+    <Compile Include="Models\DepartmentFaculty.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RoleName.cs" />
@@ -704,6 +718,11 @@
     <Content Include="Views\Account\Edit.cshtml" />
     <None Include="Views\Booking\RejectedBookingList.cshtml" />
     <Content Include="Views\Booking\ApprovedBookingList.cshtml" />
+    <Content Include="Views\DepartmentFaculties\Create.cshtml" />
+    <Content Include="Views\DepartmentFaculties\Delete.cshtml" />
+    <Content Include="Views\DepartmentFaculties\Details.cshtml" />
+    <Content Include="Views\DepartmentFaculties\Edit.cshtml" />
+    <Content Include="Views\DepartmentFaculties\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -790,6 +809,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805240506392_Idunno.resx">
       <DependentUpon>201805240506392_Idunno.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250140089_AddDepartmentFaculty.resx">
+      <DependentUpon>201805250140089_AddDepartmentFaculty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250241287_AddingDeptFacForeignKey.resx">
+      <DependentUpon>201805250241287_AddingDeptFacForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250301284_AddingDeptFacultyForDropdown.resx">
+      <DependentUpon>201805250301284_AddingDeptFacultyForDropdown.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

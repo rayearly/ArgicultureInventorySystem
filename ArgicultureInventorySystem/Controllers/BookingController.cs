@@ -543,7 +543,8 @@ namespace ArgicultureInventorySystem.Controllers
                     //Update if exist
                     var bInDb = _context.Bookings.Single(b => b.BookingDateId == booking.BookingDateId && b.StockId == booking.StockId);
 
-                    bInDb.BookingDate = booking.BookingDate;
+                    bInDb.BookingDate.BookingDateTime = ucBooking.BookingDate.BookingDateTime;
+                    bInDb.BookingDate.ReturnDateTime = ucBooking.BookingDate.ReturnDateTime;
                     bInDb.BookingDateId = booking.BookingDateId;
                     bInDb.BookingNotes = booking.BookingNotes;
                     bInDb.BookingQuantity = booking.BookingQuantity;

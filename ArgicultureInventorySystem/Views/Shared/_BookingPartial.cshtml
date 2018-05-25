@@ -11,17 +11,17 @@
         <table class="table table-bordered table-hover">
             <tr>
                 <td>
-                    @Html.LabelFor(b => b.StockId)
+                    <b>Stock Name :</b>
                     @Html.DropDownListFor(m => m.StockId, ((IEnumerable<SelectListItem>)ViewBag.LoadStocks), "--Select Stock--", new { @class = "form-control" })
                     @Html.ValidationMessageFor(b => b.StockId)
                 </td>
                 <td>
-                    @Html.LabelFor(b => b.BookingQuantity)
+                    <b>Booking Quantity :</b>
                     @Html.TextBoxFor(b => b.BookingQuantity, new { @class = "form-control" })
                     @Html.ValidationMessageFor(b => b.BookingQuantity)
                 </td>
                 <td>
-                    @Html.LabelFor(b => b.BookingNotes)
+                    <b>Booking Notes :</b>
                     @Html.TextBoxFor(b => b.BookingNotes, new { @class = "form-control" })
                     @Html.ValidationMessageFor(b => b.BookingNotes)
                 </td>

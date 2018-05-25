@@ -14,11 +14,14 @@
         <td width="60%">
             <div>
                 <p>
-                    @Html.ActionLink("View Users", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                    @Html.ActionLink("Manage Users", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
 
                 <p>
-                    @Html.ActionLink("View Stocks", "Index", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                    @Html.ActionLink("Manage Stocks", "Index", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                </p>
+                <p>
+                    @Html.ActionLink("Manage Department / Faculty", "Index", "DepartmentFaculties", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
                 <p>
                     @Html.ActionLink("Generate Report", "Report", "Booking", null, new { @class = "btn btn-warning btn-lg btn-block" })
@@ -99,7 +102,3 @@
         </td>
     </tr>
 </table>
-
-@Html.ActionLink("View Stock Report - Pesticide", "GetStockPesticide", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
-@Html.ActionLink("View Stock Report - Fertilizer", "GetStockFertilizer", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
-@Html.ActionLink("View Stock Report - Tools", "GetStockTool", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,6 +20,12 @@ namespace ArgicultureInventorySystem.Models
 
         public virtual IList<Booking> Bookings { get; set; }
 
+        public string DepartmentFacultyName { get; set; }
+
+        public int DepartmentFacultyId { get; set; }
+
+        //public DepartmentFaculty DepartmentFaculty { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -36,6 +43,7 @@ namespace ArgicultureInventorySystem.Models
         public DbSet<StockMeasurement> StockMeasurements { get; set; }
         public DbSet<StockType> StockTypes { get; set; }
         public DbSet<BookingDate> BookingDates { get; set; }
+        public DbSet<DepartmentFaculty> DepartmentFaculties { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
