@@ -8,55 +8,74 @@
 <h2>User List</h2>
 
 <p>
-    @Html.ActionLink("Create New User", "Create", "UniversityCommunity", null, new {@class = "btn btn-primary"})
+    @Html.ActionLink("Register New User", "Register", "Account", null, new {@class = "btn btn-primary"})
 </p>
 <table id ="users" class="table table-bordered table-hover">
     <thead>
-        <tr>
-            <th>
-                User ID
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                Contact Number
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            User ID
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            Contact Number
+        </th>
+        <th>
+            Manage
+        </th>
+    </tr>
     </thead>
     
-@foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IdNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PhoneNo)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", "Account", new { userId = item.Id }, null) |
-            <!--Html.ActionLink("Delete", "Delete", new { id=item.Id }) | -->
-            @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new { id = item.Id }, null)
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNo)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Account", new { userId = item.Id }, null) |
+                <!--Html.ActionLink("Delete", "Delete", new { id=item.Id }) | -->
+                @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new { id = item.Id }, null)
+            </td>
+        </tr>
+    }
 
 </table>
 
+<ul class="pager">
+    <li>@Html.ActionLink("<< Back", "AdminHomePage", "Booking", new { @class = "btn btn-default" })</li>
+</ul>
+
+
+
+
 @section scripts{
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#users").DataTable({
-                columnDefs : [
-                    { targets: 3, sortable: false}
+                columnDefs: [
+                    { targets: 3, sortable: false }
                 ],
                 order: [[0, "asc"]]
             });
         });
     </script>
+
+    @if (TempData["EditSuccessful"] != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@TempData["EditSuccessful"]");
+            });
+        </script>
+    }
 }
+

@@ -84,3 +84,14 @@
         </dd>
     </dl>
 </div>
+
+@section Scripts{
+    @if (TempData["EditSuccessful"] != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@TempData["EditSuccessful"]");
+            });
+        </script>
+    }
+}

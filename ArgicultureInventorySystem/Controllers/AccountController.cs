@@ -66,7 +66,20 @@ namespace ArgicultureInventorySystem.Controllers
                 Console.WriteLine(@"{0} Exception caught.", e);
             }
 
-            return RedirectToAction("Index", "Manage");
+            // If role is admin then redirect to index booking, if session empty go to manage, if session yes go to booking user
+            if (User.IsInRole(RoleName.CanManageBookings) && Session["UserSessionId"] != null)
+            {
+                TempData["EditSuccessful"] = "Edit Successful";
+                return RedirectToAction("AllBookingList", "Booking");
+            }
+
+            if (Session["UserSessionId"] != null)
+            {
+                TempData["EditSuccessful"] = "Edit Successful";
+                return RedirectToAction("Index", "Manage");
+            }
+            
+            return RedirectToAction("Index", "Manage");  
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -479,7 +492,7 @@ namespace ArgicultureInventorySystem.Controllers
             Session.Clear();
             Session.Abandon();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Manage");
         }
 
         //

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -12,16 +13,19 @@ namespace ArgicultureInventorySystem.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        [DisplayName("ID Number")]
         public string IdNumber { get; set; }
 
         public string Name { get; set; }
 
+        [DisplayName("Phone Number")]
         public string PhoneNo { get; set; }
 
         public virtual IList<Booking> Bookings { get; set; }
 
         public string DepartmentFacultyName { get; set; }
 
+        [DisplayName("Department Name")]
         public int? DFId { get; set; }
 
         [ForeignKey("DFId")]
