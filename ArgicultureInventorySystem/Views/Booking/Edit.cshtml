@@ -3,15 +3,6 @@
 @{
     ViewBag.Title = "Edit";
 }
-@{
-    if (User.IsInRole(RoleName.CanManageBookings) && Session["UserSessionId"] != null)
-    {
-        <ul class="breadcrumb">
-            <li><a href="../AdminHomePage">Home</a></li>
-            <li class="active">Homepage</li>
-        </ul>
-    }
-}
 
 
 <h2>Edit</h2>

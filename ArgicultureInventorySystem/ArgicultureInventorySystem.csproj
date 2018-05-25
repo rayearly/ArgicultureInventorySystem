@@ -346,6 +346,26 @@
     <Compile Include="Migrations\201805250301284_AddingDeptFacultyForDropdown.Designer.cs">
       <DependentUpon>201805250301284_AddingDeptFacultyForDropdown.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805250634288_TryDeptFactAddID.cs" />
+    <Compile Include="Migrations\201805250634288_TryDeptFactAddID.Designer.cs">
+      <DependentUpon>201805250634288_TryDeptFactAddID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805250710204_Try.cs" />
+    <Compile Include="Migrations\201805250710204_Try.Designer.cs">
+      <DependentUpon>201805250710204_Try.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805250733530_test.cs" />
+    <Compile Include="Migrations\201805250733530_test.Designer.cs">
+      <DependentUpon>201805250733530_test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805250745243_Testntah.cs" />
+    <Compile Include="Migrations\201805250745243_Testntah.Designer.cs">
+      <DependentUpon>201805250745243_Testntah.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805250911438_adddepartmentfaculties.cs" />
+    <Compile Include="Migrations\201805250911438_adddepartmentfaculties.Designer.cs">
+      <DependentUpon>201805250911438_adddepartmentfaculties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -818,6 +838,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805250301284_AddingDeptFacultyForDropdown.resx">
       <DependentUpon>201805250301284_AddingDeptFacultyForDropdown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250634288_TryDeptFactAddID.resx">
+      <DependentUpon>201805250634288_TryDeptFactAddID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250710204_Try.resx">
+      <DependentUpon>201805250710204_Try.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250733530_test.resx">
+      <DependentUpon>201805250733530_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250745243_Testntah.resx">
+      <DependentUpon>201805250745243_Testntah.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805250911438_adddepartmentfaculties.resx">
+      <DependentUpon>201805250911438_adddepartmentfaculties.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

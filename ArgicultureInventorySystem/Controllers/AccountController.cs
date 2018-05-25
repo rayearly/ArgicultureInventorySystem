@@ -192,7 +192,24 @@ namespace ArgicultureInventorySystem.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            LoadDeptFact();
             return View();
+        }
+
+        [AllowAnonymous]
+        private void LoadDeptFact()
+        {
+            var df = _context.DepartmentFaculties.ToList();
+
+            // Get the stock into the list
+            var selectItems = df.Select(deptfact => new SelectListItem
+            {
+                Value = deptfact.Id.ToString(),
+                Text = deptfact.Name
+            }).ToList();
+
+            // Store the list in a ViewBag
+            ViewBag.LoadDeptFact = selectItems;
         }
 
         //
@@ -202,6 +219,8 @@ namespace ArgicultureInventorySystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            LoadDeptFact();
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -211,7 +230,8 @@ namespace ArgicultureInventorySystem.Controllers
                     IdNumber = model.IdNumber,
                     Name = model.Name,
                     PhoneNo = model.PhoneNo,
-                    DepartmentFacultyId = model.DepartmentFacultyId,
+                    DFId = model.DFId,
+                    //DepartmentFaculty =  model.DepartmentFaculty,
                     DepartmentFacultyName = model.DepartmentFacultyName
                 };
 
@@ -226,7 +246,7 @@ namespace ArgicultureInventorySystem.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Login", "Account");
                 }
 
                 AddErrors(result);

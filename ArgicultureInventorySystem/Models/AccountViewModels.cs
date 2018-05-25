@@ -84,15 +84,12 @@ namespace ArgicultureInventorySystem.Models
         public virtual IList<Booking> Bookings { get; set; }
 
         [Display(Name = "Faculty / Department")]
-        public int DepartmentFacultyId { get; set; }
+        public int DFId { get; set; }
+
+        public IList<DepartmentFaculty> DepartmentFaculty { get; set; }
 
         [Display(Name = "Faculty / Department")]
         public string DepartmentFacultyName { get; set; }
-
-        private IEnumerable<DepartmentFaculty> DeptFact { get; set; }
-
-        [Display(Name = "Faculty / Department")]
-        public IEnumerable<DepartmentFaculty> DepartmentFaculty { get; set; }
 
         [Required]
         [EmailAddress]

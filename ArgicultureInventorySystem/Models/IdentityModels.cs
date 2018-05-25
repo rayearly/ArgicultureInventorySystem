@@ -22,9 +22,10 @@ namespace ArgicultureInventorySystem.Models
 
         public string DepartmentFacultyName { get; set; }
 
-        public int DepartmentFacultyId { get; set; }
+        public int? DFId { get; set; }
 
-        //public DepartmentFaculty DepartmentFaculty { get; set; }
+        [ForeignKey("DFId")]
+        public virtual DepartmentFaculty DepartmentFaculty { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -44,6 +45,11 @@ namespace ArgicultureInventorySystem.Models
         public DbSet<StockType> StockTypes { get; set; }
         public DbSet<BookingDate> BookingDates { get; set; }
         public DbSet<DepartmentFaculty> DepartmentFaculties { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

@@ -1,10 +1,11 @@
-﻿@model IEnumerable<ArgicultureInventorySystem.Models.ApplicationUser>
+﻿@using ArgicultureInventorySystem.Models
+@model IEnumerable<ArgicultureInventorySystem.Models.ApplicationUser>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Users List</h2>
+<h2>User List</h2>
 
 <p>
     @Html.ActionLink("Create New User", "Create", "UniversityCommunity", null, new {@class = "btn btn-primary"})
@@ -38,9 +39,9 @@
             @Html.DisplayFor(modelItem => item.PhoneNo)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", "Account", new { userId=item.Id }, null) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id }) | 
-            @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new { id=item.Id }, null)
+            @Html.ActionLink("Edit", "Edit", "Account", new { userId = item.Id }, null) |
+            <!--Html.ActionLink("Delete", "Delete", new { id=item.Id }) | -->
+            @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new { id = item.Id }, null)
         </td>
     </tr>
 }
