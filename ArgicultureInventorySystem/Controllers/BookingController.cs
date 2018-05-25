@@ -534,6 +534,11 @@ namespace ArgicultureInventorySystem.Controllers
                         check = "overload booking";
                     }
 
+                    if (booking.BookingQuantity <= 0)
+                    {
+                        zeroBooking = "zero booking";
+                    }
+
                     _context.Bookings.Add(booking);
                     
                 }
