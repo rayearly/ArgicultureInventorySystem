@@ -13,43 +13,48 @@
 <p>
     @Html.ActionLink("Create New Department / Faculty", "Create", "DepartmentFaculties", null, new { @class = "btn btn-primary" })
 </p>
-<table id ="facdept" class="table table-bordered table-hover">
+<table id="facdept" class="table table-bordered table-hover">
     <thead>
-    <tr>
-        <th>
-            No.
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            Manage
-        </th>
-    </tr>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Manage
+            </th>
+        </tr>
     </thead>
 
     <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @{
-                    count++;
-                    @count
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-    }
+        @foreach (var item in Model)
+        {
+            <tr id="bookings">
+                <td>
+                    @{
+                        count++;
+                        @count
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" })
+                    @Html.HiddenFor(modelItem => item.Id, new { @class = "bookingDateId" })
+                    <a href="#" class="btn btn-primary deleteBooking">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<ul class="pager">
+    <li>@Html.ActionLink("<< Back", "AdminHomePage", "Booking", null, new { @class = "btn btn-default" })</li>
+</ul>
+
 
 @section scripts{
     <script>
@@ -59,21 +64,35 @@
             });
 
 
-            $("#facdept").on("click", ".js-delete", function() {
-                var button = $(this);
+            $("#facdept").on("click", ".deleteBooking", function() {
 
-                bootbox.confirm("Are you sure?",
-                    function(result) {
+                var container = $(this).closest('#bookings');
+                var id = container.find('.bookingDateId').val();
+
+                if (id) {
+                    bootbox.confirm("Delete Department / Faculty?", function(result) {
                         if (result) {
-                            $.ajax({
-                                url: "/api/stocks/" + $(this).attr("data-customer-id"),
-                                method: "DELETE",
-                                success: function() {
-                                    button.parents("tr").remove();
-                                }
-                            });
+                            $.ajax(
+                                {
+                                    type: "DELETE",
+                                    url: "@Url.Action("DeleteByDfId" , "DepartmentFaculties")",
+                                    ajaxsync: true,
+                                    data: { DfId: id },
+                                    success: function() {
+                                        bootbox.alert("Department / Faculty deleted successfully", function () {
+                                            container.fadeOut(500,
+                                                function() {
+                                                    container.remove();
+                                                });
+                                        });
+                                    },
+                                    error: function(data) {
+                                        bootbox.alert("fail");
+                                    }
+                                });
                         }
                     });
+                }
             });
         });
 

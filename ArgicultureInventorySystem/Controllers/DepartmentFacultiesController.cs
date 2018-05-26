@@ -12,12 +12,12 @@ namespace ArgicultureInventorySystem.Controllers
 {
     public class DepartmentFacultiesController : Controller
     {
-        private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
         // GET: DepartmentFaculties
         public ActionResult Index()
         {
-            return View(_db.DepartmentFaculties.ToList());
+            return View(_context.DepartmentFaculties.ToList());
         }
 
         // GET: DepartmentFaculties/Details/5
@@ -27,7 +27,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DepartmentFaculty departmentFaculty = _db.DepartmentFaculties.Find(id);
+            DepartmentFaculty departmentFaculty = _context.DepartmentFaculties.Find(id);
             if (departmentFaculty == null)
             {
                 return HttpNotFound();
@@ -50,8 +50,8 @@ namespace ArgicultureInventorySystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.DepartmentFaculties.Add(departmentFaculty);
-                _db.SaveChanges();
+                _context.DepartmentFaculties.Add(departmentFaculty);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +65,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DepartmentFaculty departmentFaculty = _db.DepartmentFaculties.Find(id);
+            DepartmentFaculty departmentFaculty = _context.DepartmentFaculties.Find(id);
             if (departmentFaculty == null)
             {
                 return HttpNotFound();
@@ -82,8 +82,8 @@ namespace ArgicultureInventorySystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(departmentFaculty).State = EntityState.Modified;
-                _db.SaveChanges();
+                _context.Entry(departmentFaculty).State = EntityState.Modified;
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(departmentFaculty);
@@ -96,7 +96,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DepartmentFaculty departmentFaculty = _db.DepartmentFaculties.Find(id);
+            DepartmentFaculty departmentFaculty = _context.DepartmentFaculties.Find(id);
             if (departmentFaculty == null)
             {
                 return HttpNotFound();
@@ -109,17 +109,43 @@ namespace ArgicultureInventorySystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            DepartmentFaculty departmentFaculty = _db.DepartmentFaculties.Find(id);
-            _db.DepartmentFaculties.Remove(departmentFaculty ?? throw new InvalidOperationException());
-            _db.SaveChanges();
+            DepartmentFaculty departmentFaculty = _context.DepartmentFaculties.Find(id);
+            _context.DepartmentFaculties.Remove(departmentFaculty ?? throw new InvalidOperationException());
+            _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // Delete by StockId
+        [HttpDelete]
+        public ActionResult DeleteByDfId(int dfId)
+        {
+            // Get the bookings that have the same bookingDateId to be deleted
+            var dfToDelete = _context.DepartmentFaculties.Where(b => b.Id == dfId);
+
+            if (dfToDelete.Any())
+            {
+                foreach (var df in dfToDelete)
+                {
+                    // Delete each of the bookings
+                    _context.DepartmentFaculties.Remove(df);
+                }
+            }
+            else
+            {
+                // If booking does not exist return BadRequest
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            _context.SaveChanges();
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _db.Dispose();
+                _context.Dispose();
             }
             base.Dispose(disposing);
         }
