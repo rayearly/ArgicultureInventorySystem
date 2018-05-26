@@ -1,0 +1,32 @@
+﻿@model ExportExcel.Models.TechnologyViewModel  
+@{  
+    ViewBag.Title = "Export To Excel";  
+}  
+<div class="panel">  
+    <div class="panel-heading">  
+        <a href="@Url.Action("ExportToExcel")" class="btn btn-primary">Export Report to Excel</a>  
+    </div>  
+    <div class="panel-body">  
+        <table class="table table-striped table-bordered">  
+            <thead>  
+            <tr>  
+                <th>Name</th>  
+                <th>Current Quantity</th>  
+                <th>Original Quantity</th>  
+                <th>Measurement ID</th>  
+            </tr>  
+            </thead>  
+            <tbody>  
+            @foreach (var item in Model.Technologies)  
+            {  
+                <tr>  
+                    <td>@item.Name</td>  
+                    <td>@item.CurrentQuantity</td>  
+                    <td>@item.OriginalQuantity</td>  
+                    <td>@item.MeasurementName</td>  
+                </tr>  
+            }  
+            </tbody>  
+        </table>  
+    </div>  
+</div>

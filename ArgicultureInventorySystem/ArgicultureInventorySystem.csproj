@@ -63,6 +63,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.7.5.2\lib\net45\FluentValidation.dll</HintPath>
     </Reference>
@@ -124,6 +127,7 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ComponentModel.Annotations.4.4.1\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
@@ -140,6 +144,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -216,6 +221,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Code\ExcelExportHelper.cs" />
+    <Compile Include="Code\StaticData.cs" />
+    <Compile Include="Code\Technology.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\StocksController.cs" />
     <Compile Include="Controllers\BookingController.cs" />
@@ -224,6 +232,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StockMeasurementsController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
+    <Compile Include="Controllers\TechnologyController.cs" />
     <Compile Include="Controllers\UniversityCommunityController.cs" />
     <Compile Include="Dtos\StockDto.cs" />
     <Compile Include="Global.asax.cs">
@@ -366,6 +375,10 @@
     <Compile Include="Migrations\201805250911438_adddepartmentfaculties.Designer.cs">
       <DependentUpon>201805250911438_adddepartmentfaculties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805260526568_StockAddQuantityInCard.cs" />
+    <Compile Include="Migrations\201805260526568_StockAddQuantityInCard.Designer.cs">
+      <DependentUpon>201805260526568_StockAddQuantityInCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -383,6 +396,8 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\SortByBookingDate.cs" />
     <Compile Include="ViewModel\StockTypeMeasurementViewModel.cs" />
+    <Compile Include="ViewModel\StockViewModel.cs" />
+    <Compile Include="ViewModel\TechnologyViewModel.cs" />
     <Compile Include="ViewModel\UcBookingStockViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -743,6 +758,7 @@
     <Content Include="Views\DepartmentFaculties\Details.cshtml" />
     <Content Include="Views\DepartmentFaculties\Edit.cshtml" />
     <Content Include="Views\DepartmentFaculties\Index.cshtml" />
+    <Content Include="Views\Technology\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -853,6 +869,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805250911438_adddepartmentfaculties.resx">
       <DependentUpon>201805250911438_adddepartmentfaculties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805260526568_StockAddQuantityInCard.resx">
+      <DependentUpon>201805260526568_StockAddQuantityInCard.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

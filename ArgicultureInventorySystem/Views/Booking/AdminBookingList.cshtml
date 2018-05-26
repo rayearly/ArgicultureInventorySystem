@@ -34,7 +34,9 @@
         <th>
             Status
         </th>
-        <th></th>
+        <th>
+            Manage
+        </th>
     </tr>
     </thead>
     
@@ -63,10 +65,10 @@
                 @Html.DisplayFor(modelItem => item.BookingStatus)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }) |
+                @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary"})
                 @Html.HiddenFor(modelItem => item.BookingDateId, new { @class = "bookingDateId" })
-                <a href="#" class ="deleteBooking">Delete Booking</a>
+                <a href="#" class ="btn btn-primary deleteBooking">Delete Booking</a>
             </td>
         </tr>
     }
@@ -82,7 +84,7 @@
         $(document).ready(function() {
             $("#booking").DataTable({
                 columnDefs: [
-                    { targets: 3, sortable: false }
+                    { targets: 5, sortable: false }
                 ],
                 order: [[0, "asc"]]
             });

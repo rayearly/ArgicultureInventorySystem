@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>View Details</h2>
 
 <div>
     <h4>Stock</h4>
@@ -41,6 +41,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.QuantityInCard)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuantityInCard) @Html.DisplayFor(model => model.Measurement.MeasurementType)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Note)
         </dt>
 
@@ -51,6 +59,13 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit Stock", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary"})
+    
+    <p>
+        <ul class="pager">
+            <li>@Html.ActionLink(" << Back to List", "Index")</li>
+        </ul>
+        
+    </p>
+    
 </p>

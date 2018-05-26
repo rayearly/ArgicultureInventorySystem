@@ -28,19 +28,22 @@
             No.
         </th>
         <th>
-            Stock Name
+            Name
         </th>
         <th>
-            Stock Type
+            Original Qty
         </th>
         <th>
-            Original Quantity
+            Current Qty
         </th>
         <th>
-            CurrentQuantity
+            Qty in Card
         </th>
         <th>
-            Note
+            Type
+        </th>
+        <th>
+            Note / Measurement
         </th>
         <th>
             Manage
@@ -50,18 +53,15 @@
 
     <tbody>
     @foreach (var item in Model) {
-        <tr>
+        <tr id="bookings">
             <td>
                 @{
-                    count++;
-                    @count
+            count++;
+            @count
                 }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type.StockTypeAssigned)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OriginalQuantity)
@@ -70,45 +70,69 @@
                 @Html.DisplayFor(modelItem => item.CurrentQuantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Note)
+                @Html.DisplayFor(modelItem => item.QuantityInCard)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-                @Html.ActionLink("Details", "Details", new {id = item.Id}) |
-                @Html.ActionLink("Delete", "Delete", new {id = item.Id})
-                <button data-customer-id="@item.Id" class="btn-link js-delete">Delete</button>
+                @Html.DisplayFor(modelItem => item.Type.StockTypeAssigned)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Measurement.MeasurementType) / @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary" })
+                @Html.HiddenFor(modelItem => item.Id, new { @class = "bookingDateId" })
+                <a href="#" class="btn btn-primary deleteBooking">Delete</a>
             </td>
         </tr>
     }
     </tbody>
 </table>
 
+<ul class="pager">
+    <li>@Html.ActionLink("<< Back", "AdminHomePage", "Booking", null, new { @class = "btn btn-default" })</li>
+</ul>
+
 @section scripts{
     <script>
         $(document).ready(function () {
             $("#stocks").DataTable({
                 columnDefs : [
-                    { targets: 6, sortable: false}
+                    { targets: 7, sortable: false}
                 ],
                 order: [[0, "asc"]]
             });
 
 
-            $("#stocks").on("click", ".js-delete", function() {
-                var button = $(this);
+            $("#stocks").on("click", ".deleteBooking", function () {
 
-                bootbox.confirm("Are you sure?",
-                    function(result) {
+                var container = $(this).closest('#bookings');
+                var id = container.find('.bookingDateId').val();
+
+                if (id) {
+                    bootbox.confirm("Delete Stock?", function(result) {
                         if (result) {
-                            $.ajax({
-                                url: "/api/stocks/" + $(this).attr("data-customer-id"),
-                                method: "DELETE",
-                                success: function() {
-                                    button.parents("tr").remove();
-                                }
-                            });
+                            $.ajax(
+                                {
+                                    type: "DELETE",
+                                    url: "@Url.Action("DeleteByStockId" , "Stocks")",
+                                    ajaxsync: true,
+                                    data: { stockId: id },
+                                    success: function() {
+                                        bootbox.alert("Stock deleted successfully", function () {
+                                            container.fadeOut(500,
+                                                function() {
+                                                    container.remove();
+                                                });
+                                        });
+                                    },
+                                    error: function(data) {
+                                        bootbox.alert("fail");
+                                    }
+                                });
                         }
                     });
+                }
             });
         });
 

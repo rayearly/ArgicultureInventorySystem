@@ -24,7 +24,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.OriginalQuantity)
+            @Html.DisplayFor(model => model.OriginalQuantity) @Html.DisplayFor(model => model.Measurement.MeasurementType)
         </dd>
 
         <dt>
@@ -32,7 +32,15 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CurrentQuantity)
+            @Html.DisplayFor(model => model.CurrentQuantity) @Html.DisplayFor(model => model.Measurement.MeasurementType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityInCard)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuantityInCard) @Html.DisplayFor(model => model.Measurement.MeasurementType)
         </dd>
 
         <dt>
@@ -45,12 +53,17 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Delete Stock" class="btn btn-primary" />
         </div>
     }
+    
+    <ul class="pager">
+        <li>@Html.ActionLink("<< Back to List", "Index")</li>
+    </ul>
+    
 </div>
