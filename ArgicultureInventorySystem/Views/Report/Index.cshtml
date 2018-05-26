@@ -1,0 +1,38 @@
+﻿@model ExportExcel.Models.TechnologyViewModel
+@{
+    ViewBag.Title = "Generate Report";
+}
+
+<h2>Generate Report & Export to Excel</h2>
+
+<br />
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#home" data-toggle="tab">Stock Report</a></li>
+    <li><a href="#profile" data-toggle="tab">Booking Report</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active in" id="home">
+        <div class="panel">
+            <div class="panel-heading">
+                <br />
+                <a href="@Url.Action("ExportToExcelStockPesticide")" class="btn btn-primary btn-lg btn-block">Export Stock(Pesticide) Report</a>
+                <a href="@Url.Action("ExportToExcelStockTool")" class="btn btn-primary btn-lg btn-block">Export Stock(Tool) Report</a>
+                <a href="@Url.Action("ExportToExcelStockFertilizer")" class="btn btn-primary btn-lg btn-block">Export Stock(Fertilizer) Report</a><br />
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="profile">
+        <div class="panel">
+            <div class="panel-heading">
+                <br />
+                <a href="@Url.Action("ExportToExcelBooking")" class="btn btn-primary btn-lg btn-block">Export Booking(All) Report</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ul class="pager">
+    <li>@Html.ActionLink("<< Back", "AdminHomePage", "Booking", null, new { @class = "btn btn-default" })</li>
+</ul>

@@ -14,11 +14,11 @@
 <p>
     @Html.ActionLink("Create New Stock", "Create", "Stocks", null, new { @class = "btn btn-primary" })
     <div align="right">
-        <b>Select Stock Type:</b>
-        @Html.ActionLink("All", "Index", "Stocks", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("Pesticide", "GetStockPesticide", "Stocks", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("Fertilizer", "GetStockFertilizer", "Stocks", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("Tools", "GetStockTool", "Stocks", null, new { @class = "btn btn-default" })
+        <h4>Filter Stock Type:</h4>
+        @Html.ActionLink("All", "Index", "Stocks", null, new { @class = "btn btn-success btn-sm" })
+        @Html.ActionLink("Pesticide", "GetStockPesticide", "Stocks", null, new { @class = "btn btn-success btn-sm" })
+        @Html.ActionLink("Fertilizer", "GetStockFertilizer", "Stocks", null, new { @class = "btn btn-success btn-sm" })
+        @Html.ActionLink("Tools", "GetStockTool", "Stocks", null, new { @class = "btn btn-success btn-sm" })
     </div>
 </p>
 <table id ="stocks" class="table table-bordered table-hover">

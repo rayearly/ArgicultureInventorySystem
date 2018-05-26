@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
@@ -11,15 +12,19 @@ namespace ArgicultureInventorySystem.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         [DisplayName("Stock Type")]
         public int? TypeId { get; set; }
 
+        [Required]
         // Stock Type List : Tool / Pesticide / Fertilizer (virtual to fill the data ready)
         [ForeignKey("TypeId")]
         public virtual StockType Type { get; set; }
 
+        [Required]
         // Kuantiti Dibeli
         [DisplayName("Original Quantity")]
         public decimal OriginalQuantity { get; set; }

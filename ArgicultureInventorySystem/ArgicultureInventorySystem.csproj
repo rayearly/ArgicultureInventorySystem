@@ -232,7 +232,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StockMeasurementsController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
-    <Compile Include="Controllers\TechnologyController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UniversityCommunityController.cs" />
     <Compile Include="Dtos\StockDto.cs" />
     <Compile Include="Global.asax.cs">
@@ -379,6 +379,10 @@
     <Compile Include="Migrations\201805260526568_StockAddQuantityInCard.Designer.cs">
       <DependentUpon>201805260526568_StockAddQuantityInCard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805260904485_UpdateRequiredInModel.cs" />
+    <Compile Include="Migrations\201805260904485_UpdateRequiredInModel.Designer.cs">
+      <DependentUpon>201805260904485_UpdateRequiredInModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Booking.cs" />
@@ -398,6 +402,7 @@
     <Compile Include="ViewModel\StockTypeMeasurementViewModel.cs" />
     <Compile Include="ViewModel\StockViewModel.cs" />
     <Compile Include="ViewModel\TechnologyViewModel.cs" />
+    <Compile Include="ViewModel\BookingViewModel.cs" />
     <Compile Include="ViewModel\UcBookingStockViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -759,7 +764,7 @@
     <Content Include="Views\DepartmentFaculties\Details.cshtml" />
     <Content Include="Views\DepartmentFaculties\Edit.cshtml" />
     <Content Include="Views\DepartmentFaculties\Index.cshtml" />
-    <Content Include="Views\Technology\Index.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -873,6 +878,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805260526568_StockAddQuantityInCard.resx">
       <DependentUpon>201805260526568_StockAddQuantityInCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805260904485_UpdateRequiredInModel.resx">
+      <DependentUpon>201805260904485_UpdateRequiredInModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

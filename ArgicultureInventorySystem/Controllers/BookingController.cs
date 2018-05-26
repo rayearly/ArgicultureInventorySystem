@@ -35,6 +35,23 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Dispose();
         }
 
+        // GET: List from ViewModel to Export to Excel
+        public List<BookingViewModel> GetBookingReport()
+        {
+            var booking = _context.Bookings.
+                Select(s => new BookingViewModel
+                {
+                    BookingId = s.BookingId + " ",
+                    ApplicationUserName = s.ApplicationUser.Name,
+                    BookingDate = s.BookingDate.BookingDateTime,
+                    ReturnDate = s.BookingDate.ReturnDateTime,
+                    BookingStatus = s.BookingStatus + " "
+
+                }).ToList();
+
+            return booking;
+        }
+
         // GET All Booking for Admin View
         public ActionResult AdminAllBookingList()
         {

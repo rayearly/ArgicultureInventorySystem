@@ -4,7 +4,7 @@
 }
 
 <h2>Admin Home Page</h2>
-
+<br/>
 <table width="100%">
     <tr>
         <td width="60%">
@@ -13,7 +13,7 @@
                     @Html.ActionLink("View All Bookings", "AdminAllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
                 <p>
-                    @Html.ActionLink("Manage Users Booking", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                    @Html.ActionLink("Manage Users & View Booking", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
                 <p>
                     @Html.ActionLink("Manage Stocks", "Index", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
@@ -22,7 +22,7 @@
                     @Html.ActionLink("Manage Department / Faculty", "Index", "DepartmentFaculties", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
                 <p>
-                    @Html.ActionLink("Generate Report", "Report", "Booking", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                    @Html.ActionLink("Generate Report", "Index", "Report", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
             </div>
         </td>

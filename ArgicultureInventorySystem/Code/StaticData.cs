@@ -54,5 +54,16 @@ namespace ExportExcel.Code
 
             }
         }
+
+        public static List<BookingViewModel> BookingReport
+        {
+            get
+            {
+                var bk = new BookingController();
+
+                return bk.GetBookingReport();
+
+            }
+        }
     }
 }

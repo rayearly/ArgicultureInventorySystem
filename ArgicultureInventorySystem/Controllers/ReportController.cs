@@ -10,7 +10,7 @@ using ExportExcel.Models;
 
 namespace ArgicultureInventorySystem.Controllers
 {
-    public class TechnologyController : Controller
+    public class ReportController : Controller
     {
         // GET: Technology
         public ActionResult Index()
@@ -44,6 +44,15 @@ namespace ArgicultureInventorySystem.Controllers
             string[] columns = { "Name", "Project", "Developer" };
             byte[] filecontent = ExcelExportHelper.ExportExcel(stocks, "Stock Report (Fertilizers)", true, columns);
             return File(filecontent, ExcelExportHelper.ExcelContentType, DateTime.Now.ToString("yyyyMMdd") + " - StockReport(Fertilizers).xlsx");
+        }
+
+        [HttpGet]
+        public FileContentResult ExportToExcelBooking()
+        {
+            List<BookingViewModel> booking = StaticData.BookingReport;
+            string[] columns = { "Name", "Project", "Developer" };
+            byte[] filecontent = ExcelExportHelper.ExportExcel(booking, "Booking Report (All)", true, columns);
+            return File(filecontent, ExcelExportHelper.ExcelContentType, DateTime.Now.ToString("yyyyMMdd") + " - BookingReport(All).xlsx");
         }
     }
 }

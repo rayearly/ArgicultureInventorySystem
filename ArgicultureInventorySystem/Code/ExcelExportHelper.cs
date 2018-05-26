@@ -71,7 +71,7 @@ namespace ExportExcel.Code
                 {
                     ExcelRange columnCells = workSheet.Cells[workSheet.Dimension.Start.Row, columnIndex, workSheet.Dimension.End.Row, columnIndex];
 
-                    int maxLength = columnCells.Max(cell => cell.Value.ToString().Count()+1);
+                    int maxLength = columnCells.Max(cell => cell.Value.ToString().Count());
                     if (maxLength < 150)
                     {
                         workSheet.Column(columnIndex).AutoFit();
