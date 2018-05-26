@@ -55,9 +55,11 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    <div align="left">
+        <ul class="pager" align="left">
+            <li><a href="javascript:void(0);" id="backLink"> << Back</a></li>
+        </ul>
+    </div>
 
 @section scripts
 {
@@ -90,6 +92,9 @@
                     }
                 });
 
+            $(document).on('click', '#backLink', function () {
+                history.go(-1);
+            });
 
             var url = '@Url.Action("BookingPartialResult")';
             var form = $('form');

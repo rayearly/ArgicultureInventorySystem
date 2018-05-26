@@ -66,10 +66,6 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            $(document).on('click', '#backLink', function () {
-                history.go(-1);
-            });
-
             $('#datepicker').datepicker({
                 dateFormat: 'dd-mm-yy',
                 minDate: new Date()
@@ -95,6 +91,10 @@
                         $('#datepicker2').val('');
                     }
                 });
+
+            $(document).on('click', '#backLink', function () {
+                history.go(-1);
+            });
 
             var url = '@Url.Action("BookingPartialResult")';
             var form = $('form');
