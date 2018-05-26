@@ -35,6 +35,31 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Dispose();
         }
 
+        // GET All Booking for Admin View
+        public ActionResult AdminAllBookingList()
+        {
+            if ((string)Session["UserSessionId"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var getBooking = _context.Bookings.ToList();
+
+
+            // Get the dates from the specific booking
+            var getBookingDates = getBooking.Select(b => b.BookingDate).ToList();
+
+            // This is the list of booking not sorted by booking date
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = getBooking.DistinctBy(b => b.BookingDateId).OrderByDescending(b => b.BookingDateId),
+                BookingDates = getBookingDates.Distinct(),
+                ApplicationUsers = _context.Users.ToList()
+            };
+
+            return View("AdminAllBookingList", viewModel);
+        }
+
         [AllowAnonymous]
         public ActionResult RedirectUserHome(string id)
         {
@@ -467,9 +492,11 @@ namespace ArgicultureInventorySystem.Controllers
             var uc = _context.Users.SingleOrDefault(u => u.Id == id);
 
             // Get the whole list of bookings
-            var getBookings = uc.Bookings.ToList();
+            //var getBookings = uc.Bookings.ToList();
 
-            var book = new List<Booking>(getBookings.Where(b => b.BookingDateId == bookingDateId));
+            var getBookings2 = _context.Bookings.Where(b => b.UserId == id);
+
+            var book = new List<Booking>(getBookings2.Where(b => b.BookingDateId == bookingDateId));
             
             var viewModel = new UcBookingStockViewModel
             {

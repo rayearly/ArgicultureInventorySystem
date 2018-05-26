@@ -10,9 +10,11 @@
         <td width="60%">
             <div>
                 <p>
-                    @Html.ActionLink("Manage Users", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                    @Html.ActionLink("View All Bookings", "AdminAllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
-
+                <p>
+                    @Html.ActionLink("Manage Users Booking", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                </p>
                 <p>
                     @Html.ActionLink("Manage Stocks", "Index", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
