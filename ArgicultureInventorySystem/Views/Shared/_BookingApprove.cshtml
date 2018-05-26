@@ -47,7 +47,7 @@
         </td>
 }
         <td>
-            @Html.ActionLink("View Booking Details", "Details", "Booking", new { id = Model.BookingDateId }, null)
+            @Html.ActionLink("View Booking Details", "Details", "Booking", new { id = Model.BookingDateId }, new { @class = "btn btn-primary" })
             <!--TODO: redirect view booking to specific list of booking for the booking id, create new controller?-->
         </td>
     </tr>

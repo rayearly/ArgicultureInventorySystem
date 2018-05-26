@@ -23,7 +23,7 @@
                 Return Date
             </th>
             <th>
-                    
+                Manage
             </th>
         </tr>
         </thead>
@@ -34,9 +34,13 @@
         }
     </table>
 </div>
-    <p>
-        @Html.ActionLink("Return to Home", "AdminHomePage", null, new { @class = "btn btn-primary" })
-    </p>
+
+<ul class="pager">
+    <li>
+        @Html.ActionLink("<< Return to Home", "AdminHomePage")
+    </li>
+</ul>
+
 
 @section scripts 
 {

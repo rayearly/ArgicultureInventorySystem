@@ -11,22 +11,22 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.ApplicationUser)
+                    User
                 </th>
                 <th>
                     Booking ID
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.BookingDate)
+                    Booking Date
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.BookingDate)
+                    Return Date
                 </th>
                 <th>
                     Returned / Reject
                 </th>
                 <th>
-
+                    Manage
                 </th>
             </tr>
         </thead>
@@ -37,9 +37,12 @@
     }
     </table>
 </div>
-    <p>
-        @Html.ActionLink("Return to Home", "AdminHomePage", null, new { @class = "btn btn-primary" })
-    </p>
+
+<ul class="pager">
+    <li>
+        @Html.ActionLink("<< Return to Home", "AdminHomePage")
+    </li>
+</ul>
 
 @section scripts 
 {

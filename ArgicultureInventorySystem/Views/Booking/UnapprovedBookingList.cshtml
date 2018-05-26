@@ -10,37 +10,41 @@
 <div id="approve">
     <table id ="booking" class="table table-bordered table-hover">
         <thead>
-            <tr>
-                <th>
-                    User Name
-                </th>
-                <th>
-                    Booking ID
-                </th>
-                <th>
-                    Booking Date
-                </th>
-                <th>
-                    Returned Date
-                </th>
-                <th>
-                    Approve / Reject
-                </th>
-                <th>
-
-                </th>
-            </tr>
+        <tr>
+            <th>
+                User Name
+            </th>
+            <th>
+                Booking ID
+            </th>
+            <th>
+                Booking Date
+            </th>
+            <th>
+                Returned Date
+            </th>
+            <th>
+                Approve / Reject
+            </th>
+            <th>
+                Manage
+            </th>
+        </tr>
         </thead>
-    @foreach (var booking in Model.Bookings)
-    {
-        <!--Partial View here-->
-        @Html.Partial("_BookingApprove", booking)
-    }
+        @foreach (var booking in Model.Bookings)
+        {
+            <!--Partial View here-->
+            @Html.Partial("_BookingApprove", booking)
+        }
     </table>
 </div>
-    <p>
-        @Html.ActionLink("Return to Home", "AdminHomePage", null, new { @class = "btn btn-primary" })
-    </p>
+
+<ul class="pager">
+    <li>
+        @Html.ActionLink("<< Return to Home", "AdminHomePage")
+    </li>
+</ul>
+        
 
 @section scripts 
     {
