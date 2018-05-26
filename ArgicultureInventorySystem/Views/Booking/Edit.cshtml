@@ -21,29 +21,30 @@
             @Html.ValidationMessageFor(model => model.ApplicationUser.Name, "", new { @class = "text-danger" })
 
             <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-            <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, "{0:dd-MM-yyyy}", new { @class = "form-control", id = "datepicker" })</dd>
+            <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, "{0:MM/dd/yyyy}", new { @class = "form-control", id = "datepicker" })</dd>
             @Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })
 
             <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Return Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-            <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, "{0:dd-MM-yyyy}", new { @class = "form-control", id = "datepicker2" })</dd>
+            <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, "{0:MM/dd/yyyy}", new { @class = "form-control", id = "datepicker2" })</dd>
             @Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })
         </dl>
 
         <div id="bookings">
             @if (Model.Bookings != null)
+        {
+            foreach (var booking in Model.Bookings)
             {
-                foreach (var booking in Model.Bookings)
-                {
-                    <!--Partial View here-->
-                    @Html.Partial("_BookingPartial", booking)
-                }
-            }
+                <!--Partial View here-->
+                @Html.Partial("_BookingPartial", booking)
+        }
+    }
         </div>
 
 
         @Html.HiddenFor(model => model.BookingDate.Id)
         @Html.HiddenFor(model => model.BookingId)
         @Html.HiddenFor(model => model.ApplicationUser.Id)
+        @Html.HiddenFor(model => model.ApplicationUser.Name)
         <br />
         <button type="button" id="add" class="btn btn-primary">Click to add Booth + </button>
 
@@ -67,7 +68,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#datepicker').datepicker({
-                dateFormat: 'dd-mm-yy',
+                //dateFormat: 'dd-mm-yy',
+                dateFormat: 'mm/dd/yy',
                 minDate: new Date()
             });
 
@@ -78,7 +80,8 @@
                 });
 
             $('#datepicker2').datepicker({
-                dateFormat: 'dd-mm-yy',
+                //dateFormat: 'dd-mm-yy',
+                dateFormat: 'mm/dd/yy',
                 minDate: bookdate
             });
 

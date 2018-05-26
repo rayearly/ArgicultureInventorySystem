@@ -19,7 +19,6 @@ namespace ArgicultureInventorySystem.Models
         [DisplayName("Stock Type")]
         public int? TypeId { get; set; }
 
-        [Required]
         // Stock Type List : Tool / Pesticide / Fertilizer (virtual to fill the data ready)
         [ForeignKey("TypeId")]
         public virtual StockType Type { get; set; }

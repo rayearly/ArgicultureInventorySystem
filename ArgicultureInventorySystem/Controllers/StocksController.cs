@@ -175,6 +175,9 @@ namespace ArgicultureInventorySystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,OriginalQuantity,CurrentQuantity,MeasurementId,TypeId,Note")] Stock stock)
         {
+            LoadTypes();
+            LoadMeasurementType();
+
             if (ModelState.IsValid)
             {
                 _context.Stocks.Add(stock);

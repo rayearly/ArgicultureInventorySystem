@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using ArgicultureInventorySystem.Models;
@@ -14,6 +15,7 @@ namespace ArgicultureInventorySystem.ViewModel
 
         public IEnumerable<Booking> Bookings { get; set; }
 
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public virtual BookingDate BookingDate { get; set; }
 
         // Get Booking by BookingDate

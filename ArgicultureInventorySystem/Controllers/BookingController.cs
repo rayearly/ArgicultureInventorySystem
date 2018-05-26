@@ -411,6 +411,7 @@ namespace ArgicultureInventorySystem.Controllers
             if (!ModelState.IsValid || ucBooking.Bookings == null)
             {
                 LoadStocks();
+                
                 return View("Create", ucBooking);
             }
 
