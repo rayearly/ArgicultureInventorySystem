@@ -41,9 +41,9 @@
                 @Html.DisplayFor(modelItem => item.PhoneNo)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", "Account", new { userId = item.Id }, null) |
+                @Html.ActionLink("Edit", "Edit", "Account", new {userId = item.Id }, new { @class = "btn btn-primary"})
                 <!--Html.ActionLink("Delete", "Delete", new { id=item.Id }) | -->
-                @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new { id = item.Id }, null)
+                @Html.ActionLink("View Bookings", "RedirectUserBooking", "Booking", new { id = item.Id }, new { @class = "btn btn-primary" })
             </td>
         </tr>
     }
