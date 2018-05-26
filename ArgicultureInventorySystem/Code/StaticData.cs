@@ -22,7 +22,7 @@ namespace ExportExcel.Code
             }
         }
 
-        public static List<StockViewModel> Stocks
+        public static List<StockViewModel> StocksPesticide
         {
             get
             {
@@ -30,6 +30,28 @@ namespace ExportExcel.Code
 
                 return stc.GetStockPesticideReport();
                 
+            }
+        }
+
+        public static List<StockViewModel> StocksTool
+        {
+            get
+            {
+                var stc = new StocksController();
+
+                return stc.GetStockToolReport();
+
+            }
+        }
+
+        public static List<StockViewModel> StocksFertilizer
+        {
+            get
+            {
+                var stc = new StocksController();
+
+                return stc.GetStockFertilizerReport();
+
             }
         }
     }

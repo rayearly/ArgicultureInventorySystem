@@ -7,11 +7,11 @@ namespace ExportExcel.Models
 {
     public class TechnologyViewModel
     {
-        public List<StockViewModel> Technologies
+        public List<StockViewModel> StockPesticide
         {
             get
             {
-                return StaticData.Stocks;
+                return StaticData.StocksPesticide;
             }
         }
 

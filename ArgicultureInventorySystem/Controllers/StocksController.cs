@@ -84,7 +84,9 @@ namespace ArgicultureInventorySystem.Controllers
                     Name = s.Name,
                     CurrentQuantity = s.CurrentQuantity,
                     OriginalQuantity = s.OriginalQuantity,
-                    MeasurementName = s.Measurement.MeasurementType
+                    QuantityInCard = s.QuantityInCard,
+                    MeasurementName = s.Measurement.MeasurementType + " ",
+                    Note = s.Note + " "
                 }).ToList();
 
             return stockPesticide;
@@ -107,7 +109,9 @@ namespace ArgicultureInventorySystem.Controllers
                     Name = s.Name,
                     CurrentQuantity = s.CurrentQuantity,
                     OriginalQuantity = s.OriginalQuantity,
-                    MeasurementName = s.Measurement.MeasurementType
+                    QuantityInCard = s.QuantityInCard,
+                    MeasurementName = s.Measurement.MeasurementType + " ",
+                    Note = s.Note + " "
                 }).ToList();
 
             return stockPesticide;
@@ -130,7 +134,9 @@ namespace ArgicultureInventorySystem.Controllers
                     Name = s.Name,
                     CurrentQuantity = s.CurrentQuantity,
                     OriginalQuantity = s.OriginalQuantity,
-                    MeasurementName = s.Measurement.MeasurementType
+                    QuantityInCard = s.QuantityInCard,
+                    MeasurementName = s.Measurement.MeasurementType + " ",
+                    Note = s.Note + " "
                 }).ToList();
 
             return stockPesticide;

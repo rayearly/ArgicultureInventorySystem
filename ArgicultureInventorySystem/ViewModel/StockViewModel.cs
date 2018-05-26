@@ -17,7 +17,13 @@ namespace ArgicultureInventorySystem.ViewModel
         [DisplayName("Original Quantity")]
         public decimal OriginalQuantity { get; set; }
 
+        [DisplayName("Quantity In Card")]
+        public decimal QuantityInCard { get; set; }
+
         [DisplayName("Measurement ID")]
         public string MeasurementName { get; set; }
+
+        [DisplayName("Note")]
+        public string Note { get; set; }
     }
 }

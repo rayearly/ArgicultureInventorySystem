@@ -70,7 +70,8 @@ namespace ExportExcel.Code
                 foreach (DataColumn column in dataTable.Columns)
                 {
                     ExcelRange columnCells = workSheet.Cells[workSheet.Dimension.Start.Row, columnIndex, workSheet.Dimension.End.Row, columnIndex];
-                    int maxLength = columnCells.Max(cell => cell.Value.ToString().Count());
+
+                    int maxLength = columnCells.Max(cell => cell.Value.ToString().Count()+1);
                     if (maxLength < 150)
                     {
                         workSheet.Column(columnIndex).AutoFit();
@@ -82,10 +83,20 @@ namespace ExportExcel.Code
                 // format header - bold, yellow on black
                 using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
                 {
-                    r.Style.Font.Color.SetColor(System.Drawing.Color.White);
+                    r.Style.Font.Color.SetColor(System.Drawing.Color.Black);
                     r.Style.Font.Bold = true;
                     r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
+                    r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#bec4ce"));
+
+                    r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                    r.Style.Border.Top.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
                 }
 
                 // format cells - add borders

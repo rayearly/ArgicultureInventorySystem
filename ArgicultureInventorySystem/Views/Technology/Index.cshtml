@@ -3,8 +3,10 @@
     ViewBag.Title = "Export To Excel";  
 }  
 <div class="panel">  
-    <div class="panel-heading">  
-        <a href="@Url.Action("ExportToExcel")" class="btn btn-primary">Export Report to Excel</a>  
+    <div class="panel-heading">
+        <a href="@Url.Action("ExportToExcelStockPesticide")" class="btn btn-primary">Export Stock(Pesticide) Report to Excel</a>
+        <a href="@Url.Action("ExportToExcelStockTool")" class="btn btn-primary">Export Stock(Tool) Report to Excel</a>
+        <a href="@Url.Action("ExportToExcelStockFertilizer")" class="btn btn-primary">Export Stock(Fertilizer) Report to Excel</a>
     </div>  
     <div class="panel-body">  
         <table class="table table-striped table-bordered">  
@@ -12,18 +14,22 @@
             <tr>  
                 <th>Name</th>  
                 <th>Current Quantity</th>  
-                <th>Original Quantity</th>  
-                <th>Measurement ID</th>  
+                <th>Original Quantity</th>
+                <th>Quantity In Card</th>
+                <th>Measurement Name</th>
+                <th>Note</th>
             </tr>  
             </thead>  
             <tbody>  
-            @foreach (var item in Model.Technologies)  
+            @foreach (var item in Model.StockPesticide)  
             {  
                 <tr>  
                     <td>@item.Name</td>  
                     <td>@item.CurrentQuantity</td>  
-                    <td>@item.OriginalQuantity</td>  
-                    <td>@item.MeasurementName</td>  
+                    <td>@item.OriginalQuantity</td>
+                    <td>@item.QuantityInCard</td>
+                    <td>@item.MeasurementName</td>
+                    <td>@item.Note</td>
                 </tr>  
             }  
             </tbody>  
