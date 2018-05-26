@@ -182,6 +182,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 _context.Stocks.Add(stock);
                 _context.SaveChanges();
+                TempData["EditSuccessful"] = "Stock created Sucessfully.";
                 return RedirectToAction("Index");
             }
 
@@ -216,6 +217,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 _context.Entry(stock).State = EntityState.Modified;
                 _context.SaveChanges();
+                TempData["EditSuccessful"] = "Stock Edited Sucessfully.";
                 return RedirectToAction("Index");
             }
             return View(stock);

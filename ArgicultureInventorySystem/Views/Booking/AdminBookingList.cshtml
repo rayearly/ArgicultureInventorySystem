@@ -13,65 +13,65 @@
 <h3>Booking List for @Model.ApplicationUser.Name</h3>
 
 <p>
-    @Html.ActionLink("Create New Booking", "Create", new {id = Model.ApplicationUser.Id}, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Create New Booking", "Create", new { id = Model.ApplicationUser.Id }, new { @class = "btn btn-primary" })
 </p>
 
 <table id="booking" class="table table-bordered table-hover">
     <thead>
-    <tr>
-        <th>
-            No.
-        </th>
-        <th>
-            Booking ID
-        </th>
-        <th>
-            Booking Date
-        </th>
-        <th>
-            Return Date
-        </th>
-        <th>
-            Status
-        </th>
-        <th>
-            Manage
-        </th>
-    </tr>
-    </thead>
-    
-    <tbody>
-        
-    @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
-    @foreach (var item in Model.Bookings)
-    {
-        <tr id="bookings">
-            <td>
-                @{
-                    count++;
-                    @count
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookingId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookingStatus)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {id = Model.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }, new { @class = "btn btn-primary" })
-                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary"})
-                @Html.HiddenFor(modelItem => item.BookingDateId, new { @class = "bookingDateId" })
-                <a href="#" class ="btn btn-primary deleteBooking">Delete Booking</a>
-            </td>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Booking ID
+            </th>
+            <th>
+                Booking Date
+            </th>
+            <th>
+                Return Date
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Manage
+            </th>
         </tr>
-    }
+    </thead>
+
+    <tbody>
+
+        @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
+        @foreach (var item in Model.Bookings)
+        {
+            <tr id="bookings">
+                <td>
+                    @{
+                        count++;
+                        @count
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookingId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookingStatus)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary" })
+                    @Html.HiddenFor(modelItem => item.BookingDateId, new { @class = "bookingDateId" })
+                    <a href="#" class="btn btn-primary deleteBooking">Delete Booking</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
@@ -121,4 +121,13 @@
             });
         });
     </script>
+
+    @if (TempData["EditSuccessful"] != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@TempData["EditSuccessful"]");
+            });
+        </script>
+    }
 }

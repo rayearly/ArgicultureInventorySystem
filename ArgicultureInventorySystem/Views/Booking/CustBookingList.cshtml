@@ -12,37 +12,38 @@
 <h3>Booking List for @Model.ApplicationUser.Name</h3>
 
 <p>
-    @Html.ActionLink("Create New Booking", "Create", new {id = Model.ApplicationUser.Id}, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Create New Booking", "Create", new { id = Model.ApplicationUser.Id }, new { @class = "btn btn-primary" })
 </p>
 <table id="booking" class="table table-bordered table-hover">
     <thead>
-    <tr>
-        <th>
-            No.
-        </th>
-        <th>
-            Booking ID
-        </th>
-        <th>
-            Booking Date
-        </th>
-        <th>
-            Return Date
-        </th>
-        <th>
-            Booking Status
-        </th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Booking ID
+            </th>
+            <th>
+                Booking Date
+            </th>
+            <th>
+                Return Date
+            </th>
+            <th>
+                Booking Status
+            </th>
+            <th></th>
+        </tr>
     </thead>
-    
+
     @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
-    @foreach (var item in Model.Bookings) {
+    @foreach (var item in Model.Bookings)
+    {
         <tr>
             <td>
                 @{
                     count++;
-                    @count  
+                    @count
                 }
             </td>
             <td>
@@ -63,7 +64,7 @@
                     @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDateId }, new { @class = "btn btn-primary" })
                 }
 
-                @Html.ActionLink("Details", "Details", new {id = item.BookingDateId}, new {@class = "btn btn-primary"})
+                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary" })
             </td>
         </tr>
     }
@@ -72,13 +73,22 @@
 
 @section scripts{
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("#booking").DataTable({
-                columnDefs : [
-                    { targets: 4, sortable: false}
+                columnDefs: [
+                    { targets: 4, sortable: false }
                 ],
                 order: [[0, "asc"]]
             });
         });
     </script>
+
+    @if (TempData["EditSuccessful"] != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@TempData["EditSuccessful"]");
+            });
+        </script>
+    }
 }

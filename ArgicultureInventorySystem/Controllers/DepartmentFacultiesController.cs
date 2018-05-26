@@ -52,6 +52,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 _context.DepartmentFaculties.Add(departmentFaculty);
                 _context.SaveChanges();
+                TempData["EditSuccessful"] = "Department / Faculty Created Successfully.";
                 return RedirectToAction("Index");
             }
 
@@ -84,6 +85,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 _context.Entry(departmentFaculty).State = EntityState.Modified;
                 _context.SaveChanges();
+                TempData["EditSuccessful"] = "Department / Faculty Edit Successful.";
                 return RedirectToAction("Index");
             }
             return View(departmentFaculty);

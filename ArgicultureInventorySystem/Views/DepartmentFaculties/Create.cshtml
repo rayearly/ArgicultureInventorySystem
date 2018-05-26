@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>DepartmentFaculty</h4>
+        <h4>Enter New Department / Faculty Name</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -32,7 +32,7 @@
 }
 
 <ul class="pager">
-    <li>@Html.ActionLink("Back to List", "Index")</li>
+    <li>@Html.ActionLink("<< Back to List", "Index")</li>
 </ul>
 
 @section Scripts {

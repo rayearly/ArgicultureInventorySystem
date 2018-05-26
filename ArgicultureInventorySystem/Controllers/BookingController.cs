@@ -456,7 +456,7 @@ namespace ArgicultureInventorySystem.Controllers
 
             if (zeroBooking != null)
             {
-                ViewBag.ZeroBooking = "Number of item must be at least 1.";
+                ViewBag.ZeroBooking = "Number of Stock Booking Quantity must be at least 1.";
                 LoadStocks();
                 return View("Create", hold);
             }
@@ -467,6 +467,7 @@ namespace ArgicultureInventorySystem.Controllers
             try
             {
                 // Save the booking in the database if the booking is not overloaded
+                TempData["EditSuccessful"] = "Booking Creation Successful";
                 _context.SaveChanges();
             }
             catch(Exception e)
@@ -641,6 +642,7 @@ namespace ArgicultureInventorySystem.Controllers
             // Detect the exception (eg; duplicate PK)
             try
             {
+                TempData["EditSuccessful"] = "Booking Edit Successful";
                 _context.SaveChanges();
             }
             catch (Exception e)
@@ -682,9 +684,9 @@ namespace ArgicultureInventorySystem.Controllers
             }
             var bookings = _context.Bookings.Where(b => b.BookingDateId == id && b.StockId == stockId && b.UserId == ucId);
 
-            if (bookings.Count() == 1)
+            if (bookings.Count() == 0)
             {
-                ViewBag.AtLeastOneStock = "At least one stock to continue booking";
+                ViewBag.AtLeastOneStock = "Select at least one stock to continue booking";
                 return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = ucId });
             }
             // Get the specific booking from Booking table (PK: stockId + bookingdateId + universityCommunityId)

@@ -21,71 +21,72 @@
         @Html.ActionLink("Tools", "GetStockTool", "Stocks", null, new { @class = "btn btn-success btn-sm" })
     </div>
 </p>
-<table id ="stocks" class="table table-bordered table-hover">
+<table id="stocks" class="table table-bordered table-hover">
     <thead>
-    <tr>
-        <th>
-            No.
-        </th>
-        <th>
-            Name
-        </th>
-        <th>
-            Original Qty
-        </th>
-        <th>
-            Current Qty
-        </th>
-        <th>
-            Qty in Card
-        </th>
-        <th>
-            Type
-        </th>
-        <th>
-            Note / Measurement
-        </th>
-        <th>
-            Manage
-        </th>
-    </tr>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Original Qty
+            </th>
+            <th>
+                Current Qty
+            </th>
+            <th>
+                Qty in Card
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Note / Measurement
+            </th>
+            <th>
+                Manage
+            </th>
+        </tr>
     </thead>
 
     <tbody>
-    @foreach (var item in Model) {
-        <tr id="bookings">
-            <td>
-                @{
-            count++;
-            @count
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OriginalQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrentQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantityInCard)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type.StockTypeAssigned)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Measurement.MeasurementType) / @Html.DisplayFor(modelItem => item.Note)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" })
-                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary" })
-                @Html.HiddenFor(modelItem => item.Id, new { @class = "bookingDateId" })
-                <a href="#" class="btn btn-primary deleteBooking">Delete</a>
-            </td>
-        </tr>
-    }
+        @foreach (var item in Model)
+        {
+            <tr id="bookings">
+                <td>
+                    @{
+                        count++;
+                        @count
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OriginalQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrentQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityInCard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type.StockTypeAssigned)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Measurement.MeasurementType) / @Html.DisplayFor(modelItem => item.Note)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary" })
+                    @Html.HiddenFor(modelItem => item.Id, new { @class = "bookingDateId" })
+                    <a href="#" class="btn btn-primary deleteBooking">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
@@ -137,4 +138,13 @@
         });
 
     </script>
+
+    @if (TempData["EditSuccessful"] != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@TempData["EditSuccessful"]");
+            });
+        </script>
+    }
 }
