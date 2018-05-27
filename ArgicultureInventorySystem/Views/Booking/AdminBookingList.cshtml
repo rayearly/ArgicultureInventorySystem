@@ -65,10 +65,10 @@
                     @Html.DisplayFor(modelItem => item.BookingStatus)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }, new { @class = "btn btn-primary" })
-                    @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("✍", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }, new { @class = "btn btn-primary", title = "Edit Booking" })
+                    @Html.ActionLink(". . .", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-info", title = "View Booking Details" })
                     @Html.HiddenFor(modelItem => item.BookingDateId, new { @class = "bookingDateId" })
-                    <a href="#" class="btn btn-primary deleteBooking">Delete Booking</a>
+                    <a href="#" class="btn btn-danger deleteBooking" title="Delete Booking">✘</a>
                 </td>
             </tr>
         }
@@ -121,13 +121,4 @@
             });
         });
     </script>
-
-    @if (TempData["EditSuccessful"] != null)
-    {
-        <script type="text/javascript">
-            $(function() {
-                bootbox.alert("@TempData["EditSuccessful"]");
-            });
-        </script>
-    }
 }

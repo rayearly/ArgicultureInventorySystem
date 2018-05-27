@@ -66,11 +66,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.BookingStatus)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }, new { @class = "btn btn-primary" })
-                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary" })
+            <td align="center">
+                @Html.ActionLink("✍", "Edit", new { id = item.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }, new { @class = "btn btn-primary", title="Edit Booking" })
+                @Html.ActionLink(". . .", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-info", title="View Booking Details" })
                 @Html.HiddenFor(modelItem => item.BookingDateId, new { @class = "bookingDateId" })
-                <a href="#" class="btn btn-primary deleteBooking">Delete Booking</a>
+                <a href="#" title="Delete Booking" class="btn btn-danger deleteBooking">✘</a>
             </td>
         </tr>
         }
@@ -86,7 +86,7 @@
         $(document).ready(function() {
             $("#booking").DataTable({
                 columnDefs: [
-                    { targets: 5, sortable: false }
+                    { targets: 6, sortable: false }
                 ],
                 order: [[0, "asc"]]
             });

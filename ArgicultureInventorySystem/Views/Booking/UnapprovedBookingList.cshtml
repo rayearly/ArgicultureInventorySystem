@@ -75,7 +75,7 @@
                                                     function() {
                                                         $tr.remove();
                                                     });
-                                                // maybe place location.reload() here to reload the page if no rows left.
+                                                location.reload();
                                             });
                                         },
                                         error: function (xhr, textStatus, errorThrown) {
@@ -109,9 +109,8 @@
                                                     function () {
                                                         $tr.remove();
                                                     });
-                                                // maybe place location.reload() here to reload the page if no rows left.
+                                                location.reload();
                                             });
-                                        
                                         },
                                         error: function (data) {
                                             bootbox.alert("Rejection Failed");

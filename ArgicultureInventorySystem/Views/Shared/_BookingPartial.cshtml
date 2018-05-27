@@ -12,7 +12,7 @@
             <tr>
                 <td>
                     <b>Stock Name :</b>
-                    @Html.DropDownListFor(m => m.StockId, ((IEnumerable<SelectListItem>)ViewBag.LoadStocks), "--Select Stock--", new { @class = "form-control" })
+                    @Html.DropDownListFor(m => m.StockId, new SelectList(ViewBag.LoadStocks, "Value", "Text"), "--Select Stock--", new { @class = "form-control" })
                     @Html.ValidationMessageFor(b => b.StockId)
                 </td>
                 <td>
@@ -31,7 +31,7 @@
                     @Html.HiddenFor(b => b.StockId, new { @class = "stockId" })
                     @Html.HiddenFor(b => b.UserId, new { @class = "ucId" })
                     <br />
-                    <div style="text-align: center"><a href="#" id="Delete" class="deleteRow"><button type="button" class="btn btn-danger">X</button></a></div>
+                    <div style="text-align: center"><a href="#" id="Delete" class="deleteRow"><button type="button" class="btn btn-danger">✘</button></a></div>
                 </td>
             </tr>
         </table>

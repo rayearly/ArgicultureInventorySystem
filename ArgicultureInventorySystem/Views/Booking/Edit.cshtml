@@ -31,13 +31,13 @@
 
         <div id="bookings">
             @if (Model.Bookings != null)
-        {
-            foreach (var booking in Model.Bookings)
             {
-                <!--Partial View here-->
-                @Html.Partial("_BookingPartial", booking)
-        }
-    }
+                foreach (var booking in Model.Bookings)
+                {
+                    <!--Partial View here-->
+                    @Html.Partial("_BookingPartial", booking)
+                }
+            }
         </div>
 
 
@@ -56,11 +56,9 @@
     </div>
 }
 
-<div align="left">
-    <ul class="pager" align="left">
-        <li><a href="javascript:void(0);" id="backLink"> << Back</a></li>
-    </ul>
-</div>
+<ul class="pager">
+    <li>@Html.ActionLink("<< Back","RedirectEdit", "Booking", new {getId = @Model.ApplicationUser.Id}, null)</li>
+</ul>
 
 
 @section scripts
@@ -148,33 +146,46 @@
         });
     </script>
 
-    @if (ViewBag.OverloadBooking != null)
-    {
-        <script type="text/javascript">
-            $(function() {
-                bootbox.alert("@ViewBag.OverloadBooking");
-            });
+    @{
 
-        </script>
-    }
+        if (ViewBag.OverloadBooking != null)
+        {
+            <script type="text/javascript">
+                $(function() {
+                    bootbox.alert("@ViewBag.OverloadBooking");
+                });
 
-    @if (ViewBag.ZeroBooking != null)
-    {
-        <script type="text/javascript">
-            $(function() {
-                bootbox.alert("@ViewBag.ZeroBooking");
-            });
+            </script>
+        }
 
-        </script>
-    }
+        else if (ViewBag.ZeroBooking != null)
+        {
+             <script type="text/javascript">
+                 $(function() {
+                     bootbox.alert("@ViewBag.ZeroBooking");
+                 });
 
-    @if (ViewBag.Error != null)
-    {
-        <script type="text/javascript">
-            $(function() {
-                bootbox.alert("@ViewBag.Error");
-            });
+             </script>
+        }
 
-        </script>
+        else if (ViewBag.Error != null)
+        {
+             <script type="text/javascript">
+                 $(function() {
+                     bootbox.alert("@ViewBag.Error");
+                 });
+
+             </script>
+        }
+
+        else if (TempData["EditSuccessful"] != null)
+        {
+             <script type="text/javascript">
+                 $(function() {
+                     bootbox.alert("@TempData["EditSuccessful"]");
+                 });
+             </script>
+        }
+
     }
 }

@@ -264,7 +264,6 @@ namespace ArgicultureInventorySystem.Controllers
                     if (s.Id == book.StockId)
                     {
                         // Substract current quantity with quantity booked
-                        // TODO: check if the value is negative/zero, dont make approval
                         var currentQty = s.CurrentQuantity - book.BookingQuantity;
 
                         if (currentQty < 0)
@@ -281,6 +280,7 @@ namespace ArgicultureInventorySystem.Controllers
                 book.BookingStatus = "Approved";
             }
 
+            // It is not null if the current quantity of stock is not enough to approved the booking
             if (check != null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "The stock for " + stocklist + "is not enough");
@@ -467,7 +467,7 @@ namespace ArgicultureInventorySystem.Controllers
             try
             {
                 // Save the booking in the database if the booking is not overloaded
-                TempData["EditSuccessful"] = "Booking Creation Successful";
+                TempData["EditSuccessful"] = "Booking Creation Successful. Refer to Booking ID:" + bookingId;
                 _context.SaveChanges();
             }
             catch(Exception e)
@@ -477,8 +477,10 @@ namespace ArgicultureInventorySystem.Controllers
                 LoadStocks();
                 return View("Create", hold);
             }
-            
+
             // TODO: Successful booking notification?
+            //return new HttpStatusCodeResult(HttpStatusCode.OK);
+            
             return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = getId });
         }
 
@@ -535,17 +537,13 @@ namespace ArgicultureInventorySystem.Controllers
         {
             var hold = ucBooking;
 
-            var getBooking = _context.Bookings.ToList();
-
             // Get Bookings specific to the customer
-            var getSpecificBooking = getBooking.Where(b => b.ApplicationUser.Id == ucBooking.ApplicationUser.Id).ToList();
-
-            var getSpecificBooking2 = _context.Bookings.Where(b => b.BookingDateId == ucBooking.BookingDate.Id);
+            var getSpecificBooking = _context.Bookings.Where(b => b.BookingDateId == ucBooking.BookingDate.Id);
 
             var viewModel = new UcBookingStockViewModel
             {
                 ApplicationUser = _context.Users.SingleOrDefault(u => u.Id == ucBooking.ApplicationUser.Id),
-                Bookings = getSpecificBooking2,
+                Bookings = getSpecificBooking,
                 BookingDate = ucBooking.BookingDate
             };
 
@@ -623,6 +621,7 @@ namespace ArgicultureInventorySystem.Controllers
 
             if (check != null)
             {
+                //return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "The stock for " + listOfOverload + " is not enough");
                 ViewBag.OverloadBooking = "The stock for " + listOfOverload + " is not enough";
                 LoadStocks();
                 return View("Edit", hold);
@@ -630,23 +629,25 @@ namespace ArgicultureInventorySystem.Controllers
 
             if (zeroBooking != null)
             {
-                ViewBag.ZeroBooking = "Number of item must be at least 1.";
+                //return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Number of item must be at least 1.");
+                ViewBag.ZeroBooking = "Number of Stock Booking Quantity must be at least 1.";
                 LoadStocks();
                 return View("Edit", hold);
             }
 
-            var getId = ucBooking.ApplicationUser.Id;
-
-            //_context.SaveChanges();
+            // var getId = ucBooking.ApplicationUser.Id;
 
             // Detect the exception (eg; duplicate PK)
             try
             {
                 TempData["EditSuccessful"] = "Booking Edit Successful";
                 _context.SaveChanges();
+                LoadStocks();
+                return View("Edit", hold);
             }
             catch (Exception e)
             {
+                //return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Stock selection cannot be duplicated.");
                 Console.WriteLine(@"{0} Exception caught.", e);
                 ViewBag.Error = "Booking cannot be duplicated";
                 LoadStocks();
@@ -654,7 +655,23 @@ namespace ArgicultureInventorySystem.Controllers
             }
 
             // TODO: Successful booking notification?
-            return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = getId });
+
+            // return new HttpStatusCodeResult(HttpStatusCode.OK);
+
+            // return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = getId });
+        }
+
+        [AllowAnonymous]
+        public ActionResult RedirectEdit(string getId)
+        {
+            if (User.IsInRole(RoleName.CanManageBookings))
+            {
+                    return RedirectToAction("AdminBooking", new {id = getId});
+            }
+            
+            return RedirectToAction("CustomerBooking", new {id = getId});
+
+            //return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = getId });
         }
 
         // GET: Booking/Delete/5
@@ -682,9 +699,11 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
-            var bookings = _context.Bookings.Where(b => b.BookingDateId == id && b.StockId == stockId && b.UserId == ucId);
+            var bookings = _context.Bookings.Where(b => b.BookingDateId == id && b.StockId == stockId && b.UserId == ucId).ToList();
 
-            if (bookings.Count() == 0)
+            var bookings2 = _context.Bookings.Where(b => b.BookingDateId == id);
+
+            if (bookings2.Count() == 1)
             {
                 ViewBag.AtLeastOneStock = "Select at least one stock to continue booking";
                 return RedirectToAction(User.IsInRole(RoleName.CanManageBookings) ? "AdminBooking" : "CustomerBooking", "Booking", new { id = ucId });

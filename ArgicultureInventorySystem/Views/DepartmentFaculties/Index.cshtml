@@ -41,10 +41,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" })
+                <td align="center">
+                    @Html.ActionLink("✍", "Edit", new { id = item.Id }, new { @class = "btn btn-primary", title="Edit Department / Faculty Information"})
                     @Html.HiddenFor(modelItem => item.Id, new { @class = "bookingDateId" })
-                    <a href="#" class="btn btn-primary deleteBooking">Delete</a>
+                    <a href="#" title="Delete Department/Faculty" class="btn btn-danger deleteBooking">✘</a>
                 </td>
             </tr>
         }
