@@ -83,7 +83,7 @@
                     @Html.ActionLink("✍", "Edit", new { id = item.Id }, new { @class = "btn btn-primary", title="Edit Stock Information" })
                     @Html.ActionLink(". . .", "Details", new { id = item.Id }, new { @class = "btn btn-info", title="View Stock Details" })
                     @Html.HiddenFor(modelItem => item.Id, new { @class = "bookingDateId" })
-                    <a href="#" title="Delete Stock" class="btn btn-primary deleteBooking">✘</a>
+                    <a href="#" title="Delete Stock" class="btn btn-danger deleteBooking">✘</a>
                 </td>
             </tr>
         }

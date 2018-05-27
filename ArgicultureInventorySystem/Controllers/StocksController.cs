@@ -57,6 +57,8 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Stocks
+        // Do not allow cache will delete tempdata and will not be displayed if user click Back
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult Index()
         {
             var stock = _context.Stocks.ToList();

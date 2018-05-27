@@ -104,6 +104,7 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Booking for Specific Customer
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         [AllowAnonymous]
         public ActionResult CustomerBooking(string id)
         {
@@ -467,7 +468,7 @@ namespace ArgicultureInventorySystem.Controllers
             try
             {
                 // Save the booking in the database if the booking is not overloaded
-                TempData["EditSuccessful"] = "Booking Creation Successful. Refer to Booking ID:" + bookingId;
+                TempData["EditSuccessful"] = "Booking Creation Successful. Refer to Booking ID: " + bookingId;
                 _context.SaveChanges();
             }
             catch(Exception e)
@@ -747,6 +748,7 @@ namespace ArgicultureInventorySystem.Controllers
             return View("Edit", viewModel);
         }
 
+        [AllowAnonymous]
         [HttpDelete]
         public ActionResult DeleteByBookingDateId(int bookingDateId)
         {

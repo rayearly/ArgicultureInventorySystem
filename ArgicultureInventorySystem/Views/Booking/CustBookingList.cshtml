@@ -9,7 +9,7 @@
     ViewBag.Title = "Booking List";
 }
 
-<h3>Booking List for @Model.ApplicationUser.Name</h3>
+<h3>Booking History for @Model.ApplicationUser.Name</h3>
 
 <p>
     @Html.ActionLink("Create New Booking", "Create", new { id = Model.ApplicationUser.Id }, new { @class = "btn btn-primary" })
@@ -39,7 +39,7 @@
     @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
     @foreach (var item in Model.Bookings)
     {
-        <tr>
+        <tr id="bookings">
             <td>
                 @{
                     count++;
@@ -58,13 +58,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.BookingStatus)
             </td>
-            <td>
+            <td align="center">
+                @Html.HiddenFor(modelItem => item.BookingDateId, new { @class = "bookingDateId" })
                 @if (item.BookingStatus != "Approved" && item.BookingStatus != "Rejected" && item.BookingStatus != "Returned")
                 {
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDateId }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("✍", "Edit", new { id = Model.ApplicationUser.Id, bookingDateId = item.BookingDateId }, new { @class = "btn btn-primary", title = "Edit Booking" })
                 }
 
-                @Html.ActionLink("Details", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-primary" })
+                @Html.ActionLink(". . .", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-info", title = "View Booking Details" })
+
+                @if (item.BookingStatus != "Approved" && item.BookingStatus != "Rejected" && item.BookingStatus != "Returned")
+                {
+                    <a href="#" title="Delete Booking" class="btn btn-danger deleteBooking">✘</a>
+                }
             </td>
         </tr>
     }
@@ -74,12 +80,54 @@
 @section scripts{
     <script>
         $(document).ready(function () {
+            //location.reload();
             $("#booking").DataTable({
                 columnDefs: [
                     { targets: 4, sortable: false }
                 ],
                 order: [[0, "asc"]]
             });
+
+            $('#booking').on('click', '.deleteBooking', function () {
+
+                var container = $(this).closest('#bookings');
+                var id = container.find('.bookingDateId').val();
+
+                if (id) {
+                    bootbox.confirm("Delete Booked item?", function(result) {
+                        if (result) {
+                            $.ajax(
+                                {
+                                    type: "DELETE",
+                                    url: "@Url.Action("DeleteByBookingDateId" , "Booking")",
+                                    ajaxsync: true,
+                                    data: { bookingDateId: id },
+                                    success: function() {
+                                        bootbox.alert("Item booked deleted successfully", function () {
+                                            container.fadeOut(500,
+                                                function() {
+                                                    container.remove();
+                                                });
+                                            location.reload();
+                                        });
+                                    },
+                                    error: function(data) {
+                                        bootbox.alert("Delete Failed.");
+                                    }
+                                });
+                        }
+                    });
+                }
+            });
         });
     </script>
+
+    @if (TempData["EditSuccessful"] != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@TempData["EditSuccessful"]");
+            });
+        </script>
+    }
 }
