@@ -770,6 +770,7 @@
     <Content Include="Views\DepartmentFaculties\Edit.cshtml" />
     <Content Include="Views\DepartmentFaculties\Index.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Booking\RejectedBookingList2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

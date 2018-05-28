@@ -227,6 +227,21 @@ namespace ArgicultureInventorySystem.Controllers
             return View("RejectedBookingList", viewModel);
         }
 
+        // GET: Get rejected Bookings and display it in a page to be viewed/approved by admin
+        public ActionResult RejectedBookingList2()
+        {
+            // Get the unapproved bookings
+            var rejected = _context.Bookings.Where(b => b.BookingStatus == "Rejected").ToList();
+
+            // This is the list of booking not sorted by booking date
+            var viewModel = new UcBookingStockViewModel
+            {
+                Bookings = rejected.DistinctBy(b => b.BookingDateId).OrderByDescending(b => b.BookingDateId)
+            };
+
+            return View("RejectedBookingList2", viewModel);
+        }
+
         // GET: Get returned Bookings and display it in a page to be viewed by admin
         public ActionResult ReturnedBookingList()
         {
