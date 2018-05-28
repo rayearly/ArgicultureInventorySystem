@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -27,10 +28,58 @@ namespace ArgicultureInventorySystem.Controllers
 
         private readonly ApplicationDbContext _context;
 
-
         public AccountController()
         {
             _context = new ApplicationDbContext();
+        }
+
+        public ActionResult Edit(string userId)
+        {
+            LoadDeptFact();
+            if (userId == null)
+            {
+                userId = (string) Session["UserSessionId"];
+            }
+            
+            var applicationUser = _context.Users.Single(u => u.Id == userId);
+            return View(applicationUser);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(string id, ApplicationUser appUser)
+        {
+            var applicationUserInDb = _context.Users.Single(u => u.Id == id);
+
+            try
+            {
+                applicationUserInDb.IdNumber = appUser.IdNumber;
+                applicationUserInDb.Name = appUser.Name;
+                applicationUserInDb.PhoneNo = appUser.PhoneNo;
+                applicationUserInDb.Email = appUser.Email;
+                applicationUserInDb.DFId = appUser.DFId;
+
+                _context.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(@"{0} Exception caught.", e);
+            }
+
+            // If role is admin then redirect to index booking, if session empty go to manage, if session yes go to booking user
+            if (User.IsInRole(RoleName.CanManageBookings) && Session["UserSessionId"] != null)
+            {
+                TempData["EditSuccessful"] = "Edit Successful";
+                return RedirectToAction("AllBookingList", "Booking");
+            }
+
+            if (Session["UserSessionId"] != null)
+            {
+                TempData["EditSuccessful"] = "Edit Successful";
+                return RedirectToAction("Index", "Manage");
+            }
+            
+            return RedirectToAction("Index", "Manage");  
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -157,7 +206,24 @@ namespace ArgicultureInventorySystem.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            LoadDeptFact();
             return View();
+        }
+
+        [AllowAnonymous]
+        private void LoadDeptFact()
+        {
+            var df = _context.DepartmentFaculties.ToList();
+
+            // Get the stock into the list
+            var selectItems = df.Select(deptfact => new SelectListItem
+            {
+                Value = deptfact.Id.ToString(),
+                Text = deptfact.Name
+            }).ToList();
+
+            // Store the list in a ViewBag
+            ViewBag.LoadDeptFact = selectItems;
         }
 
         //
@@ -167,6 +233,8 @@ namespace ArgicultureInventorySystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            LoadDeptFact();
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -175,7 +243,9 @@ namespace ArgicultureInventorySystem.Controllers
                     Email = model.Email,
                     IdNumber = model.IdNumber,
                     Name = model.Name,
-                    PhoneNo = model.PhoneNo
+                    PhoneNo = model.PhoneNo,
+                    DFId = model.DFId,
+                    DepartmentFacultyName = model.DepartmentFacultyName
                 };
 
                 var result = await UserManager.CreateAsync(user, model.Password);
@@ -189,7 +259,7 @@ namespace ArgicultureInventorySystem.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Login", "Account");
                 }
 
                 AddErrors(result);
@@ -422,7 +492,7 @@ namespace ArgicultureInventorySystem.Controllers
             Session.Clear();
             Session.Abandon();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Manage");
         }
 
         //

@@ -259,3 +259,13 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/ArgicultureInventorySystem/Migrations/201805170022230_addfacultyagain.resx
+/ArgicultureInventorySystem/Migrations/201805170022230_addfacultyagain.Designer.cs
+/ArgicultureInventorySystem/Migrations/201805170022230_addfacultyagain.cs
+/ArgicultureInventorySystem/Migrations/201805170002250_addfacultyDepartmentattribtouser.resx
+/ArgicultureInventorySystem/Migrations/201805170002250_addfacultyDepartmentattribtouser.Designer.cs
+/ArgicultureInventorySystem/Migrations/201805170002250_addfacultyDepartmentattribtouser.cs
+/ArgicultureInventorySystem/Migrations/201805162356499_AddingFacultyDepartmentForUser.resx
+/ArgicultureInventorySystem/Migrations/201805162356499_AddingFacultyDepartmentForUser.Designer.cs
+/ArgicultureInventorySystem/Migrations/201805162356499_AddingFacultyDepartmentForUser.cs
+/ArgicultureInventorySystem/Models/FacultyDepartment.cs

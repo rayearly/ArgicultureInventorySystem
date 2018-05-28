@@ -11,6 +11,7 @@ using ArgicultureInventorySystem.ViewModel;
 
 namespace ArgicultureInventorySystem.Controllers
 {
+    [Authorize(Roles = RoleName.CanManageBookings)]
     public class StocksController : Controller
     {
         private readonly ApplicationDbContext _context = new ApplicationDbContext();
@@ -56,6 +57,8 @@ namespace ArgicultureInventorySystem.Controllers
         }
 
         // GET: Stocks
+        // Do not allow cache will delete tempdata and will not be displayed if user click Back
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult Index()
         {
             var stock = _context.Stocks.ToList();
@@ -63,6 +66,7 @@ namespace ArgicultureInventorySystem.Controllers
             return View(stock);
         }
 
+        #region GET: Different types of stocks (Display / Export Excel)
         // Pesticide = 2, Tools = 1, Fertilizer = 3
 
         // GET: Stocks - Pesticide
@@ -73,11 +77,76 @@ namespace ArgicultureInventorySystem.Controllers
             return View("Index", stockPesticide);
         }
 
+        // GET: List from ViewModel to Export to Excel
+        public List<StockViewModel> GetStockPesticideReport()
+        {
+            var stockPesticide = _context.Stocks.Where(s => s.TypeId == 2).
+                Select(s => new StockViewModel
+                {
+                    Name = s.Name,
+                    CurrentQuantity = s.CurrentQuantity,
+                    OriginalQuantity = s.OriginalQuantity,
+                    QuantityInCard = s.QuantityInCard,
+                    MeasurementName = s.Measurement.MeasurementType + " ",
+                    Note = s.Note + " "
+                }).ToList();
 
+            return stockPesticide;
+        }
+        
         // GET: Stocks - Tools
+        public ActionResult GetStockFertilizer()
+        {
+            var stockFertilizer = _context.Stocks.Where(s => s.TypeId == 3).ToList();
+
+            return View("Index", stockFertilizer);
+        }
+
+        // GET: List from ViewModel to Export to Excel
+        public List<StockViewModel> GetStockFertilizerReport()
+        {
+            var stockPesticide = _context.Stocks.Where(s => s.TypeId == 3).
+                Select(s => new StockViewModel
+                {
+                    Name = s.Name,
+                    CurrentQuantity = s.CurrentQuantity,
+                    OriginalQuantity = s.OriginalQuantity,
+                    QuantityInCard = s.QuantityInCard,
+                    MeasurementName = s.Measurement.MeasurementType + " ",
+                    Note = s.Note + " "
+                }).ToList();
+
+            return stockPesticide;
+        }
 
         // GET: Stocks = Fertilizers
-        
+        public ActionResult GetStockTool()
+        {
+            var stockTool = _context.Stocks.Where(s => s.TypeId == 1).ToList();
+
+            return View("Index", stockTool);
+        }
+
+        // GET: List from ViewModel to Export to Excel
+        public List<StockViewModel> GetStockToolReport()
+        {
+            var stockPesticide = _context.Stocks.Where(s => s.TypeId == 1).
+                Select(s => new StockViewModel
+                {
+                    Name = s.Name,
+                    CurrentQuantity = s.CurrentQuantity,
+                    OriginalQuantity = s.OriginalQuantity,
+                    QuantityInCard = s.QuantityInCard,
+                    MeasurementName = s.Measurement.MeasurementType + " ",
+                    Note = s.Note + " "
+                }).ToList();
+
+            return stockPesticide;
+        }
+
+        #endregion
+
+
         // GET: Stocks/Details/5
         public ActionResult Details(int? id)
         {
@@ -108,10 +177,14 @@ namespace ArgicultureInventorySystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,OriginalQuantity,CurrentQuantity,MeasurementId,TypeId,Note")] Stock stock)
         {
+            LoadTypes();
+            LoadMeasurementType();
+
             if (ModelState.IsValid)
             {
                 _context.Stocks.Add(stock);
                 _context.SaveChanges();
+                TempData["EditSuccessful"] = "Stock created Sucessfully.";
                 return RedirectToAction("Index");
             }
 
@@ -146,6 +219,7 @@ namespace ArgicultureInventorySystem.Controllers
             {
                 _context.Entry(stock).State = EntityState.Modified;
                 _context.SaveChanges();
+                TempData["EditSuccessful"] = "Stock Edited Sucessfully.";
                 return RedirectToAction("Index");
             }
             return View(stock);
@@ -175,6 +249,32 @@ namespace ArgicultureInventorySystem.Controllers
             _context.Stocks.Remove(stock);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // Delete by StockId
+        [HttpDelete]
+        public ActionResult DeleteByStockId(int stockId)
+        {
+            // Get the bookings that have the same bookingDateId to be deleted
+            var stockToDelete = _context.Stocks.Where(b => b.Id == stockId);
+
+            if (stockToDelete.Any())
+            {
+                foreach (var stock in stockToDelete)
+                {
+                    // Delete each of the bookings
+                    _context.Stocks.Remove(stock);
+                }
+            }
+            else
+            {
+                // If booking does not exist return BadRequest
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            _context.SaveChanges();
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         protected override void Dispose(bool disposing)

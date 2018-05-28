@@ -4,12 +4,8 @@
     ViewBag.Title = "UnapprovedBookingList";
 }
 
-@{
-    var count = 0;
-    var count2 = 0;
-}
 
-<h2>Unapproved Booking List</h2>
+<h2>In Process Booking List</h2>
 <br/>
 <div id="approve">
     <table id ="booking" class="table table-bordered table-hover">
@@ -19,29 +15,36 @@
                 User Name
             </th>
             <th>
-                Booking Date
+                Booking ID
             </th>
             <th>
                 Booking Date
+            </th>
+            <th>
+                Returned Date
             </th>
             <th>
                 Approve / Reject
             </th>
             <th>
-
+                Manage
             </th>
         </tr>
         </thead>
-    @foreach (var booking in Model.Bookings)
-    {
-        <!--Partial View here-->
-        @Html.Partial("_BookingApprove", booking)
-    }
+        @foreach (var booking in Model.Bookings)
+        {
+            <!--Partial View here-->
+            @Html.Partial("_BookingApprove", booking)
+        }
     </table>
 </div>
-    <p>
-        @Html.ActionLink("Return to Home", "AdminHomePage", null, new { @class = "btn btn-primary" })
-    </p>
+
+<ul class="pager">
+    <li>
+        @Html.ActionLink("<< Return to Home", "AdminHomePage")
+    </li>
+</ul>
+        
 
 @section scripts 
     {
@@ -72,7 +75,7 @@
                                                     function() {
                                                         $tr.remove();
                                                     });
-                                                // maybe place location.reload() here to reload the page if no rows left.
+                                                location.reload();
                                             });
                                         },
                                         error: function (xhr, textStatus, errorThrown) {
@@ -106,9 +109,8 @@
                                                     function () {
                                                         $tr.remove();
                                                     });
-                                                // maybe place location.reload() here to reload the page if no rows left.
+                                                location.reload();
                                             });
-                                        
                                         },
                                         error: function (data) {
                                             bootbox.alert("Rejection Failed");

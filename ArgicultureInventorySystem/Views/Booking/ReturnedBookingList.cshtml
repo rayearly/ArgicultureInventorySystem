@@ -14,13 +14,16 @@
                 Name
             </th>
             <th>
+                Booking ID
+            </th>
+            <th>
                 Booking Date
             </th>
             <th>
                 Return Date
             </th>
             <th>
-                    
+                Manage
             </th>
         </tr>
         </thead>
@@ -31,9 +34,13 @@
         }
     </table>
 </div>
-    <p>
-        @Html.ActionLink("Return to Home", "AdminHomePage", null, new { @class = "btn btn-primary" })
-    </p>
+
+<ul class="pager">
+    <li>
+        @Html.ActionLink("<< Return to Home", "AdminHomePage")
+    </li>
+</ul>
+
 
 @section scripts 
 {
@@ -64,7 +71,7 @@
                                                 function () {
                                                     $tr.remove();
                                                 });
-                                            // maybe place location.reload() here to reload the page if no rows left.
+                                            location.reload();
                                         });
 
                                     },
@@ -99,7 +106,7 @@
                                                 function () {
                                                     $tr.remove();
                                                 });
-                                            // maybe place location.reload() here to reload the page if no rows left.
+                                            location.reload();
                                         });
 
                                     },

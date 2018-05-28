@@ -3,25 +3,26 @@
     ViewBag.Title = "AdminHomePage";
 }
 
-<h2>HomePage</h2>
-
-<ul class="breadcrumb">
-    <li><a href="#">Home</a></li>
-    <li class="active">Homepage</li>
-</ul>
+<h2>Admin Home Page</h2>
+<br/>
 <table width="100%">
     <tr>
         <td width="60%">
             <div>
                 <p>
-                    @Html.ActionLink("View Users", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
-                </p>
-
-                <p>
-                    @Html.ActionLink("View Stocks", "Index", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                    @Html.ActionLink("View All Bookings", "AdminAllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
                 <p>
-                    @Html.ActionLink("Generate Report", "Report", "Booking", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                    @Html.ActionLink("Manage Users & View Booking", "AllBookingList", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                </p>
+                <p>
+                    @Html.ActionLink("Manage Stocks", "Index", "Stocks", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                </p>
+                <p>
+                    @Html.ActionLink("Manage Department / Faculty", "Index", "DepartmentFaculties", null, new { @class = "btn btn-warning btn-lg btn-block" })
+                </p>
+                <p>
+                    @Html.ActionLink("Generate Report", "Index", "Report", null, new { @class = "btn btn-warning btn-lg btn-block" })
                 </p>
             </div>
         </td>
@@ -63,24 +64,27 @@
 
                 <div align="left" class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Booking Status</h3>
+                        <h3 class="panel-title">View Booking In Status</h3>
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <span class="badge">
-                                    <script>document.write(inProcess);</script></span>
-                                @Html.ActionLink("Unapproved Booking", "UnApprovedBookingList", null, new { @class = "btn-link" })
+                                    <script>document.write(inProcess);</script>
+                                </span>
+                                @Html.ActionLink("In Process Booking", "UnApprovedBookingList", null, new { @class = "btn-link" })
                             </li>
                             <li class="list-group-item">
                                 <span class="badge">
-                                    <script>document.write(approved);</script></span>
+                                    <script>document.write(approved);</script>
+                                </span>
                                 @Html.ActionLink("Approved Booking", "ApprovedBookingList", null, new { @class = "btn-link" })
                             </li>
                             <li class="list-group-item">
                                 <span class="badge">
-                                    <script>document.write(rejected);</script></span>
-                                @Html.ActionLink("Rejected Booking", "RejectedBookingList", null, new { @class = "btn-link" })
+                                    <script>document.write(rejected);</script>
+                                </span>
+                                @Html.ActionLink("Rejected Booking", "RejectedBookingList2", null, new { @class = "btn-link" })
                             </li>
                             <li class="list-group-item">
                                 <span class="badge">
@@ -96,7 +100,3 @@
         </td>
     </tr>
 </table>
-
-@Html.ActionLink("View Stock Report - Pesticide", "GetStockPesticide", "Stocks", new { @class = "btn btn-warning btn-lg btn-block" }, null)
-
-Changes from rayadderley

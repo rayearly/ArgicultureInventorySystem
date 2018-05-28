@@ -8,45 +8,48 @@
 <div class="approve">
     @using (Html.BeginCollectionItem("approve"))
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => modelItem.BookingDate.BookingDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => modelItem.BookingDate.ReturnDateTime)
-            </td>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => modelItem.ApplicationUser.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => modelItem.BookingId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => modelItem.BookingDate.BookingDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => modelItem.BookingDate.ReturnDateTime)
+        </td>
 
-            @if (ViewBag.Title != "ReturnedBookingList")
+        @if (ViewBag.Title != "ReturnedBookingList")
+    {
+        <td align="center">
+            <div class="approve">
+                @if (ViewBag.Title == "ApprovedBookingList")
             {
-                <td align="center">
-                    <div class="approve">
-                        @if (ViewBag.Title == "ApprovedBookingList")
-                        {
-                            <a href="#" id="Approve" class="returnRow"><button type="button" class="btn btn-success">↻</button></a>
-                        }
+                <a href="#" id="Approve" class="returnRow"><button type="button" class="btn btn-success" title="Return Booking">↻</button></a>
+        }
 
-                        @if (ViewBag.Title != "ApprovedBookingList")
-                        {
-                            <a href="#" id="Approve" class="approveRow"><button type="button" class="btn btn-primary">✓</button></a>
-                        }
+                @if (ViewBag.Title != "ApprovedBookingList")
+            {
+                <a href="#" id="Approve" class="approveRow"><button type="button" class="btn btn-primary" title="Approve Booking">✓</button></a>
+        }
 
 
-                        @if (ViewBag.Title != "RejectedBookingList")
-                        {
-                            <a href="#" id="Approve" class="disapproveRow"><button type="button" class="btn btn-danger">X</button></a>
-                        }
+                @if (ViewBag.Title != "RejectedBookingList")
+            {
+                <a href="#" id="Approve" class="disapproveRow"><button type="button" class="btn btn-danger" title="Reject Booking">✘</button></a>
+        }
 
-                        @Html.HiddenFor(modelItem => modelItem.BookingDateId, new {@class = "bookingId"})
-                    </div>
-                </td>
-            }
-            <td>
-                @Html.ActionLink("View Booking Details", "Details", "Booking", new {id = Model.BookingDateId}, null)
-                <!--TODO: redirect view booking to specific list of booking for the booking id, create new controller?-->
-            </td>
-        </tr>
+                @Html.HiddenFor(modelItem => modelItem.BookingDateId, new { @class = "bookingId" })
+            </div>
+        </td>
+}
+        <td align="center">
+            @Html.ActionLink(". . .", "Details", "Booking", new { id = Model.BookingDateId }, new { @class = "btn btn-info", title="View Booking Details" })
+            <!--TODO: redirect view booking to specific list of booking for the booking id, create new controller?-->
+        </td>
+    </tr>
     }
 </div>

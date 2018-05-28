@@ -1,0 +1,109 @@
+﻿@model IEnumerable<ArgicultureInventorySystem.Models.DepartmentFaculty>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    var count = 0;
+}
+
+<h2>Department / Faculty List</h2>
+
+<p>
+    @Html.ActionLink("Create New Department / Faculty", "Create", "DepartmentFaculties", null, new { @class = "btn btn-primary" })
+</p>
+<table id="facdept" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Manage
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="bookings">
+                <td>
+                    @{
+                        count++;
+                        @count
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td align="center">
+                    @Html.ActionLink("✍", "Edit", new { id = item.Id }, new { @class = "btn btn-primary", title="Edit Department / Faculty Information"})
+                    @Html.HiddenFor(modelItem => item.Id, new { @class = "bookingDateId" })
+                    <a href="#" title="Delete Department/Faculty" class="btn btn-danger deleteBooking">✘</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<ul class="pager">
+    <li>@Html.ActionLink("<< Back", "AdminHomePage", "Booking", null, new { @class = "btn btn-default" })</li>
+</ul>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#facdept").DataTable({
+                order: [[0, "asc"]]
+            });
+
+
+            $("#facdept").on("click", ".deleteBooking", function() {
+
+                var container = $(this).closest('#bookings');
+                var id = container.find('.bookingDateId').val();
+
+                if (id) {
+                    bootbox.confirm("Delete Department / Faculty?", function(result) {
+                        if (result) {
+                            $.ajax(
+                                {
+                                    type: "DELETE",
+                                    url: "@Url.Action("DeleteByDfId" , "DepartmentFaculties")",
+                                    ajaxsync: true,
+                                    data: { DfId: id },
+                                    success: function() {
+                                        bootbox.alert("Department / Faculty deleted successfully", function () {
+                                            container.fadeOut(500,
+                                                function() {
+                                                    container.remove();
+                                                });
+                                        });
+                                    },
+                                    error: function(data) {
+                                        bootbox.alert("fail");
+                                    }
+                                });
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+
+    @if (TempData["EditSuccessful"] != null)
+    {
+        <script type="text/javascript">
+            $(function() {
+                bootbox.alert("@TempData["EditSuccessful"]");
+            });
+        </script>
+    }
+}

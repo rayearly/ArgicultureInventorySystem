@@ -11,26 +11,27 @@
         <table class="table table-bordered table-hover">
             <tr>
                 <td>
-                    @Html.LabelFor(b => b.StockId)
-                    @Html.DropDownListFor(m => m.StockId, ((IEnumerable<SelectListItem>)ViewBag.LoadStocks), "--Select Stock--", new { @class = "form-control" })
+                    <b>Stock Name :</b>
+                    @Html.DropDownListFor(m => m.StockId, new SelectList(ViewBag.LoadStocks, "Value", "Text"), "--Select Stock--", new { @class = "form-control" })
                     @Html.ValidationMessageFor(b => b.StockId)
                 </td>
                 <td>
-                    @Html.LabelFor(b => b.BookingQuantity)
+                    <b>Booking Quantity :</b>
                     @Html.TextBoxFor(b => b.BookingQuantity, new { @class = "form-control" })
                     @Html.ValidationMessageFor(b => b.BookingQuantity)
                 </td>
                 <td>
-                    @Html.LabelFor(b => b.BookingNotes)
+                    <b>Booking Notes :</b>
                     @Html.TextBoxFor(b => b.BookingNotes, new { @class = "form-control" })
                     @Html.ValidationMessageFor(b => b.BookingNotes)
                 </td>
                 <td>
-                    @Html.HiddenFor(b => b.BookingDateId, new {@class="id"})
+                    @Html.HiddenFor(model => model.BookingId)
+                    @Html.HiddenFor(b => b.BookingDateId, new { @class = "id" })
                     @Html.HiddenFor(b => b.StockId, new { @class = "stockId" })
                     @Html.HiddenFor(b => b.UserId, new { @class = "ucId" })
-                    <br/>
-                    <div style ="text-align: center"><a href="#" id="Delete" class="deleteRow"><button type="button" class="btn btn-danger">X</button></a></div>
+                    <br />
+                    <div style="text-align: center"><a href="#" id="Delete" class="deleteRow"><button type="button" class="btn btn-danger">✘</button></a></div>
                 </td>
             </tr>
         </table>

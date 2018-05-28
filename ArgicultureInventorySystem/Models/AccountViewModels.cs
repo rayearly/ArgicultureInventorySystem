@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace ArgicultureInventorySystem.Models
 {
@@ -81,6 +83,14 @@ namespace ArgicultureInventorySystem.Models
 
         public virtual IList<Booking> Bookings { get; set; }
 
+        [Display(Name = "Faculty / Department")]
+        public int DFId { get; set; }
+
+        public IList<DepartmentFaculty> DepartmentFaculty { get; set; }
+
+        [Display(Name = "Faculty / Department")]
+        public string DepartmentFacultyName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -94,7 +104,7 @@ namespace ArgicultureInventorySystem.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -113,7 +123,7 @@ namespace ArgicultureInventorySystem.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

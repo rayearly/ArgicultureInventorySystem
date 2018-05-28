@@ -1,28 +1,43 @@
 ﻿@using ArgicultureInventorySystem.Models
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-        <div class="navbar-header">
+        <div class="navbar-header"  style="font-weight:900">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            @Html.ActionLink("ArgInSys", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                
-                @{
-                    if (User.IsInRole(RoleName.CanManageBookings) && Session["UserSessionId"] != null)
-                    {
-                        <li>@Html.ActionLink("Admin Menu", "AdminHomePage", "Booking")</li>
-                        <li>@Html.ActionLink("View Customer List", "AllBookingList", "Booking")</li>
-                    }
-                    else if (Session["UserSessionId"] != null)
-                    {
-                        <li>@Html.ActionLink("My Booking", "RedirectUserBooking", "Booking")</li>
-                    }
+            @{
+                if (User.IsInRole(RoleName.CanManageBookings) && Session["UserSessionId"] != null)
+                {
+                    @Html.ActionLink("ArgInvSys", "AdminHomePage", "Booking", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                else if (Session["UserSessionId"] != null)
+                {
+                    @Html.ActionLink("ArgInvSys", "RedirectUserBooking", "Booking", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                else
+                {
+                    <div style="font-weight:900">@Html.ActionLink("ArgInvSys", "Login", "Account", new { area = "" }, new { @class = "navbar-brand" })</div>
+                }
+            }
 
+        </div>
+        <div class="navbar-collapse collapse"  style="font-weight:900">
+            <ul class="nav navbar-nav">
+                @{
+        if (User.IsInRole(RoleName.CanManageBookings) && Session["UserSessionId"] != null)
+        {
+            <li>@Html.ActionLink("Admin Menu", "AdminHomePage", "Booking")</li>
+            <li>@Html.ActionLink("View Customer List", "AllBookingList", "Booking")</li>
+            <li>@Html.ActionLink("View All Bookings", "AdminAllBookingList", "Booking")</li>
+            <li>@Html.ActionLink("Generate Report", "Index", "Report")</li>
+
+        }
+else if (Session["UserSessionId"] != null)
+{
+            <li>@Html.ActionLink("My Booking", "RedirectUserBooking", "Booking")</li>
+}
                 }
             </ul>
             @Html.Partial("_LoginPartial")

@@ -1,14 +1,16 @@
-﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+﻿@using ArgicultureInventorySystem.Models
+@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
 @{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
 
-@using (Html.BeginForm()) 
+<h2>Edit Booking</h2>
+
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <h4>Booking</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -19,27 +21,31 @@
             @Html.ValidationMessageFor(model => model.ApplicationUser.Name, "", new { @class = "text-danger" })
 
             <dt>@Html.LabelFor(model => model.BookingDate.BookingDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-            <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "datepicker" })</dd>
+            <dd>@Html.TextBoxFor(model => model.BookingDate.BookingDateTime, "{0:MM/dd/yyyy}", new { @class = "form-control", id = "datepicker" })</dd>
             @Html.ValidationMessageFor(model => model.BookingDate.BookingDateTime, "", new { @class = "text-danger" })
 
-            <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Booking Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-            <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "datepicker2" })</dd>
+            <dt>@Html.LabelFor(model => model.BookingDate.ReturnDateTime, "Return Date", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+            <dd>@Html.TextBoxFor(model => model.BookingDate.ReturnDateTime, "{0:MM/dd/yyyy}", new { @class = "form-control", id = "datepicker2" })</dd>
             @Html.ValidationMessageFor(model => model.BookingDate.ReturnDateTime, "", new { @class = "text-danger" })
         </dl>
-           
-    <div id="bookings">
-        @foreach (var booking in Model.Bookings)
-        {
-            <!--Partial View here-->
-            @Html.Partial("_BookingPartial", booking)
-          
-        }
-    </div>
 
-            
+        <div id="bookings">
+            @if (Model.Bookings != null)
+            {
+                foreach (var booking in Model.Bookings)
+                {
+                    <!--Partial View here-->
+                    @Html.Partial("_BookingPartial", booking)
+                }
+            }
+        </div>
 
+
+        @Html.HiddenFor(model => model.BookingDate.Id)
+        @Html.HiddenFor(model => model.BookingId)
         @Html.HiddenFor(model => model.ApplicationUser.Id)
-        <br/>
+        @Html.HiddenFor(model => model.ApplicationUser.Name)
+        <br />
         <button type="button" id="add" class="btn btn-primary">Click to add Booth + </button>
 
         <div class="form-group">
@@ -50,21 +56,45 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+<ul class="pager">
+    <li>@Html.ActionLink("<< Back","RedirectEdit", "Booking", new {getId = @Model.ApplicationUser.Id}, null)</li>
+</ul>
+
 
 @section scripts
 {
     <script type="text/javascript">
         $(document).ready(function () {
-
             $('#datepicker').datepicker({
-                format: 'dd/MM/yy'
+                //dateFormat: 'dd-mm-yy',
+                dateFormat: 'mm/dd/yy',
+                minDate: new Date()
             });
 
+            var bookdate = new Date();
+            $('#datepicker').on("change paste keyup",
+                function () {
+                    bookdate = $('#datepicker').val();
+                });
+
             $('#datepicker2').datepicker({
-                format: 'dd/MM/yy'
+                //dateFormat: 'dd-mm-yy',
+                dateFormat: 'mm/dd/yy',
+                minDate: bookdate
+            });
+
+            $('#datepicker2').on("change paste keyup",
+                function () {
+
+                    var returndate = $('#datepicker2').val();
+                    if (returndate < bookdate) {
+                        bootbox.alert("The return date must be after the booking date.");
+                        $('#datepicker2').val('');
+                    }
+                });
+
+            $(document).on('click', '#backLink', function () {
+                history.go(-1);
             });
 
             var url = '@Url.Action("BookingPartialResult")';
@@ -86,7 +116,7 @@
                 var id = container.find('.id').val();
                 var stockId = container.find('.stockId').val();
                 var ucId = container.find('.ucId').val();
-                
+
                 if (id) {
                     bootbox.confirm("Delete Booked item?", function(result) {
                         if (result) {
@@ -97,15 +127,16 @@
                                     ajaxsync: true,
                                     data: { id: id, stockId: stockId, ucId: ucId },
                                     success: function() {
-                                        bootbox.alert("Item booked deleted successfully", function () {
-                                            container.fadeOut(500,
+                                            bootbox.alert("Item booked deleted successfully",
                                                 function() {
-                                                    container.remove();
+                                                    container.fadeOut(500,
+                                                        function() {
+                                                            container.remove();
+                                                        });
                                                 });
-                                        });
                                     },
                                     error: function(data) {
-                                        bootbox.alert("fail");
+                                        bootbox.alert("At least select one stock to continue booking.");
                                     }
                                 });
                         }
@@ -114,4 +145,47 @@
             });
         });
     </script>
+
+    @{
+
+        if (ViewBag.OverloadBooking != null)
+        {
+            <script type="text/javascript">
+                $(function() {
+                    bootbox.alert("@ViewBag.OverloadBooking");
+                });
+
+            </script>
+        }
+
+        else if (ViewBag.ZeroBooking != null)
+        {
+             <script type="text/javascript">
+                 $(function() {
+                     bootbox.alert("@ViewBag.ZeroBooking");
+                 });
+
+             </script>
+        }
+
+        else if (ViewBag.Error != null)
+        {
+             <script type="text/javascript">
+                 $(function() {
+                     bootbox.alert("@ViewBag.Error");
+                 });
+
+             </script>
+        }
+
+        else if (TempData["EditSuccessful"] != null)
+        {
+             <script type="text/javascript">
+                 $(function() {
+                     bootbox.alert("@TempData["EditSuccessful"]");
+                 });
+             </script>
+        }
+
+    }
 }

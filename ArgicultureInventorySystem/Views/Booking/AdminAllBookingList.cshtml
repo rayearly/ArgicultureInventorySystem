@@ -1,0 +1,127 @@
+﻿@model ArgicultureInventorySystem.ViewModel.UcBookingStockViewModel
+
+@{
+    ViewBag.Title = "Booking List";
+}
+
+@{
+    var count = 0;
+}
+
+<script>var count = 1;</script>
+
+<h3>All Booking List</h3>
+
+<table id="booking" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                Booking ID
+            </th>
+            <th>
+                Booking Date
+            </th>
+            <th>
+                Return Date
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Manage
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @Html.HiddenFor(model => model.BookingDate.Id, "bookingDateId")
+        @foreach (var item in Model.Bookings)
+        {
+        <tr id="bookings">
+            <td>
+                @{
+            count++;
+            @count
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingDate.BookingDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingDate.ReturnDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingStatus)
+            </td>
+            <td align="center">
+                @Html.ActionLink("✍", "Edit", new { id = item.ApplicationUser.Id, bookingDateId = item.BookingDate.Id }, new { @class = "btn btn-primary", title="Edit Booking" })
+                @Html.ActionLink(". . .", "Details", new { id = item.BookingDateId }, new { @class = "btn btn-info", title="View Booking Details" })
+                @Html.HiddenFor(modelItem => item.BookingDateId, new { @class = "bookingDateId" })
+                <a href="#" title="Delete Booking" class="btn btn-danger deleteBooking">✘</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<ul class="pager">
+    <li>@Html.ActionLink("<< Back", "AdminHomePage", "Booking", null, new { @class = "btn btn-default" })</li>
+</ul>
+
+@section scripts{
+    <script>
+        $(document).ready(function() {
+            $("#booking").DataTable({
+                columnDefs: [
+                    { targets: 6, sortable: false }
+                ],
+                order: [[0, "asc"]]
+            });
+
+            $('#booking').on('click', '.deleteBooking', function () {
+
+                var container = $(this).closest('#bookings');
+                var id = container.find('.bookingDateId').val();
+
+                if (id) {
+                    bootbox.confirm("Delete Booked item?", function(result) {
+                        if (result) {
+                            $.ajax(
+                                {
+                                    type: "DELETE",
+                                    url: "@Url.Action("DeleteByBookingDateId" , "Booking")",
+                                    ajaxsync: true,
+                                    data: { bookingDateId: id },
+                                    success: function() {
+                                        bootbox.alert("Item booked deleted successfully", function () {
+                                            container.fadeOut(500,
+                                                function() {
+                                                    container.remove();
+                                                });
+                                            
+                                        });
+                                    },
+                                    error: function(data) {
+                                        bootbox.alert("Delete Failed");
+                                    }
+                                });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
